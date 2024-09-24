@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os, hashlib
+import os
+import database, files
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -29,17 +30,13 @@ def handle_file_upload():
         file.save(file_path)
 
         # Hash the file
-        file_hash = generate_file_hash(file_path)
+        file_hash = files.generate_file_hash(file_path)
         print("FILE HASH: ", file_hash)
 
-        return jsonify({'message': 'File uploaded successfully', 'file_path': file.filename, 'file_hash': file_hash}), 200
+        # Store file name and hash in database
+        database.insert_file_db(file.filename, file_hash)
 
-def generate_file_hash(file_path):
-    sha256_hash = hashlib.sha256()
-    with open(file_path, "rb") as f:
-        for byte_block in iter(lambda: f.read(4096), b""):
-            sha256_hash.update(byte_block)
-    return sha256_hash.hexdigest()
+        return jsonify({'message': 'File uploaded successfully', 'file': file.filename, 'file_hash': file_hash}), 200
 
 # To run the app
 if __name__ == "__main__":

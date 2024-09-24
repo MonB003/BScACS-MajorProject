@@ -22,7 +22,9 @@ function FileUploadForm() {
 
         // Send the file to the backend
         try {
-            const response = await fetch('https://bscacs-majorproject.onrender.com/upload-file', {
+            // const URL = "http://localhost:5000"
+            const URL = "https://bscacs-majorproject.onrender.com"
+            const response = await fetch(`${URL}/upload-file`, {
                 method: 'POST',
                 body: formData,
             });

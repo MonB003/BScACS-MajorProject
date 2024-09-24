@@ -15,12 +15,12 @@ function FileUploadForm() {
             alert("Error: Please select a file.");
             return;
         }
-        /** Todo: Send the file to the backend */
-        console.log("File information:", file);
+        console.log("File to send:", file);
 
         const formData = new FormData();
         formData.append('file', file);
 
+        // Send the file to the backend
         try {
             const response = await fetch('http://localhost:5000/upload-file', {
                 method: 'POST',

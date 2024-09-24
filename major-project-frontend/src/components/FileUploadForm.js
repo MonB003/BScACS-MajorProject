@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 function FileUploadForm() {
     const [file, setFile] = useState(null);

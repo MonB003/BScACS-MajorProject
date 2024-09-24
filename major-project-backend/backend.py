@@ -7,8 +7,8 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
 # Set upload folder
-UPLOAD_FOLDER = 'uploaded-files/'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# UPLOAD_FOLDER = 'uploaded-files/'
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route("/upload-file", methods=['POST'])
 def handle_file_upload():
@@ -20,17 +20,24 @@ def handle_file_upload():
     if file.filename == '':
         return jsonify({'error': 'No file with the specified filename'}), 400
     
-    # Check if the upload folder exists, otherwise create it
-    if not os.path.exists(app.config['UPLOAD_FOLDER']):
-        os.makedirs(app.config['UPLOAD_FOLDER'])
+    # # Check if the upload folder exists, otherwise create it
+    # if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    #     os.makedirs(app.config['UPLOAD_FOLDER'])
 
     if file:
         # Create file path to save the file to
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-        file.save(file_path)
+        # file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        # file.save(file_path)
 
-        # Hash the file
-        file_hash = files.generate_file_hash(file_path)
+        # # Hash the file
+        # file_hash = files.generate_file_hash(file_path)
+        # print("FILE HASH: ", file_hash)
+
+        # Read file content from memory
+        file_data = file.read()
+
+        # Hash the file content
+        file_hash = files.generate_file_hash(file_data)
         print("FILE HASH: ", file_hash)
 
         # Store file name and hash in database

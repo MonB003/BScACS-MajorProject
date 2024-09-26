@@ -59,6 +59,7 @@ def handle_file_check():
         if same_file_hash:
             return jsonify({'message': 'Success: File has not changed.', 'file': filename_result['filename'], 'file_hash': filename_result['file_hash'], 'date': filename_result['date']}), 200
         else:
+            database.insert_log_db(1, filename, "File hashes do not match.", filename_result['file_hash'], new_file_hash)
             return jsonify({'error': 'Error: File has changed.'}), 400
 
 # To run the app

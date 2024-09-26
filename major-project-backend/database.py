@@ -45,3 +45,18 @@ def find_recent_file_by_name(filename):
         print("MOST RECENT FILE RESULT", filename_recent_date)
         return filename_recent_date
     return None
+
+
+# Insert new log entry info into database
+def insert_log_db(user_id, filename, log_message, old_file_hash, new_file_hash):
+    collection = db['logs']
+    current_datetime = get_date_time()
+    log_info = {
+        "user_id": user_id,
+        "filename": filename,
+        "log_message": log_message,
+        "old_file_hash": old_file_hash,
+        "new_file_hash": new_file_hash,
+        "date": current_datetime
+    }
+    collection.insert_one(log_info)

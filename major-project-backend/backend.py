@@ -1,6 +1,6 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
-import database, files
+import database, hashing
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -20,7 +20,7 @@ def handle_file_upload():
         file_data = file.read()
 
         # Hash the file content
-        file_hash = files.generate_file_hash(file_data)
+        file_hash = hashing.generate_file_hash(file_data)
         print("FILE HASH: ", file_hash)
 
         # Store file name and hash in database
@@ -43,7 +43,7 @@ def handle_file_check():
         file_data = file.read()
 
         # Hash the file content
-        new_file_hash = files.generate_file_hash(file_data)
+        new_file_hash = hashing.generate_file_hash(file_data)
 
         filename = file.filename
 
@@ -53,7 +53,7 @@ def handle_file_check():
         if not filename_result:
             return jsonify({'error': 'File not found'}), 404
 
-        same_file_hash = files.compare_file_hashes(filename_result['file_hash'], new_file_hash)
+        same_file_hash = hashing.compare_file_hashes(filename_result['file_hash'], new_file_hash)
         print("CHECK FILE HASH RESULT", same_file_hash)
 
         if same_file_hash:
@@ -61,6 +61,14 @@ def handle_file_check():
         else:
             database.insert_log_db(1, filename, "File hashes do not match.", filename_result['file_hash'], new_file_hash)
             return jsonify({'error': 'Error: File has changed.'}), 400
+
+@app.route("/generate-log-file", methods=['GET'])
+def download_log_file():
+    user_id = 1  # Hardcoded
+    log_file_path = database.generate_log_file(1)
+
+    # Return the PDF log file to download
+    return send_file(log_file_path, as_attachment=True, download_name=f"user{user_id}-logs.pdf")
 
 # To run the app
 if __name__ == "__main__":

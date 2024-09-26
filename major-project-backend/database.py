@@ -2,6 +2,8 @@ from pymongo import MongoClient, DESCENDING
 import os
 from dotenv import load_dotenv
 from datetime import datetime
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 # Load .env file variables
 load_dotenv()
@@ -60,3 +62,36 @@ def insert_log_db(user_id, filename, log_message, old_file_hash, new_file_hash):
         "date": current_datetime
     }
     collection.insert_one(log_info)
+
+# Creates a log file for the user
+def generate_log_file(user_id):
+    collection = db['logs']
+    # Get logs for this user
+    user_logs = collection.find({"user_id": user_id})  
+
+    log_file_path = f"user{user_id}-logs.pdf"
+    
+    # Create a PDF object
+    canvasObj = canvas.Canvas(log_file_path, pagesize=letter)
+    canvasObj.setFont("Helvetica", 12)
+    canvasObj.drawString(50, 750, f"Log File for User {user_id}")
+    canvasObj.drawString(50, 730, f"Created on: {get_date_time()}")
+    
+    y_position = 700  # Start position to write logs
+
+    # Iterate over the logs and write each line in the PDF
+    for log in user_logs:
+        canvasObj.drawString(50, y_position, f"Date: {log['date']}")
+        y_position -= 20
+        canvasObj.drawString(50, y_position, f"Filename: {log['filename']}")
+        y_position -= 20
+        canvasObj.drawString(50, y_position, f"Message: {log['log_message']}")
+        y_position -= 20
+        canvasObj.drawString(50, y_position, f"Old Hash: {log['old_file_hash']}")
+        y_position -= 20
+        canvasObj.drawString(50, y_position, f"New Hash: {log['new_file_hash']}")
+        y_position -= 40
+    
+    # Save the PDF
+    canvasObj.save()
+    return log_file_path

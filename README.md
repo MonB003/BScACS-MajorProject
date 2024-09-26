@@ -47,6 +47,7 @@ pip install flask
 pip install flask-cors
 pip install pymongo
 pip install python-dotenv
+pip install reportlab
 ```
 
 ### Running the project locally:

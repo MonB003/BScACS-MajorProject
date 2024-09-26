@@ -9,7 +9,7 @@ function FileCheckForm() {
         setFile(event.target.files[0]);
     };
 
-    // Handle file upload
+    // Handle file checking
     const handleFileCheck = async () => {
         if (!file) {
             alert("Error: Please select a file.");
@@ -22,8 +22,8 @@ function FileCheckForm() {
 
         // Send the file to the backend
         try {
-            const URL = "http://localhost:5000"
-            // const URL = "https://bscacs-majorproject.onrender.com"
+            // const URL = "http://localhost:5000"
+            const URL = "https://bscacs-majorproject.onrender.com"
             const response = await fetch(`${URL}/check-file`, {
                 method: 'POST',
                 body: formData,

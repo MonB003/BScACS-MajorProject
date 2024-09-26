@@ -1,4 +1,4 @@
-from pymongo import MongoClient
+from pymongo import MongoClient, DESCENDING
 import os
 from dotenv import load_dotenv
 from datetime import datetime
@@ -35,3 +35,13 @@ def insert_file_db(filename, file_hash):
 def find_file_by_hash(file_hash):
     collection = db['files']
     return collection.find_one({"file_hash": file_hash})
+
+# Find the most recent file by filename
+def find_recent_file_by_name(filename):
+    collection = db['files']
+    filename_recent_date = collection.find_one({"filename": filename}, sort=[('date', DESCENDING)])
+    
+    if filename_recent_date:
+        print("MOST RECENT FILE RESULT", filename_recent_date)
+        return filename_recent_date
+    return None

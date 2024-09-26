@@ -1,14 +1,9 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os
 import database, files
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
-
-# Set upload folder
-# UPLOAD_FOLDER = 'uploaded-files/'
-# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route("/upload-file", methods=['POST'])
 def handle_file_upload():
@@ -18,21 +13,9 @@ def handle_file_upload():
     file = request.files['file']
     
     if file.filename == '':
-        return jsonify({'error': 'No file with the specified filename'}), 400
-    
-    # # Check if the upload folder exists, otherwise create it
-    # if not os.path.exists(app.config['UPLOAD_FOLDER']):
-    #     os.makedirs(app.config['UPLOAD_FOLDER'])
+        return jsonify({'error': 'No file with the specified filename'}), 404
 
     if file:
-        # Create file path to save the file to
-        # file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-        # file.save(file_path)
-
-        # # Hash the file
-        # file_hash = files.generate_file_hash(file_path)
-        # print("FILE HASH: ", file_hash)
-
         # Read file content from memory
         file_data = file.read()
 
@@ -44,6 +27,39 @@ def handle_file_upload():
         database.insert_file_db(file.filename, file_hash)
 
         return jsonify({'message': 'File uploaded successfully', 'file': file.filename, 'file_hash': file_hash}), 200
+
+@app.route("/check-file", methods=['POST'])
+def handle_file_check():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file sent'}), 400
+    
+    file = request.files['file']
+    
+    if file.filename == '':
+        return jsonify({'error': 'No file with the specified filename'}), 404
+    
+    if file:
+        # Read file content from memory
+        file_data = file.read()
+
+        # Hash the file content
+        new_file_hash = files.generate_file_hash(file_data)
+
+        filename = file.filename
+
+        filename_result = database.find_recent_file_by_name(filename)
+        print("FILENAME RESULT", filename_result)
+
+        if not filename_result:
+            return jsonify({'error': 'File not found'}), 404
+
+        same_file_hash = files.compare_file_hashes(filename_result['file_hash'], new_file_hash)
+        print("CHECK FILE HASH RESULT", same_file_hash)
+
+        if same_file_hash:
+            return jsonify({'message': 'Success: File has not changed.', 'file': filename_result['filename'], 'file_hash': filename_result['file_hash'], 'date': filename_result['date']}), 200
+        else:
+            return jsonify({'error': 'Error: File has changed.'}), 400
 
 # To run the app
 if __name__ == "__main__":

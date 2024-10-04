@@ -11,7 +11,7 @@ load_dotenv()
 # Connect to MongoDB database
 MONGO_URI = os.getenv("MONGO_URI")
 client = MongoClient(MONGO_URI)
-db = client['files_db']
+db = client['toolkit_db']
 
 def get_date_time():
     # Get current date and time
@@ -48,6 +48,28 @@ def find_recent_file_by_name(filename):
         return filename_recent_date
     return None
 
+def update_file_db(user_id, filename, file_hash):
+    collection = db['files']
+
+    # Insert file data if new, otherwise update these fields
+    current_datetime = get_date_time()
+    file_data = {
+        "user_id": user_id,
+        "filename": filename,
+        "file_hash": file_hash,
+        "date": current_datetime
+    }
+
+    # Insert or update a file entry
+    update_result = collection.update_one(
+        {"filename": filename, "user_id": user_id},
+        {"$set": file_data},  # Use set operator to update the fields
+        upsert=True  # Upsert creates a new document if none is found
+    )
+
+    if update_result is None:
+        return False
+    return True
 
 # Insert new log entry info into database
 def insert_log_db(user_id, filename, log_message, old_file_hash, new_file_hash):

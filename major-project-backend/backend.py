@@ -9,11 +9,17 @@ CORS(app)  # Enable CORS for all routes
 def handle_file_upload():
     if 'file' not in request.files:
         return jsonify({'error': 'No file sent'}), 400
-    
+        
     file = request.files['file']
     
+    # Get the user ID from the request form
+    user_id = request.form.get('user_id')
+
     if file.filename == '':
         return jsonify({'error': 'No file with the specified filename'}), 404
+    
+    if not user_id:
+        return jsonify({'error': 'No user ID was provided'}), 400
 
     if file:
         # Read file content from memory
@@ -24,7 +30,7 @@ def handle_file_upload():
         print("FILE HASH: ", file_hash)
 
         # Store file name and hash in database
-        database.insert_file_db(file.filename, file_hash)
+        database.update_file_db(user_id, file.filename, file_hash)
 
         return jsonify({'message': 'File uploaded successfully', 'file': file.filename, 'file_hash': file_hash}), 200
 

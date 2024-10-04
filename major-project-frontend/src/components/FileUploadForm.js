@@ -16,14 +16,18 @@ function FileUploadForm() {
             return;
         }
         console.log("File to send:", file);
+        console.log("TYPE:", file.type);
+        console.log("SIZE:", file.size);
+        console.log("LAST MODIFIED:", file.lastModified);
 
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('user_id', 1);
 
         // Send the file to the backend
         try {
-            // const URL = "http://localhost:5000"
-            const URL = "https://bscacs-majorproject.onrender.com"
+            const URL = "http://localhost:5000"
+            // const URL = "https://bscacs-majorproject.onrender.com"
             const response = await fetch(`${URL}/upload-file`, {
                 method: 'POST',
                 body: formData,

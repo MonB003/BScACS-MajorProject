@@ -15,6 +15,10 @@ function FileUploadForm() {
             alert("Error: Please select a file.");
             return;
         }
+
+        const formMessage = document.getElementById('formMessage')
+        formMessage.style.display = "block";
+
         console.log("File to send:", file);
         console.log("TYPE:", file.type);
         console.log("SIZE:", file.size);
@@ -26,14 +30,15 @@ function FileUploadForm() {
 
         // Send the file to the backend
         try {
-            const URL = "http://localhost:5000"
-            // const URL = "https://bscacs-majorproject.onrender.com"
+            const URL = process.env.REACT_APP_BACKEND_HOSTED_URL;
             const response = await fetch(`${URL}/upload-file`, {
                 method: 'POST',
                 body: formData,
             });
 
             const result = await response.json();
+            formMessage.style.display = "none";
+
             console.log("RESPONSE", result)
             if (response.ok) {
                 alert(result.message);
@@ -52,6 +57,7 @@ function FileUploadForm() {
                 <input type="file" onChange={handleFileChange} />
                 <br />
                 <button onClick={handleFileUpload}>Upload File</button>
+                <p id="formMessage" style={{display: "none"}}>File upload in progress</p>
             </div>
         </>
     );

@@ -5,8 +5,7 @@ function LogGenerator() {
     const handleLogGeneration = async () => {
         // Send the request to the backend
         try {
-            // const URL = "http://localhost:5000"
-            const URL = "https://bscacs-majorproject.onrender.com"
+            const URL = process.env.REACT_APP_BACKEND_HOSTED_URL;
             const response = await fetch(`${URL}/generate-log-file`);
 
             if (!response.ok) {

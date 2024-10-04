@@ -42,9 +42,14 @@ Cloning the repository:
 In the respective folders, you will need to install these packages:
 #### React-Frontend (major-project-frontend folder):
 ```
-npm install 
+npm install
 ```
 #### Python-Backend (major-project-backend folder):
+The backend requires a virtual environment to be setup:
+```
+python -m venv venv
+```
+Packages to install:
 ```
 pip install flask
 pip install flask-cors
@@ -52,11 +57,6 @@ pip install pymongo
 pip install python-dotenv
 pip install reportlab
 ```
-The backend requires a virtual environment to be setup:
-```
-python -m venv venv
-```
-
 ### Running the project locally:
 #### Server (Python)
 1. Open Command Prompt

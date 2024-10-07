@@ -27,7 +27,6 @@ def handle_file_upload():
 
         # Hash the file content
         file_hash = hashing.generate_file_hash(file_data)
-        print("FILE HASH: ", file_hash)
 
         # Store file name and hash in database
         database.update_file_db(user_id, file.filename, file_hash)
@@ -58,13 +57,11 @@ def handle_file_check():
         filename = file.filename
 
         filename_result = database.find_recent_file_by_name(filename)
-        print("FILENAME RESULT", filename_result)
 
         if not filename_result:
             return jsonify({'error': 'File not found'}), 404
 
         same_file_hash = hashing.compare_file_hashes(filename_result['file_hash'], new_file_hash)
-        print("CHECK FILE HASH RESULT", same_file_hash)
 
         if same_file_hash:
             return jsonify({'message': 'Success: File has not changed.', 'file': filename_result['filename'], 'file_hash': filename_result['file_hash'], 'date': filename_result['date']}), 200

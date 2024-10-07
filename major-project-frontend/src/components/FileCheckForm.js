@@ -35,7 +35,7 @@ function FileCheckForm() {
             const result = await response.json();
             formCheckMessage.style.display = "none";
 
-            console.log("RESPONSE", result)
+            console.log("Response", result)
             if (response.ok) {
                 alert(result.message);
             } else {

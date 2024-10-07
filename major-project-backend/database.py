@@ -19,7 +19,6 @@ def get_date_time():
     
     # Format: dd/mm/YY H:M:S
     datetime_formatted = now.strftime("%d/%m/%Y %H:%M:%S")
-    print("Date and time:", datetime_formatted)
     return datetime_formatted
 
 # Insert file info into database
@@ -44,7 +43,6 @@ def find_recent_file_by_name(filename):
     filename_recent_date = collection.find_one({"filename": filename}, sort=[('date', DESCENDING)])
     
     if filename_recent_date:
-        print("MOST RECENT FILE RESULT", filename_recent_date)
         return filename_recent_date
     return None
 

@@ -20,9 +20,9 @@ function FileUploadForm() {
         formMessage.style.display = "block";
 
         console.log("File to send:", file);
-        console.log("TYPE:", file.type);
-        console.log("SIZE:", file.size);
-        console.log("LAST MODIFIED:", file.lastModified);
+        console.log("Type:", file.type);
+        console.log("Size:", file.size);
+        console.log("Last modified:", file.lastModified);
 
         const formData = new FormData();
         formData.append('file', file);
@@ -39,7 +39,7 @@ function FileUploadForm() {
             const result = await response.json();
             formMessage.style.display = "none";
 
-            console.log("RESPONSE", result)
+            console.log("Response", result)
             if (response.ok) {
                 alert(result.message);
             } else {

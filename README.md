@@ -1,11 +1,11 @@
 # COMP 8800 and 8900 Major Project
-> The *Secure MoniTor Toolkit* is a forensics toolkit, which offers a user-friendly solution to enhance the detection and response of digital forensic incidents. Users can upload files to check the file integrity.
+> The *Secure MoniTor Toolkit* is a forensics toolkit, which offers a user-friendly solution to enhance the detection and response of digital forensic incidents. Users can upload files to check for file integrity.
 
 [Hosted App Link](https://major-project-monb.netlify.app/)
 
 ## Table of Contents
 - [Technologies](#technologies)
-- [Dependencies](#dependencies)
+- [Operating Systems](#operating-systems)
 - [How to run the project](#how-to-run-project)
 - [Features](#features)
 
@@ -15,9 +15,11 @@
 * Database: MongoDB
 * Hosting: [Netlify.com (frontend)](https://www.netlify.com/), [Render.com (backend)](https://render.com/)
 
-## Dependencies
+## <a id="operating-systems">Operating Systems</a>
+
 This project has been tested on:
 * Windows 11
+* macOS Sonoma 14.4.1
 * Fedora 40
 
 ## <a id="how-to-run-project">How to run the project</a>
@@ -37,7 +39,7 @@ Cloning the repository:
 - `cd` into the folder you want the repository stored in
 - Type: `git clone https://github.com/MonB003/BScACS-MajorProject.git`
 
-<b>Note:</b> There is a `.env` file that is needed in order for the database functionality to work.
+**Note:** There is a `.env` file that is needed in order for the database functionality to work.
 
 In the respective folders, you will need to install these packages:
 #### React-Frontend (major-project-frontend folder):
@@ -45,11 +47,20 @@ In the respective folders, you will need to install these packages:
 npm install
 ```
 #### Python-Backend (major-project-backend folder):
-The backend requires a virtual environment to be setup:
+The backend requires a virtual environment to be setup. 
+
+**Windows and Linux:**
 ```
 python -m venv venv
 ```
-Packages to install:
+**Mac:**
+```
+python3 -m venv venv
+```
+
+The packages below need to be installed.
+
+**Windows and Linux:**
 ```
 pip install flask
 pip install flask-cors
@@ -57,19 +68,33 @@ pip install pymongo
 pip install python-dotenv
 pip install reportlab
 ```
+**Mac:**
+```
+pip3 install flask
+pip3 install flask-cors
+pip3 install pymongo
+pip3 install python-dotenv
+pip3 install reportlab
+```
+
 ### Running the project locally:
 #### Server (Python)
 1. Open Command Prompt
-2. `cd` into your project folder
+2. `cd` into your project folder (for example: `cd BScACS-MajorProject`)
 3. Type `cd major-project-backend`
 4. Type the following commands
 
-<b>Windows:</b>
+**Windows:**
 ```
 .\venv\Scripts\activate
 python backend.py
 ```
-<b>Linux:</b>
+**Mac:**
+```
+source venv/bin/activate
+python3 backend.py
+```
+**Linux:**
 ```
 source venv/bin/activate
 python backend.py
@@ -78,7 +103,7 @@ python backend.py
 
 #### Client (React)
 1. Open Command Prompt
-2. `cd` into your project folder
+2. `cd` into your project folder (for example: `cd BScACS-MajorProject`)
 3. Type `cd major-project-frontend`
 4. Type `npm start`
 5. Go to http://localhost:3000 on any browser

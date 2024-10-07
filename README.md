@@ -25,7 +25,7 @@ This project has been tested on:
 ## <a id="how-to-run-project">How to run the project</a>
 ### Prerequisites:
 - Have a Git and GitHub account
-- Have Visual Studio Code or another coding editor
+- Have Visual Studio Code or another coding editor (for viewing and editing the code if needed)
 
 ### Configuration instructions:
 
@@ -35,7 +35,7 @@ You will need to install:
 - [Pip package management](https://pypi.org/project/pip/) (pip)
 
 Cloning the repository:
-- Open Command Prompt 
+- Open Command Prompt (Windows) or Terminal (Mac and Linux)
 - `cd` into the folder you want the repository stored in
 - Type: `git clone https://github.com/MonB003/BScACS-MajorProject.git`
 
@@ -102,7 +102,7 @@ python backend.py
 5. This will start the server on http://localhost:5000
 
 #### Client (React)
-1. Open Command Prompt
+1. Open Command Prompt (Windows) or Terminal (Mac and Linux)
 2. `cd` into your project folder (for example: `cd BScACS-MajorProject`)
 3. Type `cd major-project-frontend`
 4. Type `npm start`

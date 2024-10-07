@@ -12,7 +12,7 @@
 ## Technologies
 * Frontend: React, JavaScript
 * Backend: Python, Flask
-* Database: MongoDB
+* Database: [MongoDB](https://www.mongodb.com/)
 * Hosting: [Netlify.com (frontend)](https://www.netlify.com/), [Render.com (backend)](https://render.com/)
 
 ## <a id="operating-systems">Operating Systems</a>
@@ -79,7 +79,7 @@ pip3 install reportlab
 
 ### Running the project locally:
 #### Server (Python)
-1. Open Command Prompt
+1. Open Command Prompt (Windows) or Terminal (Mac and Linux)
 2. `cd` into your project folder (for example: `cd BScACS-MajorProject`)
 3. Type `cd major-project-backend`
 4. Type the following commands

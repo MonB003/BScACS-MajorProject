@@ -41,9 +41,10 @@ def handle_file_check():
     
     # Get the file data from the request form
     file = request.files['file']
-    # Get the user ID from the request form
+    # Get the user ID from the request form and store as a number
     user_id = request.form.get('user_id')
-    
+    user_id_num = int(user_id)
+
     if file.filename == '':
         return jsonify({'error': 'No file with the specified filename'}), 404
     
@@ -68,13 +69,13 @@ def handle_file_check():
         if same_file_hash:
             return jsonify({'message': 'Success: File has not changed.', 'file': filename_result['filename'], 'file_hash': filename_result['file_hash'], 'date': filename_result['date']}), 200
         else:
-            database.insert_log_db(user_id, filename, "File hashes do not match.", filename_result['file_hash'], new_file_hash)
+            database.insert_log_db(user_id_num, filename, "File hashes do not match.", filename_result['file_hash'], new_file_hash)
             return jsonify({'error': 'Error: File has changed.'}), 400
 
 @app.route("/generate-log-file", methods=['GET'])
 def download_log_file():
     user_id = 1  # Hardcoded
-    log_file_path = database.generate_log_file(user_id)
+    log_file_path = database.generate_log_file(1)
 
     # Return the PDF log file to download
     return send_file(log_file_path, as_attachment=True, download_name=f"user{user_id}-logs.pdf")

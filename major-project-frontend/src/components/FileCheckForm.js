@@ -17,8 +17,8 @@ function FileCheckForm() {
         }
         console.log("File to send:", file);
 
-        const formMessage = document.getElementById('formMessage')
-        formMessage.style.display = "block";
+        const formCheckMessage = document.getElementById('formCheckMessage')
+        formCheckMessage.style.display = "block";
 
         const formData = new FormData();
         formData.append('file', file);
@@ -26,14 +26,14 @@ function FileCheckForm() {
 
         // Send the file to the backend
         try {
-            const URL = process.env.REACT_APP_BACKEND_HOSTED_URL;
+            const URL = process.env.REACT_APP_BACKEND_LOCAL_URL;
             const response = await fetch(`${URL}/check-file`, {
                 method: 'POST',
                 body: formData,
             });
 
             const result = await response.json();
-            formMessage.style.display = "none";
+            formCheckMessage.style.display = "none";
 
             console.log("RESPONSE", result)
             if (response.ok) {
@@ -53,7 +53,7 @@ function FileCheckForm() {
                 <input type="file" onChange={handleFileChange} />
                 <br />
                 <button onClick={handleFileCheck}>Check File</button>
-                <p id="formMessage" style={{display: "none"}}>File check in progress</p>
+                <p id="formCheckMessage" style={{display: "none"}}>File check in progress</p>
             </div>
         </>
     );

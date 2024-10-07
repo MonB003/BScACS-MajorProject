@@ -24,7 +24,6 @@ This project has been tested on:
 
 ## <a id="how-to-run-project">How to run the project</a>
 ### Prerequisites:
-- Have a Git and GitHub account
 - Have Visual Studio Code or another coding editor (for viewing and editing the code if needed)
 
 ### Configuration instructions:
@@ -33,13 +32,6 @@ You will need to install:
 - [Node package manager](https://nodejs.org/en/download/) (npm)
 - [Python](https://www.python.org/downloads/)
 - [Pip package management](https://pypi.org/project/pip/) (pip)
-
-Cloning the repository:
-- Open Command Prompt (Windows) or Terminal (Mac and Linux)
-- `cd` into the folder you want the repository stored in
-- Type: `git clone https://github.com/MonB003/BScACS-MajorProject.git`
-
-**Note:** There is a `.env` file that is needed in order for the database functionality to work.
 
 In the respective folders, you will need to install these packages:
 #### React Frontend (major-project-frontend folder):

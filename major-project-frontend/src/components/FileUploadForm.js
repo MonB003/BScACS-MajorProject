@@ -30,7 +30,7 @@ function FileUploadForm() {
 
         // Send the file to the backend
         try {
-            const URL = process.env.REACT_APP_BACKEND_HOSTED_URL;
+            const URL = process.env.REACT_APP_BACKEND_LOCAL_URL;
             const response = await fetch(`${URL}/upload-file`, {
                 method: 'POST',
                 body: formData,

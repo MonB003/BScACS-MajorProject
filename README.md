@@ -58,7 +58,8 @@ python -m venv venv
 python3 -m venv venv
 ```
 
-Activate the environment.
+Activate the virtual environment.
+
 **Windows:**
 ```
 .\venv\Scripts\activate

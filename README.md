@@ -58,6 +58,16 @@ python -m venv venv
 python3 -m venv venv
 ```
 
+Activate the environment.
+**Windows:**
+```
+.\venv\Scripts\activate
+```
+**Mac and Linux:**
+```
+source venv/bin/activate
+```
+
 The packages below need to be installed.
 
 **Windows and Linux:**

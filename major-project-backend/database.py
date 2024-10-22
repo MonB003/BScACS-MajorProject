@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from datetime import datetime
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+import uuid
+import hashing
 
 # Load .env file variables
 load_dotenv()
@@ -115,3 +117,35 @@ def generate_log_file(user_id):
     # Save the PDF
     canvasObj.save()
     return log_file_path
+
+
+def generate_user_id():
+    # Use uuid4 to generate an ID
+    uuid_value = uuid.uuid4() 
+    print("The id generated using uuid4() : ", uuid_value) 
+    return str(uuid_value)
+
+# Insert user into database
+def insert_user_db(username, password):
+    collection = db['users']
+    current_datetime = get_date_time()
+    hash_password = hashing.generate_hash(password.encode('utf-8'))
+    user_data = {
+        "userID": generate_user_id(),
+        "username": username,
+        "password": hash_password,
+        "date": current_datetime
+    }
+    collection.insert_one(user_data)
+    return user_data
+
+# Find a user by username
+def find_username(username):
+    collection = db['users']
+    return collection.find_one({"username": username})
+
+# Find a user by username and password
+def find_user_account(username, password):
+    collection = db['users']
+    hash_password = hashing.generate_hash(password.encode('utf-8'))
+    return collection.find_one({"username": username, "password": hash_password})

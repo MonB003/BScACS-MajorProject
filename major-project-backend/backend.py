@@ -14,6 +14,7 @@ def handle_file_upload():
     file = request.files['file']
     # Get the user ID from the request form
     user_id = request.form.get('user_id')
+    print("USER ID", user_id)
 
     if file.filename == '':
         return jsonify({'error': 'No file with the specified filename'}), 404
@@ -26,7 +27,7 @@ def handle_file_upload():
         file_data = file.read()
 
         # Hash the file content
-        file_hash = hashing.generate_file_hash(file_data)
+        file_hash = hashing.generate_hash(file_data)
 
         # Store file name and hash in database
         database.update_file_db(user_id, file.filename, file_hash)
@@ -42,7 +43,6 @@ def handle_file_check():
     file = request.files['file']
     # Get the user ID from the request form and store as a number
     user_id = request.form.get('user_id')
-    user_id_num = int(user_id)
 
     if file.filename == '':
         return jsonify({'error': 'No file with the specified filename'}), 404
@@ -52,7 +52,7 @@ def handle_file_check():
         file_data = file.read()
 
         # Hash the file content
-        new_file_hash = hashing.generate_file_hash(file_data)
+        new_file_hash = hashing.generate_hash(file_data)
 
         filename = file.filename
 
@@ -66,16 +66,59 @@ def handle_file_check():
         if same_file_hash:
             return jsonify({'message': 'Success: File has not changed.', 'file': filename_result['filename'], 'file_hash': filename_result['file_hash'], 'date': filename_result['date']}), 200
         else:
-            database.insert_log_db(user_id_num, filename, "File hashes do not match.", filename_result['file_hash'], new_file_hash)
+            database.insert_log_db(user_id, filename, "File hashes do not match.", filename_result['file_hash'], new_file_hash)
             return jsonify({'error': 'Error: File has changed.'}), 400
 
 @app.route("/generate-log-file", methods=['GET'])
 def download_log_file():
     user_id = 1  # Hardcoded
+    # user_id = request.form.get('user_id')
+
     log_file_path = database.generate_log_file(1)
 
     # Return the PDF log file to download
     return send_file(log_file_path, as_attachment=True, download_name=f"user{user_id}-logs.pdf")
+
+@app.route("/signup", methods=['POST'])
+def handle_user_signup():
+    # Get the username and password from the request form
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    print("USERNAME", username)
+    print("PASSWORD", password)
+
+    if username == '' or password == '':
+        return jsonify({'error': 'Please fill out all fields.'}), 400
+    
+    if username:
+        username_result = database.find_username(username)
+        if username_result:
+            return jsonify({'error': 'An account with this username already exists.'}), 400
+        else:
+            user_result = database.insert_user_db(username, password)
+            print("USER", user_result)
+            return jsonify({'message': 'Success: A user account has been created.', 'user_id': user_result['userID'], 'username': user_result['username']}), 200
+
+@app.route("/login", methods=['POST'])
+def handle_user_login():
+    # Get the username and password from the request form
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    print("USERNAME", username)
+    print("PASSWORD", password)
+
+    if username == '' or password == '':
+        return jsonify({'error': 'Please fill out all fields.'}), 400
+    
+    if username and password:
+        user_result = database.find_user_account(username, password)
+        if not user_result:
+            return jsonify({'error': 'No user account exists with this information.'}), 400
+        else:
+            print("USER", user_result)
+            return jsonify({'message': 'Success: A user account was found.', 'user_id': user_result['userID'], 'username': user_result['username']}), 200
 
 # To run the app
 if __name__ == "__main__":

@@ -40,14 +40,15 @@ def find_file_by_hash(file_hash):
     return collection.find_one({"file_hash": file_hash})
 
 # Find the most recent file by filename
-def find_recent_file_by_name(filename):
+def find_recent_file_by_name(filename, user_id):
     collection = db['files']
-    filename_recent_date = collection.find_one({"filename": filename}, sort=[('date', DESCENDING)])
+    filename_recent_date = collection.find_one({"filename": filename, "user_id": user_id}, sort=[('date', DESCENDING)])
     
     if filename_recent_date:
         return filename_recent_date
     return None
 
+# Insert or update a file entry in the database
 def update_file_db(user_id, filename, file_hash):
     collection = db['files']
 
@@ -86,17 +87,17 @@ def insert_log_db(user_id, filename, log_message, old_file_hash, new_file_hash):
     collection.insert_one(log_info)
 
 # Creates a log file for the user
-def generate_log_file(user_id):
+def generate_log_file(user_id, username):
     collection = db['logs']
     # Get logs for this user
     user_logs = collection.find({"user_id": user_id})  
 
-    log_file_path = f"user{user_id}-logs.pdf"
+    log_file_path = f"{username}-logs.pdf"
     
     # Create a PDF object
     canvasObj = canvas.Canvas(log_file_path, pagesize=letter)
     canvasObj.setFont("Helvetica", 12)
-    canvasObj.drawString(50, 750, f"Log File for User {user_id}")
+    canvasObj.drawString(50, 750, f"Log File for {username}")
     canvasObj.drawString(50, 730, f"Created on: {get_date_time()}")
     
     y_position = 700  # Start position to write logs
@@ -118,7 +119,7 @@ def generate_log_file(user_id):
     canvasObj.save()
     return log_file_path
 
-
+# Generate a user ID
 def generate_user_id():
     # Use uuid4 to generate an ID
     uuid_value = uuid.uuid4() 

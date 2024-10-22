@@ -8,7 +8,7 @@ CORS(app)  # Enable CORS for all routes
 @app.route("/upload-file", methods=['POST'])
 def handle_file_upload():
     if 'file' not in request.files:
-        return jsonify({'error': 'No file sent'}), 400
+        return jsonify({'error': 'No file was sent.'}), 400
         
     # Get the file data from the request form
     file = request.files['file']
@@ -17,10 +17,10 @@ def handle_file_upload():
     print("USER ID", user_id)
 
     if file.filename == '':
-        return jsonify({'error': 'No file with the specified filename'}), 404
+        return jsonify({'error': 'The filename cannot be empty.'}), 404
     
     if not user_id:
-        return jsonify({'error': 'No user ID was provided'}), 400
+        return jsonify({'error': 'The user ID cannot be empty.'}), 400
 
     if file:
         # Read file content from memory
@@ -37,7 +37,7 @@ def handle_file_upload():
 @app.route("/check-file", methods=['POST'])
 def handle_file_check():
     if 'file' not in request.files:
-        return jsonify({'error': 'No file sent'}), 400
+        return jsonify({'error': 'No file was sent.'}), 400
     
     # Get the file data from the request form
     file = request.files['file']
@@ -45,7 +45,7 @@ def handle_file_check():
     user_id = request.form.get('user_id')
 
     if file.filename == '':
-        return jsonify({'error': 'No file with the specified filename'}), 404
+        return jsonify({'error': 'The filename cannot be empty.'}), 404
     
     if file:
         # Read file content from memory
@@ -56,28 +56,34 @@ def handle_file_check():
 
         filename = file.filename
 
-        filename_result = database.find_recent_file_by_name(filename)
-
+        filename_result = database.find_recent_file_by_name(filename, user_id)
+        
         if not filename_result:
-            return jsonify({'error': 'File not found'}), 404
+            error_message = "Error. The file: " + filename + " was not found."
+            return jsonify({'error': error_message}), 404
 
         same_file_hash = hashing.compare_file_hashes(filename_result['file_hash'], new_file_hash)
 
         if same_file_hash:
-            return jsonify({'message': 'Success: File has not changed.', 'file': filename_result['filename'], 'file_hash': filename_result['file_hash'], 'date': filename_result['date']}), 200
+            success_message = "Success! The file: " + filename + " has not changed."
+            return jsonify({'message': success_message, 'file': filename_result['filename'], 'file_hash': filename_result['file_hash'], 'date': filename_result['date']}), 200
         else:
+            error_message = "Error. The file: " + filename + " has changed."
             database.insert_log_db(user_id, filename, "File hashes do not match.", filename_result['file_hash'], new_file_hash)
-            return jsonify({'error': 'Error: File has changed.'}), 400
+            return jsonify({'error': error_message}), 400
 
-@app.route("/generate-log-file", methods=['GET'])
+@app.route("/generate-log-file", methods=['POST'])
 def download_log_file():
-    user_id = 1  # Hardcoded
-    # user_id = request.form.get('user_id')
+    # user_id = "1"  # Hardcoded
+    # username = "username"
+    user_id = request.form.get('user_id')
+    username = request.form.get('username')
+    # print("REQUEST: " + user_id1 + " " + username1)
 
-    log_file_path = database.generate_log_file(1)
+    log_file_path = database.generate_log_file(user_id, username)
 
     # Return the PDF log file to download
-    return send_file(log_file_path, as_attachment=True, download_name=f"user{user_id}-logs.pdf")
+    return send_file(log_file_path, as_attachment=True, download_name=f"{username}-logs.pdf")
 
 @app.route("/signup", methods=['POST'])
 def handle_user_signup():

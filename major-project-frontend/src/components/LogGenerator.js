@@ -1,12 +1,19 @@
 import React from 'react'
 
-function LogGenerator() {
+function LogGenerator({ userID, username }) {
     // Handle log file generation
     const handleLogGeneration = async () => {
+        const formData = new FormData();
+        formData.append('user_id', userID);
+        formData.append('username', username);
+
         // Send the request to the backend
         try {
             const URL = process.env.REACT_APP_BACKEND_LOCAL_URL;
-            const response = await fetch(`${URL}/generate-log-file`);
+            const response = await fetch(`${URL}/generate-log-file`, {
+                method: 'POST',
+                body: formData,
+            });
 
             if (!response.ok) {
                 alert('Error: The log file could not be generated.');
@@ -19,7 +26,7 @@ function LogGenerator() {
             const logFileURL = window.URL.createObjectURL(blobResult);
             const a = document.createElement('a');
             a.href = logFileURL;
-            a.download = 'log_file.pdf'; // PDF file name
+            a.download = username + '_log_file.pdf'; // PDF file name
             // Put file on the page to download, then remove it after
             document.body.appendChild(a);
             a.click();

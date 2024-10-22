@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-function FileCheckForm() {
+function FileCheckForm({ userID }) {
     const [file, setFile] = useState(null);
 
     // Handle file change
@@ -22,7 +22,8 @@ function FileCheckForm() {
 
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('user_id', 1);
+        formData.append('user_id', userID);
+        console.log("USER ID FORM DATA", userID)
 
         // Send the file to the backend
         try {
@@ -50,7 +51,7 @@ function FileCheckForm() {
         <>
             <div>
                 <h1>Check a File</h1>
-                <input type="file" onChange={handleFileChange} />
+                <input type="file" onChange={handleFileChange} required={true} />
                 <br />
                 <button onClick={handleFileCheck}>Check File</button>
                 <p id="formCheckMessage" style={{display: "none"}}>File check in progress</p>

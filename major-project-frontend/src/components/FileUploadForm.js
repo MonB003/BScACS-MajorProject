@@ -22,11 +22,17 @@ function FileUploadForm({ userID }) {
         console.log("File to send:", file);
         console.log("Type:", file.type);
         console.log("Size:", file.size);
-        console.log("Last modified:", file.lastModified);
+        // console.log("Last modified:", file.lastModified);
+        console.log("Last modified date:", file.lastModifiedDate);
 
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('size', file.size);
+        // formData.append('lastModified', file.lastModified);
+        formData.append('lastModifiedDate', file.lastModifiedDate);
+
         formData.append('user_id', userID);
+
 
         // Send the file to the backend
         try {

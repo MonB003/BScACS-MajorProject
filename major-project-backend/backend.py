@@ -14,23 +14,32 @@ def handle_file_upload():
     file = request.files['file']
     # Get the user ID from the request form
     user_id = request.form.get('user_id')
-    print("USER ID", user_id)
 
     if file.filename == '':
         return jsonify({'error': 'The filename cannot be empty.'}), 404
     
     if not user_id:
         return jsonify({'error': 'The user ID cannot be empty.'}), 400
+    
+    # print("FILE", file)
+    # print(f"Filename: {file.filename}")
+    # content_type = file.content_type
+    size = request.form.get('size')
+    # print(f"lastModified: {request.form.get('lastModified')}")
+    last_modified_date = request.form.get('lastModifiedDate')
 
     if file:
         # Read file content from memory
         file_data = file.read()
 
+        file_text = file_data.decode('utf-8')
+        print("File Content: ", file_text)
+
         # Hash the file content
         file_hash = hashing.generate_hash(file_data)
 
         # Store file name and hash in database
-        database.update_file_db(user_id, file.filename, file_hash)
+        database.update_file_db(user_id, file.filename, file_hash, file.content_type, size, last_modified_date)
 
         return jsonify({'message': 'File uploaded successfully', 'file': file.filename, 'file_hash': file_hash}), 200
 
@@ -43,6 +52,8 @@ def handle_file_check():
     file = request.files['file']
     # Get the user ID from the request form and store as a number
     user_id = request.form.get('user_id')
+    size = request.form.get('size')
+    last_modified_date = request.form.get('lastModifiedDate')
 
     if file.filename == '':
         return jsonify({'error': 'The filename cannot be empty.'}), 404
@@ -55,30 +66,35 @@ def handle_file_check():
         new_file_hash = hashing.generate_hash(file_data)
 
         filename = file.filename
-
         filename_result = database.find_recent_file_by_name(filename, user_id)
+        new_file_result = {
+            "user_id": user_id,
+            "filename": filename,
+            "file_hash": new_file_hash,
+            "content_type": file.content_type,
+            "size": size,
+            "last_modified_date": last_modified_date
+        }        
         
         if not filename_result:
             error_message = "Error. The file: " + filename + " was not found."
             return jsonify({'error': error_message}), 404
 
-        same_file_hash = hashing.compare_file_hashes(filename_result['file_hash'], new_file_hash)
+        # same_file_hash = hashing.compare_file_hashes(filename_result['file_hash'], new_file_hash)
+        differences_result = database.find_file_differences(filename_result, new_file_result)
 
-        if same_file_hash:
+        if differences_result is None:
             success_message = "Success! The file: " + filename + " has not changed."
             return jsonify({'message': success_message, 'file': filename_result['filename'], 'file_hash': filename_result['file_hash'], 'date': filename_result['date']}), 200
         else:
             error_message = "Error. The file: " + filename + " has changed."
-            database.insert_log_db(user_id, filename, "File hashes do not match.", filename_result['file_hash'], new_file_hash)
+            database.insert_log_db(user_id, filename, "File hashes do not match.", filename_result['file_hash'], new_file_hash, differences_result)
             return jsonify({'error': error_message}), 400
 
 @app.route("/generate-log-file", methods=['POST'])
 def download_log_file():
-    # user_id = "1"  # Hardcoded
-    # username = "username"
     user_id = request.form.get('user_id')
     username = request.form.get('username')
-    # print("REQUEST: " + user_id1 + " " + username1)
 
     log_file_path = database.generate_log_file(user_id, username)
 
@@ -90,9 +106,6 @@ def handle_user_signup():
     # Get the username and password from the request form
     username = request.form.get('username')
     password = request.form.get('password')
-
-    print("USERNAME", username)
-    print("PASSWORD", password)
 
     if username == '' or password == '':
         return jsonify({'error': 'Please fill out all fields.'}), 400
@@ -112,9 +125,6 @@ def handle_user_login():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    print("USERNAME", username)
-    print("PASSWORD", password)
-
     if username == '' or password == '':
         return jsonify({'error': 'Please fill out all fields.'}), 400
     
@@ -123,7 +133,6 @@ def handle_user_login():
         if not user_result:
             return jsonify({'error': 'No user account exists with this information.'}), 400
         else:
-            print("USER", user_result)
             return jsonify({'message': 'Success: A user account was found.', 'user_id': user_result['userID'], 'username': user_result['username']}), 200
 
 # To run the app

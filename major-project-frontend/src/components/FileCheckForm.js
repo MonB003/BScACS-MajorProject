@@ -23,7 +23,8 @@ function FileCheckForm({ userID }) {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('user_id', userID);
-        console.log("USER ID FORM DATA", userID)
+        formData.append('size', file.size);
+        formData.append('lastModifiedDate', file.lastModifiedDate);
 
         // Send the file to the backend
         try {

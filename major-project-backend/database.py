@@ -6,6 +6,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import uuid
 import hashing
+import json
 
 # Load .env file variables
 load_dotenv()
@@ -49,7 +50,7 @@ def find_recent_file_by_name(filename, user_id):
     return None
 
 # Insert or update a file entry in the database
-def update_file_db(user_id, filename, file_hash):
+def update_file_db(user_id, filename, file_hash, content_type, size, last_modified_date):
     collection = db['files']
 
     # Insert file data if new, otherwise update these fields
@@ -58,7 +59,10 @@ def update_file_db(user_id, filename, file_hash):
         "user_id": user_id,
         "filename": filename,
         "file_hash": file_hash,
-        "date": current_datetime
+        "content_type": content_type,
+        "size": size,
+        "last_modified_date": last_modified_date,
+        "date": current_datetime,
     }
 
     # Insert or update a file entry
@@ -73,17 +77,44 @@ def update_file_db(user_id, filename, file_hash):
     return True
 
 # Insert new log entry info into database
-def insert_log_db(user_id, filename, log_message, old_file_hash, new_file_hash):
+def insert_log_db(user_id, filename, log_message, old_file_hash, new_file_hash, file_differences):
     collection = db['logs']
     current_datetime = get_date_time()
+
+    print("DIFFERENCES", file_differences)
+    full_log_message = ""
+    if len(file_differences) == 1:
+        full_log_message += "Field changed: "
+    else:
+        full_log_message += "Fields changed: "
+
+    # for key in file_differences:
+    #     # Search and remove any "_" symbol, then append key to the full_log_message string
+    #     key_string = str(key).replace('_', ' ')
+    #     print("KEY", key_string)
+    #     full_log_message += key_string + ' '
+
+    for index, (key, value) in enumerate(file_differences.items()):
+        # Search and remove any "_" symbol, then append key to the full_log_message string
+        key_string = str(key).replace('_', ' ')
+        full_log_message += key_string
+        # Add commas between keys
+        if index != len(file_differences)-1:
+            full_log_message += ', '
+    
+    print("FULL MESSAGE: ", full_log_message)
+
     log_info = {
         "user_id": user_id,
         "filename": filename,
-        "log_message": log_message,
-        "old_file_hash": old_file_hash,
-        "new_file_hash": new_file_hash,
-        "date": current_datetime
+        "log_message": full_log_message,
+        # "old_file_hash": old_file_hash,
+        # "new_file_hash": new_file_hash,
+        "date": current_datetime,
     }
+
+    # Merge file_differences into log_info, so all info is stored in one dictionary
+    log_info.update(file_differences)
     collection.insert_one(log_info)
 
 # Creates a log file for the user
@@ -150,3 +181,65 @@ def find_user_account(username, password):
     collection = db['users']
     hash_password = hashing.generate_hash(password.encode('utf-8'))
     return collection.find_one({"username": username, "password": hash_password})
+
+# def find_file_differences(original_file, new_file):
+#     print (type(original_file))
+#     print (type(new_file))
+ 
+#     original_file_dict = dict(original_file)
+#     print("ORIGINAL FILE:")
+#     # Iterating the dictionary
+#     for key,value in original_file_dict.items():
+#         print ("ORIG: ", key, value)
+#     print("NEW FILE:")
+#     # Iterating the dictionary
+#     for key,value in new_file.items():
+#         print ("NEW: ", key, value)
+
+def find_file_differences(original_file, new_file):
+    # Ensure both are dictionaries
+    if not isinstance(original_file, dict) or not isinstance(new_file, dict):
+        print("Inputs must be dictionaries.")
+        return
+
+    differences = {}
+    
+    print("Comparing files...")
+
+    # Loop through each key in the new file, which has only the info to compare
+    for key in new_file:
+        if key in original_file:
+            original_value = original_file[key]
+            new_value = new_file[key]
+            
+            # Compare the initial and new values
+            if original_value != new_value:
+                differences[key] = {
+                    "original_value": original_value,
+                    "new_value": new_value
+                }
+        # else:
+        #     # Key is missing in new file
+        #     differences[key] = {
+        #         "original_value": original_file[key],
+        #         "new_value": "Key not present in new file"
+        #     }
+
+    # Check for any additional keys in the new file that were not in the original file
+    # for key in new_file:
+    #     if key not in original_file:
+    #         differences[key] = {
+    #             "original_value": "Key not present in original file",
+    #             "new_value": new_file[key]
+    #         }
+    
+    if differences:
+        print("Differences found between the files:")
+        for key, diff in differences.items():
+            print(f"Key: {key}")
+            print(f"  Original Value: {diff['original_value']}")
+            print(f"  New Value: {diff['new_value']}")
+        return differences
+    else:
+        print("There were no differences found between the files.")
+        return None

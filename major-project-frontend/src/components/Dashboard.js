@@ -11,6 +11,7 @@ function Dashboard({ user }) {
 
     return (
     <>
+        <h1>Hello, {user.username}</h1>
         <FileUploadForm userID={user.userID} />
         <FileCheckForm userID={user.userID} />
         <LogGenerator userID={user.userID} username={user.username} />

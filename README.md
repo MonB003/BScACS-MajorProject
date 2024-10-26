@@ -46,7 +46,7 @@ In the respective folders, you will need to install these packages:
 ```
 npm install
 ```
-#### Python Backend (major-project-backend folder):
+#### Python Backend (major_project_backend folder):
 The backend requires a virtual environment to be setup. 
 
 **Windows and Linux:**
@@ -92,7 +92,7 @@ pip3 install reportlab
 #### Backend (Python)
 1. Open Command Prompt (Windows) or Terminal (Mac and Linux)
 2. `cd` into your project folder (for example: `cd BScACS-MajorProject`)
-3. Type `cd major-project-backend`
+3. Type `cd major_project_backend`
 4. Type the following commands
 
 **Windows:**

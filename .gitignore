@@ -3,3 +3,6 @@
 
 # For Mac
 .DS_Store
+
+# VS code
+.vscode

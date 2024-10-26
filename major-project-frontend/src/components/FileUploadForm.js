@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-function FileUploadForm() {
+function FileUploadForm({ userID }) {
     const [file, setFile] = useState(null);
 
     // Handle file change
@@ -22,11 +22,17 @@ function FileUploadForm() {
         console.log("File to send:", file);
         console.log("Type:", file.type);
         console.log("Size:", file.size);
-        console.log("Last modified:", file.lastModified);
+        // console.log("Last modified:", file.lastModified);
+        console.log("Last modified date:", file.lastModifiedDate);
 
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('user_id', 1);
+        formData.append('size', file.size);
+        // formData.append('lastModified', file.lastModified);
+        formData.append('lastModifiedDate', file.lastModifiedDate);
+
+        formData.append('user_id', userID);
+
 
         // Send the file to the backend
         try {
@@ -54,7 +60,7 @@ function FileUploadForm() {
         <>
             <div>
                 <h1>File Upload</h1>
-                <input type="file" onChange={handleFileChange} />
+                <input type="file" onChange={handleFileChange} required={true} />
                 <br />
                 <button onClick={handleFileUpload}>Upload File</button>
                 <p id="formMessage" style={{display: "none"}}>File upload in progress</p>

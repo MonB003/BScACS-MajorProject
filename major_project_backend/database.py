@@ -6,7 +6,6 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import uuid
 import hashing
-import json
 
 # Load .env file variables
 load_dotenv()
@@ -77,7 +76,7 @@ def update_file_db(user_id, filename, file_hash, content_type, size, last_modifi
     return True
 
 # Insert new log entry info into database
-def insert_log_db(user_id, filename, log_message, old_file_hash, new_file_hash, file_differences):
+def insert_log_db(user_id, filename, file_differences):
     collection = db['logs']
     current_datetime = get_date_time()
 
@@ -87,12 +86,6 @@ def insert_log_db(user_id, filename, log_message, old_file_hash, new_file_hash, 
         full_log_message += "Field changed: "
     else:
         full_log_message += "Fields changed: "
-
-    # for key in file_differences:
-    #     # Search and remove any "_" symbol, then append key to the full_log_message string
-    #     key_string = str(key).replace('_', ' ')
-    #     print("KEY", key_string)
-    #     full_log_message += key_string + ' '
 
     for index, (key, value) in enumerate(file_differences.items()):
         # Search and remove any "_" symbol, then append key to the full_log_message string
@@ -108,8 +101,6 @@ def insert_log_db(user_id, filename, log_message, old_file_hash, new_file_hash, 
         "user_id": user_id,
         "filename": filename,
         "log_message": full_log_message,
-        # "old_file_hash": old_file_hash,
-        # "new_file_hash": new_file_hash,
         "date": current_datetime,
     }
 
@@ -135,15 +126,16 @@ def generate_log_file(user_id, username):
 
     # Iterate over the logs and write each line in the PDF
     for log in user_logs:
+        print("LOG", log)
         canvasObj.drawString(50, y_position, f"Date: {log['date']}")
         y_position -= 20
         canvasObj.drawString(50, y_position, f"Filename: {log['filename']}")
         y_position -= 20
         canvasObj.drawString(50, y_position, f"Message: {log['log_message']}")
-        y_position -= 20
-        canvasObj.drawString(50, y_position, f"Old Hash: {log['old_file_hash']}")
-        y_position -= 20
-        canvasObj.drawString(50, y_position, f"New Hash: {log['new_file_hash']}")
+        # y_position -= 20
+        # canvasObj.drawString(50, y_position, f"Old Hash: {log['old_file_hash']}")
+        # y_position -= 20
+        # canvasObj.drawString(50, y_position, f"New Hash: {log['new_file_hash']}")
         y_position -= 40
     
     # Save the PDF
@@ -182,20 +174,6 @@ def find_user_account(username, password):
     hash_password = hashing.generate_hash(password.encode('utf-8'))
     return collection.find_one({"username": username, "password": hash_password})
 
-# def find_file_differences(original_file, new_file):
-#     print (type(original_file))
-#     print (type(new_file))
- 
-#     original_file_dict = dict(original_file)
-#     print("ORIGINAL FILE:")
-#     # Iterating the dictionary
-#     for key,value in original_file_dict.items():
-#         print ("ORIG: ", key, value)
-#     print("NEW FILE:")
-#     # Iterating the dictionary
-#     for key,value in new_file.items():
-#         print ("NEW: ", key, value)
-
 def find_file_differences(original_file, new_file):
     # Ensure both are dictionaries
     if not isinstance(original_file, dict) or not isinstance(new_file, dict):
@@ -203,8 +181,6 @@ def find_file_differences(original_file, new_file):
         return
 
     differences = {}
-    
-    print("Comparing files...")
 
     # Loop through each key in the new file, which has only the info to compare
     for key in new_file:
@@ -218,21 +194,7 @@ def find_file_differences(original_file, new_file):
                     "original_value": original_value,
                     "new_value": new_value
                 }
-        # else:
-        #     # Key is missing in new file
-        #     differences[key] = {
-        #         "original_value": original_file[key],
-        #         "new_value": "Key not present in new file"
-        #     }
 
-    # Check for any additional keys in the new file that were not in the original file
-    # for key in new_file:
-    #     if key not in original_file:
-    #         differences[key] = {
-    #             "original_value": "Key not present in original file",
-    #             "new_value": new_file[key]
-    #         }
-    
     if differences:
         print("Differences found between the files:")
         for key, diff in differences.items():

@@ -21,11 +21,7 @@ def handle_file_upload():
     if not user_id:
         return jsonify({'error': 'The user ID cannot be empty.'}), 400
     
-    # print("FILE", file)
-    # print(f"Filename: {file.filename}")
-    # content_type = file.content_type
     size = request.form.get('size')
-    # print(f"lastModified: {request.form.get('lastModified')}")
     last_modified_date = request.form.get('lastModifiedDate')
 
     if file:
@@ -80,7 +76,6 @@ def handle_file_check():
             error_message = "Error. The file: " + filename + " was not found."
             return jsonify({'error': error_message}), 404
 
-        # same_file_hash = hashing.compare_file_hashes(filename_result['file_hash'], new_file_hash)
         differences_result = database.find_file_differences(filename_result, new_file_result)
 
         if differences_result is None:
@@ -88,7 +83,7 @@ def handle_file_check():
             return jsonify({'message': success_message, 'file': filename_result['filename'], 'file_hash': filename_result['file_hash'], 'date': filename_result['date']}), 200
         else:
             error_message = "Error. The file: " + filename + " has changed."
-            database.insert_log_db(user_id, filename, "File hashes do not match.", filename_result['file_hash'], new_file_hash, differences_result)
+            database.insert_log_db(user_id, filename, differences_result)
             return jsonify({'error': error_message}), 400
 
 @app.route("/generate-log-file", methods=['POST'])

@@ -28,16 +28,14 @@ def handle_file_upload():
         # Read file content from memory
         file_data = file.read()
 
-        # file_text = file_data.decode('utf-8')
-        # print("File Content: ", file_text)
-
         # Hash the file content
         file_hash = hashing.generate_hash(file_data)
 
         # Store file name and hash in database
         database.update_file_db(user_id, file.filename, file_hash, file.content_type, size, last_modified_date)
 
-        return jsonify({'message': 'File uploaded successfully', 'file': file.filename, 'file_hash': file_hash}), 200
+        message = "The file: " + file.filename + " was uploaded successfully."
+        return jsonify({'message': message, 'file': file.filename}), 200
 
 @app.route("/check-file", methods=['POST'])
 def handle_file_check():
@@ -77,20 +75,18 @@ def handle_file_check():
             return jsonify({'error': error_message}), 404
 
         differences_result = database.find_file_differences(filename_result, new_file_result)
-
         if differences_result is None:
             success_message = "Success! The file: " + filename + " has not changed."
             return jsonify({'message': success_message, 'file': filename_result['filename'], 'file_hash': filename_result['file_hash'], 'date': filename_result['date']}), 200
         else:
             error_message = "Error. The file: " + filename + " has changed."
-            database.insert_log_db(user_id, filename, differences_result)
-            return jsonify({'error': error_message}), 400
+            log_message = database.insert_log_db(user_id, filename, differences_result)
+            return jsonify({'error': error_message, 'log_message': log_message}), 400
 
 @app.route("/generate-log-file", methods=['POST'])
 def download_log_file():
     user_id = request.form.get('user_id')
     username = request.form.get('username')
-
     log_file_path = database.generate_log_file(user_id, username)
 
     # Return the PDF log file to download

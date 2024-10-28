@@ -80,7 +80,6 @@ def insert_log_db(user_id, filename, file_differences):
     collection = db['logs']
     current_datetime = get_date_time()
 
-    print("DIFFERENCES", file_differences)
     full_log_message = ""
     if len(file_differences) == 1:
         full_log_message += "Field changed: "
@@ -107,13 +106,13 @@ def insert_log_db(user_id, filename, file_differences):
     # Merge file_differences into log_info, so all info is stored in one dictionary
     log_info.update(file_differences)
     collection.insert_one(log_info)
+    return full_log_message
 
 # Creates a log file for the user
 def generate_log_file(user_id, username):
     collection = db['logs']
     # Get logs for this user
-    user_logs = collection.find({"user_id": user_id})  
-
+    user_logs = collection.find({"user_id": user_id})
     log_file_path = f"{username}-logs.pdf"
     
     # Create a PDF object
@@ -121,21 +120,39 @@ def generate_log_file(user_id, username):
     canvasObj.setFont("Helvetica", 12)
     canvasObj.drawString(50, 750, f"Log File for {username}")
     canvasObj.drawString(50, 730, f"Created on: {get_date_time()}")
-    
     y_position = 700  # Start position to write logs
 
     # Iterate over the logs and write each line in the PDF
     for log in user_logs:
-        print("LOG", log)
         canvasObj.drawString(50, y_position, f"Date: {log['date']}")
         y_position -= 20
         canvasObj.drawString(50, y_position, f"Filename: {log['filename']}")
         y_position -= 20
         canvasObj.drawString(50, y_position, f"Message: {log['log_message']}")
-        # y_position -= 20
-        # canvasObj.drawString(50, y_position, f"Old Hash: {log['old_file_hash']}")
-        # y_position -= 20
-        # canvasObj.drawString(50, y_position, f"New Hash: {log['new_file_hash']}")
+        y_position -= 20
+
+        standard_log_fields = ['_id', 'user_id', 'filename', 'log_message', 'date']
+        field_message = ""
+        if len(log) > (len(standard_log_fields)+1):
+            field_message = "Fields changed: "
+        else:
+            field_message = "Field changed: "
+        
+        canvasObj.drawString(50, y_position, f"{field_message}")
+        y_position -= 20
+
+        # Loop through each key in the log entry
+        for key, value in log.items():
+            if key not in standard_log_fields:
+                # Print original and new values if the field is not one of the standard log fields
+                if isinstance(value, dict) and 'original_value' in value and 'new_value' in value:
+                    key_string = str(key).replace('_', ' ')
+                    canvasObj.drawString(50, y_position, f"{key_string}")
+                    y_position -= 20
+                    canvasObj.drawString(60, y_position, f"Original: {value['original_value']}")
+                    y_position -= 20
+                    canvasObj.drawString(60, y_position, f"New: {value['new_value']}")
+                    y_position -= 20
         y_position -= 40
     
     # Save the PDF
@@ -180,9 +197,8 @@ def find_file_differences(original_file, new_file):
         print("Inputs must be dictionaries.")
         return
 
-    differences = {}
-
     # Loop through each key in the new file, which has only the info to compare
+    differences = {}
     for key in new_file:
         if key in original_file:
             original_value = original_file[key]
@@ -196,12 +212,6 @@ def find_file_differences(original_file, new_file):
                 }
 
     if differences:
-        print("Differences found between the files:")
-        for key, diff in differences.items():
-            print(f"Key: {key}")
-            print(f"  Original Value: {diff['original_value']}")
-            print(f"  New Value: {diff['new_value']}")
         return differences
     else:
-        print("There were no differences found between the files.")
         return None

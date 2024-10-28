@@ -28,8 +28,8 @@ def handle_file_upload():
         # Read file content from memory
         file_data = file.read()
 
-        file_text = file_data.decode('utf-8')
-        print("File Content: ", file_text)
+        # file_text = file_data.decode('utf-8')
+        # print("File Content: ", file_text)
 
         # Hash the file content
         file_hash = hashing.generate_hash(file_data)
@@ -101,6 +101,7 @@ def handle_user_signup():
     # Get the username and password from the request form
     username = request.form.get('username')
     password = request.form.get('password')
+    print("Signup for user", username)
 
     if username == '' or password == '':
         return jsonify({'error': 'Please fill out all fields.'}), 400
@@ -119,6 +120,7 @@ def handle_user_login():
     # Get the username and password from the request form
     username = request.form.get('username')
     password = request.form.get('password')
+    print("Login for user", username)
 
     if username == '' or password == '':
         return jsonify({'error': 'Please fill out all fields.'}), 400

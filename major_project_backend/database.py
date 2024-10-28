@@ -118,12 +118,30 @@ def generate_log_file(user_id, username):
     # Create a PDF object
     canvasObj = canvas.Canvas(log_file_path, pagesize=letter)
     canvasObj.setFont("Helvetica", 12)
-    canvasObj.drawString(50, 750, f"Log File for {username}")
-    canvasObj.drawString(50, 730, f"Created on: {get_date_time()}")
-    y_position = 700  # Start position to write logs
+
+    # Initial start position and margin
+    margin_top = 750
+    y_position = margin_top
+
+    canvasObj.drawString(50, y_position, f"Log File for {username}")
+    y_position -= 20
+    canvasObj.drawString(50, y_position, f"Created on: {get_date_time()}")
+    y_position -= 40
+    # y_position = 700  # Start position to write logs
+
+    # Function to add a page break if y_position is too low
+    def add_page_break():
+        nonlocal y_position
+        canvasObj.showPage()  # End current page and start a new one
+        canvasObj.setFont("Helvetica", 12)
+        y_position = margin_top  # Reset y_position to top of the new page
+
 
     # Iterate over the logs and write each line in the PDF
     for log in user_logs:
+        if y_position < 100:  # Check if there is enough space for a new log
+            add_page_break()
+        
         canvasObj.drawString(50, y_position, f"Date: {log['date']}")
         y_position -= 20
         canvasObj.drawString(50, y_position, f"Filename: {log['filename']}")
@@ -144,6 +162,9 @@ def generate_log_file(user_id, username):
         # Loop through each key in the log entry
         for key, value in log.items():
             if key not in standard_log_fields:
+                if y_position < 100:  # Check if there is enough space for a new log
+                    add_page_break()
+                
                 # Print original and new values if the field is not one of the standard log fields
                 if isinstance(value, dict) and 'original_value' in value and 'new_value' in value:
                     key_string = str(key).replace('_', ' ')

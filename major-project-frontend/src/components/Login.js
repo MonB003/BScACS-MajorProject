@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import Dashboard from "./Dashboard";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState({});
 
   const navigate = useNavigate();
 
@@ -29,7 +27,7 @@ function Login() {
           userID: result.user_id,
           username: result.username
         };
-        setUser(userJSON);
+        navigate("/toolkit", { state: { user: userJSON } });  // Pass the user in the state and redirect to dashboard
       } else {
         console.error("Error with login:", result.error);
         const formLoginMessage = document.getElementById('formLoginMessage');
@@ -43,11 +41,6 @@ function Login() {
 
   return (
     <div id="page">
-      {user?.username ? (
-        <>
-          <Dashboard user={user} />
-        </>
-      ) : (
         <>
           <h1>Login</h1>
           <form id="loginForm" onSubmit={handleLogin}>
@@ -75,7 +68,6 @@ function Login() {
             <button onClick={() => navigate("/signup")}>Signup</button>
           </div>
         </>
-      )}
     </div>
   );
 }

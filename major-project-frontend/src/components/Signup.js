@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import Dashboard from "./Dashboard";
 import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState({});
-
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
@@ -18,8 +15,8 @@ function Signup() {
 
       const URL = process.env.REACT_APP_BACKEND_HOSTED_URL;
       const response = await fetch(`${URL}/signup`, {
-          method: 'POST',
-          body: formData,
+        method: 'POST',
+        body: formData,
       });
 
       const result = await response.json();
@@ -29,7 +26,7 @@ function Signup() {
           userID: result.user_id,
           username: result.username
         };
-        setUser(userJSON);
+        navigate("/toolkit", { state: { user: userJSON } });  // Pass the user in the state and redirect to dashboard
       } else {
         console.error("Error with signup:", result.error);
         const formSignupMessage = document.getElementById('formSignupMessage');
@@ -43,39 +40,31 @@ function Signup() {
 
   return (
     <div id="page">
-      {user?.username ? (
-        <>
-           <Dashboard user={user} />
-        </>
-      ) : (
-        <>
-          <h1>Signup</h1>
-          <form id="signupForm" onSubmit={handleSignup}>
-            <input
-              type="text"
-              placeholder="Username"
-              required={true}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <br />
-            <input
-              type="password"
-              placeholder="Password"
-              required={true}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <br />
-            <button type="submit">Signup</button>
-          </form>
-          <p id="formSignupMessage" style={{display: "none"}}></p>
+      <h1>Signup</h1>
+      <form id="signupForm" onSubmit={handleSignup}>
+        <input
+          type="text"
+          placeholder="Username"
+          required={true}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <br />
+        <input
+          type="password"
+          placeholder="Password"
+          required={true}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <br />
+        <button type="submit">Signup</button>
+      </form>
+      <p id="formSignupMessage" style={{ display: "none" }}></p>
 
-          <br />
+      <br />
 
-          <div>
-            <button onClick={() => navigate("/")}>Back to Login</button>
-          </div>
-        </>
-      )}
+      <div>
+        <button onClick={() => navigate("/")}>Back to Login</button>
+      </div>
     </div>
   );
 }

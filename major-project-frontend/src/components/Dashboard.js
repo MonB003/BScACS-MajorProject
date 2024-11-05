@@ -1,13 +1,12 @@
 import React from 'react'
+import { useLocation } from "react-router-dom";
 import FileUploadForm from './FileUploadForm'
 import FileCheckForm from './FileCheckForm'
 import LogGenerator from './LogGenerator'
 
-function Dashboard({ user }) {
-    console.log("USER DASHBOARD", user)
-    console.log("USER DASHBOARD", user.userID)
-    console.log("USER DASHBOARD", user.username)
-
+function Dashboard() {
+  const location = useLocation();
+  const { user } = location.state || {};  // Retrieve user data from state
 
     return (
     <>

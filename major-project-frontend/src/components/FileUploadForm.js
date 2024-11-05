@@ -19,17 +19,36 @@ function FileUploadForm({ userID }) {
         const formMessage = document.getElementById('formMessage')
         formMessage.style.display = "block";
 
+        // const lastModified = new Date(file.lastModified);
+        // const readableDate = lastModified.toLocaleString(); // Converts to local date and time
+        // console.log("Last modified date and time:", readableDate);
+
+        const lastModified = new Date(file.lastModified);
+        // Format as: Mon Nov 04 2024 13:10:35 GMT-0800 (Pacific Standard Time)
+        const options = {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZoneName: 'short',
+        };
+        const readableDate = lastModified.toLocaleString('en-CA', options);
+        console.log("Last modified date and time:", readableDate);
+
         console.log("File to send:", file);
         console.log("Type:", file.type);
         console.log("Size:", file.size);
         // console.log("Last modified:", file.lastModified);
-        console.log("Last modified date:", file.lastModifiedDate);
+        console.log("Last modified date:", readableDate);
 
         const formData = new FormData();
         formData.append('file', file);
         formData.append('size', file.size);
         // formData.append('lastModified', file.lastModified);
-        formData.append('lastModifiedDate', file.lastModifiedDate);
+        formData.append('lastModifiedDate', readableDate);
 
         formData.append('user_id', userID);
 

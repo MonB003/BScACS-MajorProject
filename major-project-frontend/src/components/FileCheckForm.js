@@ -21,29 +21,27 @@ function FileCheckForm({ userID }) {
         formCheckMessage.style.display = "block";
 
         // const lastModified = new Date(file.lastModified);
-        // const readableDate = lastModified.toLocaleString(); // Converts to local date and time
+        // const readableDate = lastModified.toLocaleString(); // Converts local date and time
         // console.log("Last modified date and time:", readableDate);
 
         const lastModified = new Date(file.lastModified);
-        // Format as: Mon Nov 04 2024 13:10:35 GMT-0800 (Pacific Standard Time)
+        // Format example: Mon Nov 04 2024 13:10:35 GMT-0800 (Pacific Standard Time)
         const options = {
-        weekday: 'short',
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        timeZoneName: 'short',
+            weekday: 'short',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            timeZoneName: 'short',
         };
         const readableDate = lastModified.toLocaleString('en-CA', options);
-        console.log("Last modified date and time:", readableDate);
 
         const formData = new FormData();
         formData.append('file', file);
         formData.append('user_id', userID);
         formData.append('size', file.size);
-        // formData.append('lastModified', file.lastModified);
         formData.append('lastModifiedDate', readableDate);
 
         // Send the file to the backend
@@ -78,7 +76,7 @@ function FileCheckForm({ userID }) {
                 <input type="file" onChange={handleFileChange} required={true} />
                 <br />
                 <button onClick={handleFileCheck}>Check File</button>
-                <p id="formCheckMessage" style={{display: "none"}}>File check in progress</p>
+                <p id="formCheckMessage" style={{ display: "none" }}>File check in progress</p>
             </div>
         </>
     );

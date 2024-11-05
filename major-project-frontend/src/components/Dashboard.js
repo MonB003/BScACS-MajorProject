@@ -6,11 +6,7 @@ import LogGenerator from './LogGenerator'
 
 function Dashboard() {
   const location = useLocation();
-  const { user } = location.state || {};  // Retrieve `user` from state
-
-    console.log("USER DASHBOARD", user)
-    console.log("USER DASHBOARD", user.userID)
-    console.log("USER DASHBOARD", user.username)
+  const { user } = location.state || {};  // Retrieve user data from state
 
     return (
     <>

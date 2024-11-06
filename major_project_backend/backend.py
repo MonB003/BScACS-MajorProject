@@ -124,7 +124,7 @@ def handle_user_login():
     if username and password:
         user_result = database.find_user_account(username, password)
         if not user_result:
-            return jsonify({'error': 'No user account exists with this information.'}), 400
+            return jsonify({'error': 'No user account exists with this information.'}), 404
         else:
             return jsonify({'message': 'Success: A user account was found.', 'user_id': user_result['userID'], 'username': user_result['username']}), 200
 

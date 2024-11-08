@@ -39,7 +39,7 @@ Cloning the repository:
 - `cd` into the folder you want the repository stored in
 - Type: `git clone https://github.com/MonB003/BScACS-MajorProject.git`
 
-**Note:** There is a `.env` file that is needed in order for the database functionality to work.
+**Note:** There is a `.env` file that is needed in order for the database and security functionality to work.
 
 In the respective folders, you will need to install these packages:
 #### React Frontend (major-project-frontend folder):
@@ -73,19 +73,11 @@ The packages below need to be installed.
 
 **Windows and Linux:**
 ```
-pip install flask
-pip install flask-cors
-pip install pymongo
-pip install python-dotenv
-pip install reportlab
+pip install flask flask-cors pymongo python-dotenv reportlab pycryptodome
 ```
 **Mac:**
 ```
-pip3 install flask
-pip3 install flask-cors
-pip3 install pymongo
-pip3 install python-dotenv
-pip3 install reportlab
+pip3 install flask flask-cors pymongo python-dotenv reportlab pycryptodome
 ```
 
 ### Running the project locally:

@@ -16,6 +16,7 @@ function Dashboard() {
         <FileUploadForm userID={user.userID} />
         <FileCheckForm userID={user.userID} />
         <LogGenerator userID={user.userID} username={user.username} />
+        <br />
         <div id="logoutDiv">
         <button onClick={() => navigate("/")}>Logout</button>
       </div>

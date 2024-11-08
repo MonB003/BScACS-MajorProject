@@ -1,12 +1,14 @@
 import React from 'react'
-import { useLocation } from "react-router-dom";
-import FileUploadForm from './FileUploadForm'
-import FileCheckForm from './FileCheckForm'
-import LogGenerator from './LogGenerator'
+import { useLocation, useNavigate } from "react-router-dom";
+
+import FileUploadForm from '../FileForm/FileUploadForm'
+import FileCheckForm from '../FileForm/FileCheckForm'
+import LogGenerator from '../Log/LogGenerator'
 
 function Dashboard() {
   const location = useLocation();
   const { user } = location.state || {};  // Retrieve user data from state
+  const navigate = useNavigate();
 
     return (
     <>
@@ -14,6 +16,9 @@ function Dashboard() {
         <FileUploadForm userID={user.userID} />
         <FileCheckForm userID={user.userID} />
         <LogGenerator userID={user.userID} username={user.username} />
+        <div id="logoutDiv">
+        <button onClick={() => navigate("/")}>Logout</button>
+      </div>
     </>
   )
 }

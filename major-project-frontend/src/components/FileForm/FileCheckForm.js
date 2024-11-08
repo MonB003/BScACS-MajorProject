@@ -26,18 +26,20 @@ function FileCheckForm({ userID }) {
 
         const lastModified = new Date(file.lastModified);
         // Format example: Mon Nov 04 2024 13:10:35 GMT-0800 (Pacific Standard Time)
-        const options = {
-            weekday: 'short',
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            timeZoneName: 'short',
-        };
-        const readableDate = lastModified.toLocaleString('en-CA', options);
-
+        // const options = {
+        //     weekday: 'short',
+        //     year: 'numeric',
+        //     month: 'short',
+        //     day: 'numeric',
+        //     hour: '2-digit',
+        //     minute: '2-digit',
+        //     second: '2-digit',
+        //     timeZoneName: 'short',
+        // };
+        // const readableDate = lastModified.toLocaleString('en-CA', options);
+        const readableDate = lastModified.toLocaleString('en-CA');
+        console.log("Last modified date and time:", readableDate);
+        
         const formData = new FormData();
         formData.append('file', file);
         formData.append('user_id', userID);

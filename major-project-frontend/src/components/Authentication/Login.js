@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Signup() {
+function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSignup = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const formData = new FormData();
@@ -14,7 +14,7 @@ function Signup() {
       formData.append('password', password);
 
       const URL = process.env.REACT_APP_BACKEND_LOCAL_URL;
-      const response = await fetch(`${URL}/signup`, {
+      const response = await fetch(`${URL}/login`, {
         method: 'POST',
         body: formData,
       });
@@ -28,10 +28,10 @@ function Signup() {
         };
         navigate("/toolkit", { state: { user: userJSON } });  // Pass the user in the state and redirect to dashboard
       } else {
-        console.error("Error with signup:", result.error);
-        const formSignupMessage = document.getElementById('formSignupMessage');
-        formSignupMessage.innerHTML = result.error;
-        formSignupMessage.style.display = "block";
+        console.error("Error with login:", result.error);
+        const formLoginMessage = document.getElementById('formLoginMessage');
+        formLoginMessage.innerHTML = result.error;
+        formLoginMessage.style.display = "block";
       }
     } catch (err) {
       console.log(err);
@@ -40,8 +40,9 @@ function Signup() {
 
   return (
     <div id="page">
-      <h1>Signup</h1>
-      <form id="signupForm" onSubmit={handleSignup}>
+      <h1>Secure MoniTor Toolkit</h1>
+      <h2>Login</h2>
+      <form id="loginForm" onSubmit={handleLogin}>
         <input
           type="text"
           placeholder="Username"
@@ -56,17 +57,17 @@ function Signup() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <br />
-        <button type="submit">Signup</button>
+        <button type="submit">Login</button>
       </form>
-      <p id="formSignupMessage" style={{ display: "none" }}></p>
+      <p id="formLoginMessage" style={{ display: "none" }}></p>
 
       <br />
 
-      <div>
-        <button onClick={() => navigate("/")}>Back to Login</button>
+      <div id="signupDiv">
+        <button onClick={() => navigate("/signup")}>Signup</button>
       </div>
     </div>
   );
 }
 
-export default Signup;
+export default Login;

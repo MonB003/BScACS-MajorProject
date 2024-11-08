@@ -33,16 +33,38 @@ def decrypt_data(encrypted_data, key):
     data = cipher.decrypt_and_verify(ciphertext, tag)
     return data.decode('utf-8')
 
-# key = get_random_bytes(32)  # Generates a 32-byte (256-bit) key
-# key = AES_KEY
-key = base64.b64decode(AES_KEY)
+def encrypt_dictionary(dict_items):
+    # Loop through each key value in the dictionary
+    aes_key = base64.b64decode(AES_KEY)
+    for key, value in dict_items.items():
+        if isinstance(value, dict) and 'original_value' in value and 'new_value' in value:
+            orig_value = value["original_value"]
+            new_value = value["new_value"]
+            # Encrypt the values
+            encrypted_orig_value = encrypt_data(orig_value, aes_key)
+            encrypted_new_value = encrypt_data(new_value, aes_key)
+            # print("ENCRYPT ORIG", encrypted_orig_value)
+            # print("ENCRYPT NEW", encrypted_new_value)
+            # Update dictionary to store encrypted values
+            dict_items[key]["original_value"] = encrypted_orig_value
+            dict_items[key]["new_value"] = encrypted_new_value
+        else:
+            # Encrypt the value
+            encrypted_value = encrypt_data(value, aes_key)
+            # print("ENCRYPT VALUE", encrypted_value)
+            # Update dictionary to store encrypted value
+            dict_items[key] = encrypted_value
 
-# print("KEY", key)
-# encoded_key = base64.b64encode(key).decode('utf-8')
-# print(f"Encoded Key (for storage): {encoded_key}")
 
-encrypted_data = encrypt_data("testing more message", key)
-print("Encrypted:", encrypted_data)
+# key = base64.b64decode(AES_KEY)
+# encrypted_data = encrypt_data("testing more message", key)
+# print("Encrypted:", encrypted_data)
+# decrypted_data = decrypt_data(encrypted_data, key)
+# print("Decrypted:", decrypted_data)
 
-decrypted_data = decrypt_data(encrypted_data, key)
-print("Decrypted:", decrypted_data)
+# thisdict = {
+#   "brand": "Ford",
+#   "model": "Mustang",
+#   "year": 1964
+# }
+# encrypt_dictionary(thisdict)

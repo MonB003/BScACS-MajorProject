@@ -1,11 +1,10 @@
 from pymongo import MongoClient, DESCENDING
-import os
+import os, uuid
 from dotenv import load_dotenv
 from datetime import datetime
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-import uuid
-import hashing
+import hashing, security
 
 # Load .env file variables
 load_dotenv()
@@ -105,7 +104,10 @@ def insert_log_db(user_id, filename, file_differences):
 
     # Merge file_differences into log_info, so all info is stored in one dictionary
     log_info.update(file_differences)
-    collection.insert_one(log_info)
+    print("LOG INFO: ", log_info)
+    security.encrypt_dictionary(log_info)
+    print("LOG INFO AFTER: ", log_info)
+    # collection.insert_one(log_info) # ***TEMP COMMENTED OUT
     return full_log_message
 
 # Creates a log file for the user

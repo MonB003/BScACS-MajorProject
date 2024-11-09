@@ -83,6 +83,26 @@ def handle_file_check():
             log_message = database.insert_log_db(user_id, filename, differences_result)
             return jsonify({'error': error_message, 'log_message': log_message}), 400
 
+# Utility function to make MongoDB documents JSON serializable
+def serialize_file(file_doc):
+    file_doc['_id'] = str(file_doc['_id'])  # Convert ObjectId to a string
+    return file_doc
+
+@app.route("/get-user-files", methods=['POST'])
+def get_user_files():
+    user_id = request.form.get('user_id')
+    
+    if not user_id:
+        return jsonify({'error': 'The user ID cannot be empty.'}), 400
+    
+    user_files_result = database.get_user_files(user_id)
+    if user_files_result is None:
+        return jsonify({'message': "The user has no files."}), 404
+    else:
+        # Convert cursor to a list of JSON-serializable dictionaries
+        user_files = [serialize_file(file) for file in user_files_result]
+        return jsonify({'message': "Success! The user has files.", 'files': user_files}), 200
+
 @app.route("/generate-log-file", methods=['POST'])
 def download_log_file():
     user_id = request.form.get('user_id')

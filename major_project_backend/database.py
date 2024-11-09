@@ -74,6 +74,15 @@ def update_file_db(user_id, filename, file_hash, content_type, size, last_modifi
         return False
     return True
 
+# Gets all files for a user
+def get_user_files(user_id):
+    collection = db['files']
+    # Get logs for this user
+    user_files = collection.find({"user_id": user_id})
+    if user_files:
+        return user_files
+    return None
+
 # Insert new log entry info into database
 def insert_log_db(user_id, filename, file_differences):
     collection = db['logs']
@@ -106,8 +115,6 @@ def insert_log_db(user_id, filename, file_differences):
     log_info.update(file_differences)
     print("LOG INFO: ", log_info)
     security.encrypt_dictionary(log_info)
-    # security.decrypt_dictionary(log_info)
-    # print("LOG INFO AFTER: ", log_info)
     collection.insert_one(log_info)
     return full_log_message
 
@@ -147,7 +154,6 @@ def generate_log_file(user_id, username):
 
         # Decrypt log entry values
         security.decrypt_dictionary(log)
-        print("LOG ENTRY", log)
         
         canvasObj.drawString(50, y_position, f"Date: {log['date']}")
         y_position -= 20

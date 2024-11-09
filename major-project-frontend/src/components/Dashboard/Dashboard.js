@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import FileUploadForm from '../FileForm/FileUploadForm'
 import FileCheckForm from '../FileForm/FileCheckForm'
 import LogGenerator from '../Log/LogGenerator'
+import UserFiles from './UserFiles';
 
 function Dashboard() {
   const location = useLocation();
@@ -16,6 +17,8 @@ function Dashboard() {
         <FileUploadForm userID={user.userID} />
         <FileCheckForm userID={user.userID} />
         <LogGenerator userID={user.userID} username={user.username} />
+        <br />
+        <UserFiles userID={user.userID} username={user.username} />
         <br />
         <div id="logoutDiv">
         <button onClick={() => navigate("/")}>Logout</button>

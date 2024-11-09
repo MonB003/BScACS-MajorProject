@@ -48,7 +48,7 @@ def encrypt_dictionary(dict_items):
             dict_items[key]["new_value"] = encrypted_new_value
         elif key == 'user_id' or key == '_id':
             # Do not encrypt the user ID, since it's used to find a user's logs
-            print("User ID not encrypted")
+            print("IDs are not encrypted")
         else:
             # Encrypt the value
             encrypted_value = encrypt_data(value, aes_key)
@@ -59,7 +59,6 @@ def decrypt_dictionary(dict_items):
     # Loop through each key value in the dictionary
     aes_key = base64.b64decode(AES_KEY)
     for key, value in dict_items.items():
-        print("KEY", key)
         if isinstance(value, dict) and 'original_value' in value and 'new_value' in value:
             orig_value = value["original_value"]
             new_value = value["new_value"]

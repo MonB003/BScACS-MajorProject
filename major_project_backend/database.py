@@ -106,8 +106,9 @@ def insert_log_db(user_id, filename, file_differences):
     log_info.update(file_differences)
     print("LOG INFO: ", log_info)
     security.encrypt_dictionary(log_info)
-    print("LOG INFO AFTER: ", log_info)
-    # collection.insert_one(log_info) # ***TEMP COMMENTED OUT
+    # security.decrypt_dictionary(log_info)
+    # print("LOG INFO AFTER: ", log_info)
+    collection.insert_one(log_info)
     return full_log_message
 
 # Creates a log file for the user
@@ -143,6 +144,10 @@ def generate_log_file(user_id, username):
     for log in user_logs:
         if y_position < 100:  # Check if there is enough space for a new log
             add_page_break()
+
+        # Decrypt log entry values
+        security.decrypt_dictionary(log)
+        print("LOG ENTRY", log)
         
         canvasObj.drawString(50, y_position, f"Date: {log['date']}")
         y_position -= 20

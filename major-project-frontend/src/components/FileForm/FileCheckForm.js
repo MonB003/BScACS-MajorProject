@@ -22,7 +22,15 @@ function FileCheckForm({ userID }) {
 
         // Convert local date and time into readable format
         const lastModified = new Date(file.lastModified);
-        const readableDate = lastModified.toLocaleString('en-CA');
+        const readableDate = new Intl.DateTimeFormat('en-CA', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: false // Ensures 24-hour format
+        }).format(lastModified);
 
         const formData = new FormData();
         formData.append('file', file);

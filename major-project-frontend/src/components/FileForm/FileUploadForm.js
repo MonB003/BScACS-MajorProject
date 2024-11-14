@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-function FileUploadForm({ userID }) {
+function FileUploadForm({ userID, onUploadSuccess }) {
     const [file, setFile] = useState(null);
 
     // Handle file change
@@ -21,8 +21,16 @@ function FileUploadForm({ userID }) {
 
         // Convert local date and time into readable format
         const lastModified = new Date(file.lastModified);
-        const readableDate = lastModified.toLocaleString('en-CA');
-
+        const readableDate = new Intl.DateTimeFormat('en-CA', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: false // Ensures 24-hour format
+        }).format(lastModified);
+    
         console.log("File to send:", file);
         console.log("Type:", file.type);
         console.log("Size:", file.size);
@@ -48,6 +56,9 @@ function FileUploadForm({ userID }) {
             console.log("Response", result)
             if (response.ok) {
                 alert(result.message);
+                if (onUploadSuccess) {
+                    onUploadSuccess(); // Callback to refresh files displayed in UserFiles component
+                }
             } else {
                 alert(result.error);
             }

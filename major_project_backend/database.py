@@ -18,8 +18,8 @@ def get_date_time():
     # Get current date and time
     now = datetime.now()
     
-    # Format: dd/mm/YY H:M:S
-    datetime_formatted = now.strftime("%d/%m/%Y %H:%M:%S")
+    # Format: YYYY-MM-DD, H:M:S
+    datetime_formatted = now.strftime("%Y-%m-%d, %H:%M:%S")
     return datetime_formatted
 
 # Insert file info into database

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import FileUploadForm from '../FileForm/FileUploadForm';
 
 function UserFiles({ userID, username }) {
     // Store user's files
@@ -30,16 +31,20 @@ function UserFiles({ userID, username }) {
         }
     };
 
-    // Fetch files initially and set interval to update every 5 seconds, so files state is updated often
+    // Initial fetch of files
     useEffect(() => {
-        handleUserFiles(); // Initial fetch
-        const interval = setInterval(handleUserFiles, 5000); // Fetch every 5 seconds
-
-        return () => clearInterval(interval); // Cleanup interval when component is unmounted
+        handleUserFiles();
     }, []);
+
+    // Function to pass to FileUploadForm, which updates files displayed after each upload
+    const refreshFiles = () => {
+        handleUserFiles();
+    };
 
     return (
         <>
+            <FileUploadForm userID={userID} onUploadSuccess={refreshFiles} />
+
             <h1>{username}'s Files</h1>
             <div>
                 {

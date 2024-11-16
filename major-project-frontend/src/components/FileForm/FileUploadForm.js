@@ -71,7 +71,7 @@ function FileUploadForm({ userID, onUploadSuccess }) {
         <>
             <div>
                 <h1>File Upload</h1>
-                <input type="file" onChange={handleFileChange} required={true} />
+                <input data-testid="fileInput" type="file" onChange={handleFileChange} required={true} />
                 <br />
                 <button onClick={handleFileUpload}>Upload File</button>
                 <p id="formMessage" style={{ display: "none" }}>File upload in progress</p>

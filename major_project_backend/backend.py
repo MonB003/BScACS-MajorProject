@@ -30,6 +30,17 @@ def handle_file_upload():
 
         # Hash the file content
         file_hash = hashing.generate_hash(file_data)
+        # chunk_hashes = hashing.generate_chunked_hash(file_data)
+        
+        # # Store file name and chunk hashes in database
+        # database.update_file_db(
+        #     user_id,
+        #     file.filename,
+        #     chunk_hashes,         # Store the list of chunk hashes
+        #     file.content_type,
+        #     size,
+        #     last_modified_date
+        # )
 
         # Store file name and hash in database
         database.update_file_db(user_id, file.filename, file_hash, file.content_type, size, last_modified_date)

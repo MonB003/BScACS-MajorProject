@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 function FileUploadForm({ userID, onUploadSuccess }) {
     const [file, setFile] = useState(null);
+    const MAX_FILE_SIZE = 1000000;
 
     // Handle file change
     const handleFileChange = (event) => {
@@ -35,6 +36,12 @@ function FileUploadForm({ userID, onUploadSuccess }) {
         console.log("Type:", file.type);
         console.log("Size:", file.size);
         console.log("Last modified date:", readableDate);
+
+        if (file.size > MAX_FILE_SIZE) {
+            let errorMessage = "Error: File size is too large. Max file size to upload: " + MAX_FILE_SIZE;
+            alert(errorMessage);
+            return;
+        }
 
         const formData = new FormData();
         formData.append('file', file);

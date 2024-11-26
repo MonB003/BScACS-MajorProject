@@ -1,9 +1,14 @@
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
-import database, hashing
+import database, hashing, files
+import os, stat
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
+
+# Set upload folder
+UPLOAD_FOLDER = 'uploaded-files/'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route("/upload-file", methods=['POST'])
 def handle_file_upload():
@@ -25,26 +30,33 @@ def handle_file_upload():
     last_modified_date = request.form.get('lastModifiedDate')
 
     if file:
+        # Create file path to save the file to
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(file_path)
+        # Make file read-only for security
+        # os.chmod(file_path, stat.S_IREAD)
+        
         # Read file content from memory
         file_data = file.read()
 
-        # # Hash the file content
-        # file_hash = hashing.generate_hash(file_data)
+        # Hash the file content
+        file_hash = hashing.generate_hash(file_data)
+        # Store file name and hash in database
+        database.update_file_db(user_id, file.filename, file_hash, file.content_type, size, last_modified_date)
 
-        # # Store file name and hash in database
-        # database.update_file_db(user_id, file.filename, file_hash, file.content_type, size, last_modified_date)
+        # Parse metadata based on file type
+        files.parse_file_by_type(file, file_path, file.content_type)
 
-        chunk_hashes = hashing.generate_chunked_hash(file_data)
-        
-        # Store file name and chunk hashes in database
-        database.update_file_db(
-            user_id,
-            file.filename,
-            chunk_hashes,         # Store the list of chunk hashes
-            file.content_type,
-            size,
-            last_modified_date
-        )
+        # chunk_hashes = hashing.generate_chunked_hash(file_data)
+        # # Store file name and chunk hashes in database
+        # database.update_file_db(
+        #     user_id,
+        #     file.filename,
+        #     chunk_hashes,         # Store the list of chunk hashes
+        #     file.content_type,
+        #     size,
+        #     last_modified_date
+        # )
 
         message = "The file: " + file.filename + " was uploaded successfully."
         return jsonify({'message': message, 'file': file.filename}), 200
@@ -69,8 +81,8 @@ def handle_file_check():
         file_data = file.read()
 
         # Hash the file content
-        # new_file_hash = hashing.generate_hash(file_data)
-        new_file_hash = hashing.generate_chunked_hash(file_data)
+        new_file_hash = hashing.generate_hash(file_data)
+        # new_file_hash = hashing.generate_chunked_hash(file_data)
 
         filename = file.filename
         filename_result = database.find_recent_file_by_name(filename, user_id)
@@ -93,7 +105,7 @@ def handle_file_check():
             return jsonify({'message': success_message, 'file': filename_result['filename'], 'file_hash': filename_result['file_hash'], 'date': filename_result['date']}), 200
         else:
             error_message = "Error. The file: " + filename + " has changed."
-            log_message = "" # database.insert_log_db(user_id, filename, differences_result)
+            log_message = "" # TEMP: database.insert_log_db(user_id, filename, differences_result)
             return jsonify({'error': error_message, 'log_message': log_message}), 400
 
 # Utility function to make MongoDB documents JSON serializable

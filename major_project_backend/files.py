@@ -4,8 +4,9 @@ import PyPDF2
 import os, time
 from PIL import Image, ExifTags
 from PIL.ExifTags import TAGS
+from io import BytesIO
 
-def parse_file_by_type(file, filename, file_type):
+def parse_file_info_by_type(file, filename, file_type):
     print("FILE TYPE", file_type)
     # print("FILE NAME", filename)
     # print("FILE", file)
@@ -68,3 +69,61 @@ def parse_file_by_type(file, filename, file_type):
     else:
         print("File type not supported")
         # return None  # Unsupported file type
+
+def parse_file_content(file_type, local_file, new_file):
+    print("FILE TYPE:", file_type)
+    
+    # Generic File Metadata
+    file_stats = os.stat(local_file)
+    print(f"Permissions: {oct(file_stats.st_mode)[-3:]}")
+    print(f"Created: {time.ctime(file_stats.st_ctime)}")
+    print(f"Last Modified: {time.ctime(file_stats.st_mtime)}")
+    print(f"Last Accessed: {time.ctime(file_stats.st_atime)}")
+
+    # Read local file content
+    print("--- FILE CONTENT ---")
+    if file_type in ["text/plain", "text/csv"]:
+        with open(local_file, 'r', encoding='utf-8') as f:
+            content = f.readlines()
+            # print("\n".join(content[:5]))  # Print first 5 lines
+            print("\n".join(content))
+    elif file_type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        doc = docx.Document(local_file)
+        print("Title:", doc.core_properties.title or "No title")
+        for para in doc.paragraphs: # [:5]:  # First 5 paragraphs
+            print(para.text)
+    elif file_type == "application/pdf":
+        reader = PyPDF2.PdfReader(local_file)
+        for page in reader.pages: # [:5]:  # First 5 pages
+            print(page.extract_text())
+    else:
+        print("Unsupported file type.")
+
+def parse_uploaded_file_content(file_type, uploaded_file):
+    print("UPLOADED FILE TYPE:", file_type)
+    # print("NEW FILE:", uploaded_file)
+    
+    # try:
+    #     data = uploaded_file.decode('utf-8').split('\r\n')
+    #     print("NEW FILE DATA")
+    #     for line in data:
+    #         print(line)  # Print each line
+    # except UnicodeDecodeError:
+    #     print("ERROR DECODING")
+        
+    print("--- UPLOADED FILE CONTENT ---")
+    if file_type in ["text/plain", "text/csv"]:
+        data = uploaded_file.decode('utf-8').split('\r\n') # Separate by line
+        for line in data:
+            print(line)  # Print each line
+    elif file_type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        doc = docx.Document(BytesIO(uploaded_file))  # Read DOCX from memory
+        print("Title:", doc.core_properties.title or "No title")
+        for para in doc.paragraphs:
+            print(para.text)
+    elif file_type == "application/pdf":
+        reader = PyPDF2.PdfReader(BytesIO(uploaded_file))  # Read PDF from memory
+        for page in reader.pages:
+            print(page.extract_text())
+    else:
+        print("Unsupported file type.")

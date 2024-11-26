@@ -36,6 +36,8 @@ def handle_file_upload():
         # Make file read-only for security
         # os.chmod(file_path, stat.S_IREAD)
         
+        # Reset the file pointer after saving it
+        file.seek(0)
         # Read file content from memory
         file_data = file.read()
 
@@ -45,7 +47,9 @@ def handle_file_upload():
         database.update_file_db(user_id, file.filename, file_hash, file.content_type, size, last_modified_date)
 
         # Parse metadata based on file type
-        files.parse_file_by_type(file, file_path, file.content_type)
+        # files.parse_file_by_type(file, file_path, file.content_type)
+        files.parse_file_content(file.content_type, file_path, file_data)
+        files.parse_uploaded_file_content(file.content_type, file_data)
 
         # chunk_hashes = hashing.generate_chunked_hash(file_data)
         # # Store file name and chunk hashes in database

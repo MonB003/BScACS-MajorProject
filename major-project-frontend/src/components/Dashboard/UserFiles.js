@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import FileUploadForm from '../FileForm/FileUploadForm';
+import './UserFiles.css'
 
 function UserFiles({ userID, username }) {
     // Store user's files
@@ -46,7 +47,7 @@ function UserFiles({ userID, username }) {
             <FileUploadForm userID={userID} onUploadSuccess={refreshFiles} />
 
             <h1>{username}'s Files</h1>
-            <div>
+            <div id="fileList">
                 {
                     // Loop through files state object and display each file's info
                     files ? (

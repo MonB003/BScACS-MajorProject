@@ -242,6 +242,7 @@ def find_file_differences(original_file, new_file):
             # print(type(original_value)) # list
             # print(type(new_value)) # tuple
 
+            # REMOVE THIS IF CHECK IF NOT USING CHUNKED HASHES
             if type(original_value) is list or type(new_value) is list:
                 print("ITEM IS LIST")
                 original_hashes = original_value[1]

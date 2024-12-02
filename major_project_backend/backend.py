@@ -9,6 +9,8 @@ CORS(app)  # Enable CORS for all routes
 # Set upload folder
 UPLOAD_FOLDER = 'uploaded-files/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+CHANGES_FOLDER = 'changed-files/'
+app.config['CHANGES_FOLDER'] = CHANGES_FOLDER
 
 @app.route("/upload-file", methods=['POST'])
 def handle_file_upload():
@@ -48,19 +50,8 @@ def handle_file_upload():
 
         # Parse metadata based on file type
         # files.parse_file_by_type(file, file_path, file.content_type)
-        files.parse_file_content(file.content_type, file_path, file_data)
-        files.parse_uploaded_file_content(file.content_type, file_data)
-
-        # chunk_hashes = hashing.generate_chunked_hash(file_data)
-        # # Store file name and chunk hashes in database
-        # database.update_file_db(
-        #     user_id,
-        #     file.filename,
-        #     chunk_hashes,         # Store the list of chunk hashes
-        #     file.content_type,
-        #     size,
-        #     last_modified_date
-        # )
+        # files.parse_file_content(file.content_type, file_path, file_data)
+        # files.parse_uploaded_file_content(file.content_type, file_data)
 
         message = "The file: " + file.filename + " was uploaded successfully."
         return jsonify({'message': message, 'file': file.filename}), 200
@@ -87,7 +78,7 @@ def handle_file_check():
         # Hash the file content
         new_file_hash = hashing.generate_hash(file_data)
         # new_file_hash = hashing.generate_chunked_hash(file_data)
-
+        
         filename = file.filename
         filename_result = database.find_recent_file_by_name(filename, user_id)
         new_file_result = {
@@ -108,6 +99,20 @@ def handle_file_check():
             success_message = "Success! The file: " + filename + " has not changed."
             return jsonify({'message': success_message, 'file': filename_result['filename'], 'file_hash': filename_result['file_hash'], 'date': filename_result['date']}), 200
         else:
+            # Get file path of saved file
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+            # Find differences in metadata between the two files
+            file_data_changes = files.compare_file_metadata(file_path, file_data, file.content_type)
+            # print("FILE CHANGES:", file_data_changes)
+
+            # Get filename without extension
+            # filename = file.filename.split('.')[0]
+            # file_changes_path = os.path.join(app.config['CHANGES_FOLDER'], f"{filename}-changes.txt")
+            # print("FILE CHANGE PATH:", file_changes_path)
+            # if not os.path.exists(file_changes_path):
+            #     os.makedirs(file_changes_path)
+            files.save_file_changes(app.config['CHANGES_FOLDER'], user_id, file.filename, differences_result, file_data_changes)
+
             error_message = "Error. The file: " + filename + " has changed."
             log_message = "" # TEMP: database.insert_log_db(user_id, filename, differences_result)
             return jsonify({'error': error_message, 'log_message': log_message}), 400

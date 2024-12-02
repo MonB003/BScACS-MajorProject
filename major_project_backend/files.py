@@ -120,13 +120,11 @@ def parse_uploaded_file_content(file_type, uploaded_file):
         print("Unsupported file type.")
 
 def compare_file_metadata(local_file_path, uploaded_file_data, file_type):
-    print("FILE TYPE:", file_type)
     # Read local file
     with open(local_file_path, 'r', encoding='utf-8') as local_file:
         local_lines = local_file.readlines()
     
     # Read uploaded file data from memory if it's a text file
-    # if file_type in ["text/plain", "text/csv"]:
     if file_type.startswith("text/"):
         uploaded_lines = uploaded_file_data.decode('utf-8').splitlines(keepends=True)
     else:
@@ -139,25 +137,20 @@ def compare_file_metadata(local_file_path, uploaded_file_data, file_type):
                                 tofile='uploaded_file', 
                                 lineterm='')
     
-    # # Print the differences line by line
-    # print("DIFFERENCES:")
-    # for line in diff:
-    #     print(line)
-        
     return diff
 
 def save_file_changes(log_dir, user_id, filename, metadata, differences):
+    # Create directory path
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
     
+    # Create path to file changes file
     name = filename.split('.')[0] # Get filename without the extension
     log_filename = os.path.join(log_dir, f"{name}-changes.txt")
-    # print("FILE CHANGE PATH:", log_filename)
     
     with open(log_filename, 'w', encoding='utf-8') as f:
         f.write(f"Filename: {filename}\n")
         f.write(f"User ID: {user_id}\n")
-        # f.write(f"Comparison Date: {datetime.utcnow()}\n")
               
         # Parse metadata
         f.write(f"File metadata: \n")
@@ -172,50 +165,5 @@ def save_file_changes(log_dir, user_id, filename, metadata, differences):
         f.write("-" * 40 + "\n")
         f.write(f"File content metadata changes: \n")
         f.writelines(differences)
-        # for current_line in differences:
-        #     f.write(f"{current_line}")
 
-    print(f"Saved diff to {log_filename}")
-
-# def parse_file_data(file_data, file_type):
-#     print("Parsing file data...")
-
-#     if file_type in ["text/plain", "text/csv"]:
-#         content = file_data.decode('utf-8')  # Decode binary data into a string
-#         lines = content.splitlines()  # Split into lines
-#         print("\n".join(lines))  # Print first 5 lines for preview
-#         return lines  # Return list of lines for comparison
-
-#     elif file_type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-#         doc = docx.Document(BytesIO(file_data))  # Read DOCX from memory
-#         paragraphs = [para.text for para in doc.paragraphs]
-#         print("\n".join(paragraphs[:5]))  # Print first 5 paragraphs
-#         return paragraphs  # Return list of paragraphs for comparison
-
-#     elif file_type == "application/pdf":
-#         reader = PyPDF2.PdfReader(BytesIO(file_data))  # Read PDF from memory
-#         pages = [page.extract_text() for page in reader.pages]
-#         print("\n".join(pages))  # Print text from the first page
-#         return pages  # Return list of page text for comparison
-
-#     else:
-#         print("Unsupported file type.")
-#         return None
-
-# def compare_files(old_file_data, new_file_data, file_type):
-#     # Parse both files
-#     old_content = parse_file_data(old_file_data, file_type)
-#     new_content = parse_file_data(new_file_data, file_type)
-
-#     if isinstance(old_content, list) and isinstance(new_content, list):
-#         # Compare line-by-line or paragraph-by-paragraph
-#         diff = unified_diff(old_content, new_content, lineterm="")
-#         print("\n".join(list(diff)))
-#     elif isinstance(old_content, dict) and isinstance(new_content, dict):
-#         # Compare metadata for images
-#         differences = {key: (old_content.get(key), new_content.get(key))
-#                        for key in set(old_content) | set(new_content)
-#                        if old_content.get(key) != new_content.get(key)}
-#         print("Metadata differences:", differences)
-#     else:
-#         print("Unable to compare content.")
+    print(f"Saved file changes to {log_filename}")

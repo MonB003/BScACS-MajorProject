@@ -1,12 +1,12 @@
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 import database, hashing, files
-import os, stat
+import os
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
-# Set upload folder
+# Set file upload and changes folders
 UPLOAD_FOLDER = 'uploaded-files/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 CHANGES_FOLDER = 'changed-files/'
@@ -77,7 +77,6 @@ def handle_file_check():
 
         # Hash the file content
         new_file_hash = hashing.generate_hash(file_data)
-        # new_file_hash = hashing.generate_chunked_hash(file_data)
         
         filename = file.filename
         filename_result = database.find_recent_file_by_name(filename, user_id)
@@ -103,18 +102,11 @@ def handle_file_check():
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
             # Find differences in metadata between the two files
             file_data_changes = files.compare_file_metadata(file_path, file_data, file.content_type)
-            # print("FILE CHANGES:", file_data_changes)
-
-            # Get filename without extension
-            # filename = file.filename.split('.')[0]
-            # file_changes_path = os.path.join(app.config['CHANGES_FOLDER'], f"{filename}-changes.txt")
-            # print("FILE CHANGE PATH:", file_changes_path)
-            # if not os.path.exists(file_changes_path):
-            #     os.makedirs(file_changes_path)
+            # Write file differences to a local file
             files.save_file_changes(app.config['CHANGES_FOLDER'], user_id, file.filename, differences_result, file_data_changes)
 
             error_message = "Error. The file: " + filename + " has changed."
-            log_message = "" # TEMP: database.insert_log_db(user_id, filename, differences_result)
+            log_message = database.insert_log_db(user_id, filename, differences_result)
             return jsonify({'error': error_message, 'log_message': log_message}), 400
 
 # Utility function to make MongoDB documents JSON serializable

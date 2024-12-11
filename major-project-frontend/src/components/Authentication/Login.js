@@ -13,7 +13,7 @@ function Login() {
       formData.append('username', username);
       formData.append('password', password);
 
-      const URL = process.env.REACT_APP_BACKEND_HOSTED_URL;
+      const URL = process.env.REACT_APP_BACKEND_LOCAL_URL;
       const response = await fetch(`${URL}/login`, {
         method: 'POST',
         body: formData,

@@ -32,6 +32,10 @@ def handle_file_upload():
     last_modified_date = request.form.get('lastModifiedDate')
 
     if file:
+        # Create directory path
+        if not os.path.exists(app.config['UPLOAD_FOLDER']):
+            os.makedirs(app.config['UPLOAD_FOLDER'])
+    
         # Create file path to save the file to
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(file_path)

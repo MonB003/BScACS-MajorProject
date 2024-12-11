@@ -102,8 +102,6 @@ def insert_log_db(user_id, filename, file_differences):
         if index != len(file_differences)-1:
             full_log_message += ', '
     
-    print("FULL MESSAGE: ", full_log_message)
-
     log_info = {
         "user_id": user_id,
         "filename": filename,
@@ -113,9 +111,9 @@ def insert_log_db(user_id, filename, file_differences):
 
     # Merge file_differences into log_info, so all info is stored in one dictionary
     log_info.update(file_differences)
-    print("LOG INFO: ", log_info)
     security.encrypt_dictionary(log_info)
     collection.insert_one(log_info)
+    print("Log inserted into the database")
     return full_log_message
 
 # Creates a log file for the user
@@ -197,7 +195,6 @@ def generate_log_file(user_id, username):
 def generate_user_id():
     # Use uuid4 to generate an ID
     uuid_value = uuid.uuid4() 
-    print("The id generated using uuid4() : ", uuid_value) 
     return str(uuid_value)
 
 # Insert user into database
@@ -237,26 +234,26 @@ def find_file_differences(original_file, new_file):
         if key in original_file:
             original_value = original_file[key]
             new_value = new_file[key]
-            # print("ORIG", original_value)
-            # print("NEW", new_value)
-            # print(type(original_value)) # list
-            # print(type(new_value)) # tuple
+            # # print("ORIG", original_value)
+            # # print("NEW", new_value)
+            # # print(type(original_value)) # list
+            # # print(type(new_value)) # tuple
 
-            # REMOVE THIS IF CHECK IF NOT USING CHUNKED HASHES
-            if type(original_value) is list or type(new_value) is list:
-                print("ITEM IS LIST")
-                original_hashes = original_value[1]
-                new_hashes = new_value[1]
+            # # REMOVE THIS IF CHECK IF NOT USING CHUNKED HASHES
+            # if type(original_value) is list or type(new_value) is list:
+            #     print("ITEM IS LIST")
+            #     original_hashes = original_value[1]
+            #     new_hashes = new_value[1]
 
-                if original_value[0] == new_value[0]:
-                    break
+            #     if original_value[0] == new_value[0]:
+            #         break
 
-                for index, value in enumerate(original_hashes):
-                    print(index, value)
-                    if original_hashes[index] != new_hashes[index]:
-                        print("DIFFERENT", original_hashes[index])
-                    # else:
-                        # print("SAME")
+            #     for index, value in enumerate(original_hashes):
+            #         print(index, value)
+            #         if original_hashes[index] != new_hashes[index]:
+            #             print("DIFFERENT", original_hashes[index])
+            #         # else:
+            #             # print("SAME")
             
             # Compare the initial and new values
             if original_value != new_value:

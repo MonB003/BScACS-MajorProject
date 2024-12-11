@@ -1,8 +1,6 @@
 # COMP 8800 and 8900 Major Project
 > The *Secure MoniTor Toolkit* is a forensics toolkit, which offers a user-friendly solution to enhance the detection and response of digital forensic incidents. Users can upload files to check for file integrity.
 
-<!-- [Hosted App Link](https://major-project-monb.netlify.app/) -->
-
 ## Table of Contents
 - [Technologies](#technologies)
 - [Operating Systems](#operating-systems)

@@ -35,7 +35,7 @@ def handle_file_upload():
         # Create file path to save the file to
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(file_path)
-        # Make file read-only for security
+        # Make file read-only
         # os.chmod(file_path, stat.S_IREAD)
         
         # Reset the file pointer after saving it
@@ -47,11 +47,6 @@ def handle_file_upload():
         file_hash = hashing.generate_hash(file_data)
         # Store file name and hash in database
         database.update_file_db(user_id, file.filename, file_hash, file.content_type, size, last_modified_date)
-
-        # Parse metadata based on file type
-        # files.parse_file_by_type(file, file_path, file.content_type)
-        # files.parse_file_content(file.content_type, file_path, file_data)
-        # files.parse_uploaded_file_content(file.content_type, file_data)
 
         message = "The file: " + file.filename + " was uploaded successfully."
         return jsonify({'message': message, 'file': file.filename}), 200
@@ -154,7 +149,6 @@ def handle_user_signup():
             return jsonify({'error': 'An account with this username already exists.'}), 400
         else:
             user_result = database.insert_user_db(username, password)
-            print("USER", user_result)
             return jsonify({'message': 'Success: A user account has been created.', 'user_id': user_result['userID'], 'username': user_result['username']}), 200
 
 @app.route("/login", methods=['POST'])

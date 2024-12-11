@@ -1,4 +1,3 @@
-from difflib import unified_diff
 import docx
 import PyPDF2
 import os, time

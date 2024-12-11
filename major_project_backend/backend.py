@@ -1,9 +1,16 @@
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
-import database, hashing
+import database, hashing, files
+import os
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
+
+# Set file upload and changes folders
+UPLOAD_FOLDER = 'uploaded-files/'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+CHANGES_FOLDER = 'changed-files/'
+app.config['CHANGES_FOLDER'] = CHANGES_FOLDER
 
 @app.route("/upload-file", methods=['POST'])
 def handle_file_upload():
@@ -25,12 +32,19 @@ def handle_file_upload():
     last_modified_date = request.form.get('lastModifiedDate')
 
     if file:
+        # Create file path to save the file to
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(file_path)
+        # Make file read-only
+        # os.chmod(file_path, stat.S_IREAD)
+        
+        # Reset the file pointer after saving it
+        file.seek(0)
         # Read file content from memory
         file_data = file.read()
 
         # Hash the file content
         file_hash = hashing.generate_hash(file_data)
-
         # Store file name and hash in database
         database.update_file_db(user_id, file.filename, file_hash, file.content_type, size, last_modified_date)
 
@@ -58,7 +72,7 @@ def handle_file_check():
 
         # Hash the file content
         new_file_hash = hashing.generate_hash(file_data)
-
+        
         filename = file.filename
         filename_result = database.find_recent_file_by_name(filename, user_id)
         new_file_result = {
@@ -79,9 +93,36 @@ def handle_file_check():
             success_message = "Success! The file: " + filename + " has not changed."
             return jsonify({'message': success_message, 'file': filename_result['filename'], 'file_hash': filename_result['file_hash'], 'date': filename_result['date']}), 200
         else:
+            # Get file path of saved file
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+            # Find differences in metadata between the two files
+            file_data_changes = files.compare_file_metadata(file_path, file_data, file.content_type)
+            # Write file differences to a local file
+            files.save_file_changes(app.config['CHANGES_FOLDER'], user_id, file.filename, differences_result, file_data_changes)
+
             error_message = "Error. The file: " + filename + " has changed."
             log_message = database.insert_log_db(user_id, filename, differences_result)
             return jsonify({'error': error_message, 'log_message': log_message}), 400
+
+# Utility function to make MongoDB documents JSON serializable
+def serialize_file(file_doc):
+    file_doc['_id'] = str(file_doc['_id'])  # Convert ObjectId to a string
+    return file_doc
+
+@app.route("/get-user-files", methods=['POST'])
+def get_user_files():
+    user_id = request.form.get('user_id')
+    
+    if not user_id:
+        return jsonify({'error': 'The user ID cannot be empty.'}), 400
+    
+    user_files_result = database.get_user_files(user_id)
+    if user_files_result is None:
+        return jsonify({'message': "The user has no files."}), 404
+    else:
+        # Convert cursor to a list of JSON-serializable dictionaries
+        user_files = [serialize_file(file) for file in user_files_result]
+        return jsonify({'message': "Success! The user has files.", 'files': user_files}), 200
 
 @app.route("/generate-log-file", methods=['POST'])
 def download_log_file():
@@ -108,7 +149,6 @@ def handle_user_signup():
             return jsonify({'error': 'An account with this username already exists.'}), 400
         else:
             user_result = database.insert_user_db(username, password)
-            print("USER", user_result)
             return jsonify({'message': 'Success: A user account has been created.', 'user_id': user_result['userID'], 'username': user_result['username']}), 200
 
 @app.route("/login", methods=['POST'])

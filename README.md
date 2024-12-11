@@ -1,8 +1,6 @@
 # COMP 8800 and 8900 Major Project
 > The *Secure MoniTor Toolkit* is a forensics toolkit, which offers a user-friendly solution to enhance the detection and response of digital forensic incidents. Users can upload files to check for file integrity.
 
-[Hosted App Link](https://major-project-monb.netlify.app/)
-
 ## Table of Contents
 - [Technologies](#technologies)
 - [Operating Systems](#operating-systems)
@@ -39,7 +37,7 @@ Cloning the repository:
 - `cd` into the folder you want the repository stored in
 - Type: `git clone https://github.com/MonB003/BScACS-MajorProject.git`
 
-**Note:** There is a `.env` file that is needed in order for the database functionality to work.
+**Note:** There is a `.env` file that is needed in order for the database and security functionality to work.
 
 In the respective folders, you will need to install these packages:
 #### React Frontend (major-project-frontend folder):
@@ -73,19 +71,11 @@ The packages below need to be installed.
 
 **Windows and Linux:**
 ```
-pip install flask
-pip install flask-cors
-pip install pymongo
-pip install python-dotenv
-pip install reportlab
+pip install flask flask-cors pymongo python-dotenv reportlab pycryptodome python-docx PyPDF2
 ```
 **Mac:**
 ```
-pip3 install flask
-pip3 install flask-cors
-pip3 install pymongo
-pip3 install python-dotenv
-pip3 install reportlab
+pip3 install flask flask-cors pymongo python-dotenv reportlab pycryptodome python-docx PyPDF2
 ```
 
 ### Running the project locally:

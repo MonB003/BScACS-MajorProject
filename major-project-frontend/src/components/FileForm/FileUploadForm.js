@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 
-function FileUploadForm({ userID }) {
+function FileUploadForm({ userID, onUploadSuccess }) {
     const [file, setFile] = useState(null);
+    const MAX_FILE_SIZE = 1000000;
 
     // Handle file change
     const handleFileChange = (event) => {
@@ -19,29 +20,28 @@ function FileUploadForm({ userID }) {
         const formMessage = document.getElementById('formMessage')
         formMessage.style.display = "block";
 
-        // const lastModified = new Date(file.lastModified);
-        // const readableDate = lastModified.toLocaleString(); // Convert to local date and time
-        // console.log("Last modified date and time:", readableDate);
-
+        // Convert local date and time into readable format
         const lastModified = new Date(file.lastModified);
-        // Format example: Mon Nov 04 2024 13:10:35 GMT-0800 (Pacific Standard Time)
-        const options = {
-            weekday: 'short',
+        const readableDate = new Intl.DateTimeFormat('en-CA', {
             year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            timeZoneName: 'short',
-        };
-        const readableDate = lastModified.toLocaleString('en-CA', options);
-        console.log("Last modified date and time:", readableDate);
-
+            month: '2-digit',
+            day: '2-digit',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: false // Ensures 24-hour format
+        }).format(lastModified);
+    
         console.log("File to send:", file);
         console.log("Type:", file.type);
         console.log("Size:", file.size);
         console.log("Last modified date:", readableDate);
+
+        if (file.size > MAX_FILE_SIZE) {
+            let errorMessage = "Error: File size is too large. Max file size to upload: " + MAX_FILE_SIZE;
+            alert(errorMessage);
+            return;
+        }
 
         const formData = new FormData();
         formData.append('file', file);
@@ -63,6 +63,9 @@ function FileUploadForm({ userID }) {
             console.log("Response", result)
             if (response.ok) {
                 alert(result.message);
+                if (onUploadSuccess) {
+                    onUploadSuccess(); // Callback to refresh files displayed in UserFiles component
+                }
             } else {
                 alert(result.error);
             }
@@ -75,7 +78,7 @@ function FileUploadForm({ userID }) {
         <>
             <div>
                 <h1>File Upload</h1>
-                <input type="file" onChange={handleFileChange} required={true} />
+                <input data-testid="fileInput" type="file" onChange={handleFileChange} required={true} />
                 <br />
                 <button onClick={handleFileUpload}>Upload File</button>
                 <p id="formMessage" style={{ display: "none" }}>File upload in progress</p>

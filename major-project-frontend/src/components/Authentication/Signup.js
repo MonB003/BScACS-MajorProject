@@ -40,7 +40,8 @@ function Signup() {
 
   return (
     <div id="page">
-      <h1>Signup</h1>
+      <h1>Secure MoniTor Toolkit</h1>
+      <h2>Sign Up</h2>
       <form id="signupForm" onSubmit={handleSignup}>
         <input
           type="text"
@@ -56,7 +57,7 @@ function Signup() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <br />
-        <button type="submit">Signup</button>
+        <button type="submit">Sign Up</button>
       </form>
       <p id="formSignupMessage" style={{ display: "none" }}></p>
 

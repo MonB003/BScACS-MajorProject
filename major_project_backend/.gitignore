@@ -2,3 +2,5 @@
 /venv
 .env
 *-logs.pdf
+/uploaded-files/*
+/changed-files/*

@@ -1,11 +1,10 @@
 from pymongo import MongoClient, DESCENDING
-import os
+import os, uuid
 from dotenv import load_dotenv
 from datetime import datetime
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-import uuid
-import hashing
+import hashing, security
 
 # Load .env file variables
 load_dotenv()
@@ -19,8 +18,8 @@ def get_date_time():
     # Get current date and time
     now = datetime.now()
     
-    # Format: dd/mm/YY H:M:S
-    datetime_formatted = now.strftime("%d/%m/%Y %H:%M:%S")
+    # Format: YYYY-MM-DD, H:M:S
+    datetime_formatted = now.strftime("%Y-%m-%d, %H:%M:%S")
     return datetime_formatted
 
 # Insert file info into database
@@ -75,6 +74,15 @@ def update_file_db(user_id, filename, file_hash, content_type, size, last_modifi
         return False
     return True
 
+# Gets all files for a user
+def get_user_files(user_id):
+    collection = db['files']
+    # Get logs for this user
+    user_files = collection.find({"user_id": user_id})
+    if user_files:
+        return user_files
+    return None
+
 # Insert new log entry info into database
 def insert_log_db(user_id, filename, file_differences):
     collection = db['logs']
@@ -94,8 +102,6 @@ def insert_log_db(user_id, filename, file_differences):
         if index != len(file_differences)-1:
             full_log_message += ', '
     
-    print("FULL MESSAGE: ", full_log_message)
-
     log_info = {
         "user_id": user_id,
         "filename": filename,
@@ -105,7 +111,9 @@ def insert_log_db(user_id, filename, file_differences):
 
     # Merge file_differences into log_info, so all info is stored in one dictionary
     log_info.update(file_differences)
+    security.encrypt_dictionary(log_info)
     collection.insert_one(log_info)
+    print("Log inserted into the database")
     return full_log_message
 
 # Creates a log file for the user
@@ -141,6 +149,9 @@ def generate_log_file(user_id, username):
     for log in user_logs:
         if y_position < 100:  # Check if there is enough space for a new log
             add_page_break()
+
+        # Decrypt log entry values
+        security.decrypt_dictionary(log)
         
         canvasObj.drawString(50, y_position, f"Date: {log['date']}")
         y_position -= 20
@@ -184,7 +195,6 @@ def generate_log_file(user_id, username):
 def generate_user_id():
     # Use uuid4 to generate an ID
     uuid_value = uuid.uuid4() 
-    print("The id generated using uuid4() : ", uuid_value) 
     return str(uuid_value)
 
 # Insert user into database
@@ -224,7 +234,7 @@ def find_file_differences(original_file, new_file):
         if key in original_file:
             original_value = original_file[key]
             new_value = new_file[key]
-            
+
             # Compare the initial and new values
             if original_value != new_value:
                 differences[key] = {

@@ -40,7 +40,8 @@ function Login() {
 
   return (
     <div id="page">
-      <h1>Login</h1>
+      <h1>Secure MoniTor Toolkit</h1>
+      <h2>Login</h2>
       <form id="loginForm" onSubmit={handleLogin}>
         <input
           type="text"

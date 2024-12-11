@@ -1,7 +1,5 @@
 import React from 'react'
 import { useLocation, useNavigate } from "react-router-dom";
-
-// import FileUploadForm from '../FileForm/FileUploadForm'
 import FileCheckForm from '../FileForm/FileCheckForm'
 import LogGenerator from '../Log/LogGenerator'
 import UserFiles from './UserFiles';

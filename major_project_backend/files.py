@@ -91,7 +91,7 @@ def parse_file_info_by_type(file, filename, file_type):
     else:
         print("File type not supported")
 
-def parse_file_content(file_type, local_file, new_file):    
+def parse_file_content(file_type, local_file):    
     # Generic File Metadata
     file_stats = os.stat(local_file)
     print(f"Permissions: {oct(file_stats.st_mode)[-3:]}")
@@ -100,7 +100,6 @@ def parse_file_content(file_type, local_file, new_file):
     print(f"Last Accessed: {time.ctime(file_stats.st_atime)}")
 
     # Read local file content
-    print("--- FILE CONTENT ---")
     if file_type in ["text/plain", "text/csv"]:
         with open(local_file, 'r', encoding='utf-8') as f:
             content = f.readlines()

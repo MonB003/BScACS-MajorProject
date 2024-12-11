@@ -234,27 +234,7 @@ def find_file_differences(original_file, new_file):
         if key in original_file:
             original_value = original_file[key]
             new_value = new_file[key]
-            # # print("ORIG", original_value)
-            # # print("NEW", new_value)
-            # # print(type(original_value)) # list
-            # # print(type(new_value)) # tuple
 
-            # # REMOVE THIS IF CHECK IF NOT USING CHUNKED HASHES
-            # if type(original_value) is list or type(new_value) is list:
-            #     print("ITEM IS LIST")
-            #     original_hashes = original_value[1]
-            #     new_hashes = new_value[1]
-
-            #     if original_value[0] == new_value[0]:
-            #         break
-
-            #     for index, value in enumerate(original_hashes):
-            #         print(index, value)
-            #         if original_hashes[index] != new_hashes[index]:
-            #             print("DIFFERENT", original_hashes[index])
-            #         # else:
-            #             # print("SAME")
-            
             # Compare the initial and new values
             if original_value != new_value:
                 differences[key] = {

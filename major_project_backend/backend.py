@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 import database, hashing, files
-import os
+import os, stat
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -38,9 +38,17 @@ def handle_file_upload():
     
         # Create file path to save the file to
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        
+        # Check if file exists
+        if os.path.exists(file_path):
+            # Temporarily change permissions to writable
+            os.chmod(file_path, stat.S_IWRITE)
+
+        # Save the new file (overwrites if exists)
         file.save(file_path)
-        # Make file read-only
-        # os.chmod(file_path, stat.S_IREAD)
+
+        # Make file read-only again
+        os.chmod(file_path, stat.S_IREAD)
         
         # Reset the file pointer after saving it
         file.seek(0)

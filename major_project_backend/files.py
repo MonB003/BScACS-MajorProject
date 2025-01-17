@@ -1,6 +1,7 @@
 import docx
 import PyPDF2
-import os, time
+import os, time, stat
+from datetime import datetime
 from io import BytesIO
 import difflib
 
@@ -22,6 +23,14 @@ def compare_file_metadata(local_file_path, uploaded_file_data, file_type):
     
     return diff
 
+def get_date_time_string():
+    # Get current date and time
+    now = datetime.now()
+    
+    # Format: YYYY-MM-DD-H-M-S
+    datetime_formatted = now.strftime("%Y-%m-%d-%H-%M-%S")
+    return datetime_formatted
+
 def save_file_changes(log_dir, user_id, filename, metadata, differences):
     # Create directory path
     if not os.path.exists(log_dir):
@@ -29,7 +38,8 @@ def save_file_changes(log_dir, user_id, filename, metadata, differences):
     
     # Create path to file changes file
     name = filename.split('.')[0] # Get filename without the extension
-    log_filename = os.path.join(log_dir, f"{name}-changes.txt")
+    datetime_string = get_date_time_string() # Add date and time to make filename unique
+    log_filename = os.path.join(log_dir, f"{name}-changes-{datetime_string}.txt")
     
     with open(log_filename, 'w', encoding='utf-8') as f:
         f.write(f"Filename: {filename}\n")
@@ -53,6 +63,9 @@ def save_file_changes(log_dir, user_id, filename, metadata, differences):
         else:
             f.write("None.")
 
+    # Make file read-only again
+    os.chmod(log_filename, stat.S_IREAD)
+    
     print(f"Saved file changes to {log_filename}")
 
 

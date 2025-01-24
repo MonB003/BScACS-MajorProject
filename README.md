@@ -71,11 +71,12 @@ The packages below need to be installed.
 
 **Windows and Linux:**
 ```
-pip install flask flask-cors pymongo python-dotenv reportlab pycryptodome python-docx PyPDF2
+pip install flask flask-cors pymongo python-dotenv reportlab pycryptodome python-docx PyPDF2 PyJWT
+
 ```
 **Mac:**
 ```
-pip3 install flask flask-cors pymongo python-dotenv reportlab pycryptodome python-docx PyPDF2
+pip3 install flask flask-cors pymongo python-dotenv reportlab pycryptodome python-docx PyPDF2 PyJWT
 ```
 
 ### Running the project locally:

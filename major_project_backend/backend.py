@@ -1,10 +1,19 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, make_response
 from flask_cors import CORS
 import database, hashing, files
 import os, stat
+# import pwd, grp
+import datetime, jwt
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
+
+# Load .env file variables
+load_dotenv()
+
+SECRET_KEY = os.getenv("SECRET_KEY") # Secure and unique key
+ALGORITHM = "HS256"  # HMAC SHA-256
 
 # Set file upload and changes folders
 UPLOAD_FOLDER = 'uploaded-files/'
@@ -49,6 +58,9 @@ def handle_file_upload():
 
         # Make file read-only again
         os.chmod(file_path, stat.S_IREAD)
+        
+        # # Change the owner to root (for Mac or Linux) ***WHAT TO DO FOR WINDOWS?
+        # os.chown(file_path, pwd.getpwnam("root").pw_uid, grp.getgrnam("root").gr_gid)
         
         # Reset the file pointer after saving it
         file.seek(0)
@@ -160,8 +172,14 @@ def handle_user_signup():
         if username_result:
             return jsonify({'error': 'An account with this username already exists.'}), 400
         else:
+            # Store new user
             user_result = database.insert_user_db(username, password)
-            return jsonify({'message': 'Success: A user account has been created.', 'user_id': user_result['userID'], 'username': user_result['username']}), 200
+            # Setup access token
+            access_token = create_access_token(user_result['userID'])
+            response = make_response(jsonify({'message': 'Login successful'}))
+            response.set_cookie('access_token', access_token, httponly=True, secure=True, samesite='Strict', max_age=datetime.timedelta(hours=1))
+            
+            return jsonify({'message': 'Success: A user account has been created.', 'user_id': user_result['userID'], 'username': user_result['username'], "access_token": access_token}), 200
 
 @app.route("/login", methods=['POST'])
 def handle_user_login():
@@ -178,8 +196,31 @@ def handle_user_login():
         if not user_result:
             return jsonify({'error': 'No user account exists with this information.'}), 404
         else:
-            return jsonify({'message': 'Success: A user account was found.', 'user_id': user_result['userID'], 'username': user_result['username']}), 200
+            # Setup access token
+            access_token = create_access_token(user_result['userID'])
+            response = make_response(jsonify({'message': 'Login successful'}))
+            response.set_cookie('access_token', access_token, httponly=True, secure=True, samesite='Strict', max_age=datetime.timedelta(hours=1))
 
+            return jsonify({'message': 'Success: A user account was found.', 'user_id': user_result['userID'], 'username': user_result['username'], "access_token": access_token}), 200
+
+def create_access_token(user_id):
+    payload = {
+        "user_id": user_id,
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1),  # Token expires in 1 hour
+        "iat": datetime.datetime.utcnow(),  # Issued at
+    }
+    token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+    return token
+
+def verify_access_token(token):
+    try:
+        decoded = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return decoded  # Returns the payload if valid
+    except jwt.ExpiredSignatureError:
+        return None  # Token expired
+    except jwt.InvalidTokenError:
+        return None  # Invalid token
+    
 # To run the app
 if __name__ == "__main__":
     # Debug is true because we're in development mode

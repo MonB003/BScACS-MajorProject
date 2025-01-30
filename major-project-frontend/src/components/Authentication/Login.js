@@ -21,24 +21,15 @@ function Login() {
       formData.append('username', username);
       formData.append('password', password);
 
-      // console.log("BEFORE")
       const URL = process.env.REACT_APP_BACKEND_LOCAL_URL;
       const response = await fetch(`${URL}/login`, {
         method: 'POST',
         body: formData,
-        // credentials: 'include', // Include cookies in the request
       });
-      // console.log("AFTER")
-
 
       const result = await response.json();
       console.log("RESULT", result)
       if (response.ok) {
-        // const userJSON = {
-        //   userID: result.user_id,
-        //   username: result.username,
-        //   accessToken: result.access_token
-        // };
         // Store token in memory (or use a secure cookie)
         sessionStorage.setItem('userID', result.user_id);
         sessionStorage.setItem('username', result.username);

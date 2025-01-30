@@ -1,20 +1,15 @@
-import React from 'react'
-import { useEffect } from 'react';
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import FileCheckForm from '../FileForm/FileCheckForm'
 import LogGenerator from '../Log/LogGenerator'
 import UserFiles from './UserFiles';
 
 function Dashboard() {
-  // const location = useLocation();
-  // const { user } = location.state || {};  // Retrieve user data from state
-  // // console.log("TOKEN: ", user.accessToken)
-
   const navigate = useNavigate();
   const accessToken = sessionStorage.getItem('accessToken');
   const userID = sessionStorage.getItem('userID');
   const username = sessionStorage.getItem('username');
-  console.log("TOKEN: ", accessToken)
+  // console.log("TOKEN: ", accessToken)
 
   // Redirect to login if no token is present
   useEffect(() => {
@@ -27,17 +22,12 @@ function Dashboard() {
     return null; // Render nothing while redirecting
   }
 
-  const user = {
-    "userID": userID,
-    "username": username
-  }
-
   return (
     <>
-      <h1>Hello, {user.username}</h1>
-      <UserFiles userID={user.userID} username={user.username} />
-      <FileCheckForm userID={user.userID} />
-      <LogGenerator userID={user.userID} username={user.username} />
+      <h1>Hello, {username}</h1>
+      <UserFiles userID={userID} username={username} />
+      <FileCheckForm userID={userID} />
+      <LogGenerator userID={userID} username={username} />
       <br />
       <div id="logoutDiv">
         <button onClick={() => {

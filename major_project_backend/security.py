@@ -1,6 +1,6 @@
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
-import base64, os, json
+import base64, os, stat
 from dotenv import load_dotenv
 from pymongo import MongoClient
 
@@ -8,7 +8,6 @@ from pymongo import MongoClient
 load_dotenv()
 AES_KEY = os.getenv("AES_KEY")
 key = base64.b64decode(AES_KEY)  # Decode the base64 string to bytes
-# print(f"Key length: {len(key)} bytes") 
 
 # Connect to MongoDB database
 MONGO_URI = os.getenv("MONGO_URI")
@@ -16,7 +15,7 @@ client = MongoClient(MONGO_URI)
 db = client['toolkit_db']
 collection = db["initial_files"]
 
-# ** Encrypt and Save File **
+# Encrypts a file and saves encryption info to the database
 def encrypt_file(filename, file_dir, user_id):
     with open(filename, "rb") as f: # Open full file path
         data = f.read()  # Read file content
@@ -25,16 +24,15 @@ def encrypt_file(filename, file_dir, user_id):
     cipher = AES.new(key, AES.MODE_GCM, nonce=init_vector)
     ciphertext, tag = cipher.encrypt_and_digest(data)
 
-    # encrypted_filename = filename + ".encrypt"  # Save encrypted file
-    encrypted_filename = "encrypt-" + filename # Save encrypted file
     name = os.path.basename(filename) # Get filename without entire path
     encrypted_filename = os.path.join(file_dir, f"encrypt-{name}")
     if not os.path.exists(file_dir):
-            os.makedirs(file_dir)
+        os.makedirs(file_dir)
     
     with open(encrypted_filename, "wb") as f:
         f.write(ciphertext)
-
+    os.chmod(encrypted_filename, stat.S_IREAD) # Make file read only
+    
     # Store metadata in MongoDB
     file_metadata = {
         "filename": os.path.basename(filename),
@@ -42,8 +40,8 @@ def encrypt_file(filename, file_dir, user_id):
         "iv": base64.b64encode(init_vector).decode("utf-8"),
         "tag": base64.b64encode(tag).decode("utf-8"),
     }
-    # collection.insert_one(file_metadata)
-    
+
+    # Insert new entry or update existing entry if one exists
     collection.update_one(
         {"filename": os.path.basename(filename), "user_id": user_id},  # Find by filename & user
         {"$set": file_metadata},  # Update IV and tag
@@ -51,19 +49,13 @@ def encrypt_file(filename, file_dir, user_id):
     )
     print(f"File {encrypted_filename} encrypted and stored securely.")
 
-# ** Decrypt and Retrieve File **
+# Decrypts a file using encryption info from the database
 def decrypt_file(filename, file_dir, user_id):
-    print(f"File to decrypt: {filename}")
-    print(f"File to decrypt: {os.path.basename(filename)}")
-
     file_metadata = collection.find_one({"filename": os.path.basename(filename), "user_id": user_id})
     if not file_metadata:
         print("Error: Metadata not found in database.")
         return
 
-    # encrypted_filename = filename + ".encrypt"  # Save encrypted file
-    # encrypted_filename = "encrypt-" + filename
-    
     name = os.path.basename(filename) # Get filename without entire path
     encrypted_filename = os.path.join(file_dir, f"encrypt-{name}")
     if not os.path.exists(encrypted_filename):
@@ -82,15 +74,11 @@ def decrypt_file(filename, file_dir, user_id):
     cipher = AES.new(key, AES.MODE_GCM, nonce=init_vector)
     try:
         decrypted_data = cipher.decrypt_and_verify(ciphertext, tag)
-        print(f"DECRYPT DATA: {decrypted_data}")
-
-        # original_filename = filename + ".decrypt"
-        # original_filename = "decrypt-" + filename
         original_filename = os.path.join(file_dir, f"decrypt-{name}")
-        print(f"File name: {original_filename}")
 
         with open(original_filename, "wb") as f:
             f.write(decrypted_data)
+        os.chmod(original_filename, stat.S_IREAD) # Make file read only
         print(f"File decrypted and saved as {original_filename}")
     except ValueError:
         print("Decryption failed! Data may have been tampered with.")

@@ -47,7 +47,7 @@ def handle_file_upload():
     
         # Create file path to save the file to
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-        
+
         # Check if file exists
         if os.path.exists(file_path):
             # Temporarily change permissions to writable
@@ -56,19 +56,11 @@ def handle_file_upload():
         # Save the new file (overwrites if exists)
         file.save(file_path)
         
+        # Store encrypted version of the file
         security.encrypt_file(file_path, app.config['UPLOAD_FOLDER'], user_id)
-        # security.decrypt_file(file_path, app.config['UPLOAD_FOLDER'], user_id)
 
         # Make file read-only again
         os.chmod(file_path, stat.S_IREAD)
-        
-        # # Change the owner to root (for Mac or Linux) ***WHAT TO DO FOR WINDOWS?
-        # os.chown(file_path, pwd.getpwnam("root").pw_uid, grp.getgrnam("root").gr_gid)
-        
-        
-        # security.encrypt_file(file_path, user_id)
-        # security.decrypt_file(file_path, user_id)
-
         
         # Reset the file pointer after saving it
         file.seek(0)
@@ -119,24 +111,25 @@ def handle_file_check():
         if not filename_result:
             error_message = "Error. The file: " + filename + " was not found."
             return jsonify({'error': error_message}), 404
-
-        name = "encrypt-" + file.filename
-        encrypted_initial_file = os.path.join(app.config['UPLOAD_FOLDER'], name)
-        security.decrypt_file(file.filename, app.config['UPLOAD_FOLDER'], user_id)
         
         differences_result = database.find_file_differences(filename_result, new_file_result)
         if differences_result is None:
             success_message = "Success! The file: " + filename + " has not changed."
             return jsonify({'message': success_message, 'file': filename_result['filename'], 'file_hash': filename_result['file_hash'], 'date': filename_result['date']}), 200
         else:
-            # Get file path of saved file
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-            # Find differences in metadata between the two files
-            # file_data_changes = files.compare_file_metadata(file_path, file_data, file.content_type)
-            file_data_changes = files.compare_file_metadata(decrypted_initial_file, file_data, file.content_type)
+            # Decrypt the encrypted initial file
+            security.decrypt_file(file.filename, app.config['UPLOAD_FOLDER'], user_id)
+
+            # Get file path of decrypted file
+            name = "decrypt-" + file.filename
+            decrypted_initial_file = os.path.join(app.config['UPLOAD_FOLDER'], name)
+        
+            # Find differences in content between the two files
+            file_data_changes = files.compare_file_content(decrypted_initial_file, file_data, file.content_type)
 
             # Write file differences to a local file
-            files.save_file_changes(app.config['CHANGES_FOLDER'], user_id, file.filename, differences_result, file_data_changes)
+            if file_data_changes is not None:
+                files.save_file_changes(app.config['CHANGES_FOLDER'], user_id, file.filename, differences_result, file_data_changes)
 
             error_message = "Error. The file: " + filename + " has changed."
             log_message = database.insert_log_db(user_id, filename, differences_result)

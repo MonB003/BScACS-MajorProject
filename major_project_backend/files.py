@@ -5,7 +5,7 @@ from datetime import datetime
 from io import BytesIO
 import difflib
 
-def compare_file_metadata(local_file_path, uploaded_file_data, file_type):
+def compare_file_content(local_file_path, uploaded_file_data, file_type):
     # Read uploaded file data from memory if it's a text file
     if not file_type.startswith("text/"):
         print("Unsupported file type for text comparison.")

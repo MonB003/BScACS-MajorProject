@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, send_file, make_response
 from flask_cors import CORS
-import database, hashing, files
+import database, hashing, files, security
 import os, stat
 # import pwd, grp
 import datetime, jwt
@@ -55,12 +55,20 @@ def handle_file_upload():
 
         # Save the new file (overwrites if exists)
         file.save(file_path)
+        
+        security.encrypt_file(file_path, app.config['UPLOAD_FOLDER'], user_id)
+        # security.decrypt_file(file_path, app.config['UPLOAD_FOLDER'], user_id)
 
         # Make file read-only again
         os.chmod(file_path, stat.S_IREAD)
         
         # # Change the owner to root (for Mac or Linux) ***WHAT TO DO FOR WINDOWS?
         # os.chown(file_path, pwd.getpwnam("root").pw_uid, grp.getgrnam("root").gr_gid)
+        
+        
+        # security.encrypt_file(file_path, user_id)
+        # security.decrypt_file(file_path, user_id)
+
         
         # Reset the file pointer after saving it
         file.seek(0)
@@ -112,6 +120,10 @@ def handle_file_check():
             error_message = "Error. The file: " + filename + " was not found."
             return jsonify({'error': error_message}), 404
 
+        name = "encrypt-" + file.filename
+        encrypted_initial_file = os.path.join(app.config['UPLOAD_FOLDER'], name)
+        security.decrypt_file(file.filename, app.config['UPLOAD_FOLDER'], user_id)
+        
         differences_result = database.find_file_differences(filename_result, new_file_result)
         if differences_result is None:
             success_message = "Success! The file: " + filename + " has not changed."
@@ -120,7 +132,9 @@ def handle_file_check():
             # Get file path of saved file
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
             # Find differences in metadata between the two files
-            file_data_changes = files.compare_file_metadata(file_path, file_data, file.content_type)
+            # file_data_changes = files.compare_file_metadata(file_path, file_data, file.content_type)
+            file_data_changes = files.compare_file_metadata(decrypted_initial_file, file_data, file.content_type)
+
             # Write file differences to a local file
             files.save_file_changes(app.config['CHANGES_FOLDER'], user_id, file.filename, differences_result, file_data_changes)
 

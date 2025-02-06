@@ -56,7 +56,7 @@ def save_file_changes(log_dir, user_id, filename, metadata, differences):
                 f.write(f"\tNew: {value['new_value']}\n")
         
         f.write("-" * 35 + "\n")
-        f.write(f"File content metadata changes: \n")
+        f.write(f"File content changes: \n")
         if differences is not None:
             for current_line in differences:
                 f.write(f"{current_line}\n")

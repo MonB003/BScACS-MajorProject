@@ -63,7 +63,7 @@ def save_file_changes(log_dir, user_id, filename, metadata, differences):
         else:
             f.write("None.")
 
-    # Make file read-only again
+    # Make file read-only
     os.chmod(log_filename, stat.S_IREAD)
     
     print(f"Saved file changes to {log_filename}")

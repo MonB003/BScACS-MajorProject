@@ -29,9 +29,15 @@ def encrypt_file(filename, file_dir, user_id):
     if not os.path.exists(file_dir):
         os.makedirs(file_dir)
     
+    # Check if file exists
+    if os.path.exists(encrypted_filename):
+        # Temporarily change permissions to writable
+        os.chmod(encrypted_filename, stat.S_IWRITE)
+            
     with open(encrypted_filename, "wb") as f:
         f.write(ciphertext)
-    # os.chmod(encrypted_filename, stat.S_IREAD) # Make file read only
+    
+    os.chmod(encrypted_filename, stat.S_IREAD) # Make file read only
     
     # Store metadata in MongoDB
     file_metadata = {
@@ -75,10 +81,16 @@ def decrypt_file(filename, file_dir, user_id):
     try:
         decrypted_data = cipher.decrypt_and_verify(ciphertext, tag)
         original_filename = os.path.join(file_dir, f"decrypt-{name}")
+        
+        # Check if file exists
+        if os.path.exists(original_filename):
+            # Temporarily change permissions to writable
+            os.chmod(original_filename, stat.S_IWRITE)
 
         with open(original_filename, "wb") as f:
             f.write(decrypted_data)
-        # os.chmod(original_filename, stat.S_IREAD) # Make file read only
+            
+        os.chmod(original_filename, stat.S_IREAD) # Make file read only
         print(f"File decrypted and saved as {original_filename}")
     except ValueError:
         print("Decryption failed! Data may have been tampered with.")

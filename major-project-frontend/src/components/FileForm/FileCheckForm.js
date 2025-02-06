@@ -63,6 +63,10 @@ function FileCheckForm({ userID }) {
                 let alertMessage = ""
                 alertMessage += result.error + "\n"
                 alertMessage += result.log_message
+                // Check if file content log was created (for supported file types)
+                if (result.log_file != "") { 
+                    alertMessage += "\n" + result.log_file
+                }
                 alert(alertMessage);
             }
         } catch (error) {

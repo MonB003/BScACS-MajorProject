@@ -128,12 +128,16 @@ def handle_file_check():
             file_data_changes = files.compare_file_content(decrypted_initial_file, file_data, file.content_type)
 
             # Write file differences to a local file
+            content_changes_log = ""
             if file_data_changes is not None:
-                files.save_file_changes(app.config['CHANGES_FOLDER'], user_id, file.filename, differences_result, file_data_changes)
+                content_changes_log = "Log file for file content changes: "
+                changes_log_file = files.save_file_changes(app.config['CHANGES_FOLDER'], user_id, file.filename, differences_result, file_data_changes)
+                content_changes_log += changes_log_file
 
             error_message = "Error. The file: " + filename + " has changed."
             log_message = database.insert_log_db(user_id, filename, differences_result)
-            return jsonify({'error': error_message, 'log_message': log_message}), 400
+            
+            return jsonify({'error': error_message, 'log_message': log_message, 'log_file': content_changes_log}), 400
 
 # Utility function to make MongoDB documents JSON serializable
 def serialize_file(file_doc):

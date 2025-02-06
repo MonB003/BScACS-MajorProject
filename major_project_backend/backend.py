@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify, send_file, make_response
 from flask_cors import CORS
 import database, hashing, files, security
 import os, stat
-# import pwd, grp
 import datetime, jwt
 from dotenv import load_dotenv
 

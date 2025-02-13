@@ -55,6 +55,7 @@ function UserFiles({ userID, username }) {
                             <div key={index} className='fileItem'>
                                 <h3>File: {file.filename}</h3>
                                 <ul>
+                                    <li>File Path: {file.file_path}</li>
                                     <li>File Type: {file.content_type}</li>
                                     <li>Size: {file.size}</li>
                                     <li>Last Modified: {file.last_modified_date}</li>

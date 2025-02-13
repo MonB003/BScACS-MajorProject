@@ -38,6 +38,15 @@ def handle_file_upload():
     
     size = request.form.get('size')
     last_modified_date = request.form.get('lastModifiedDate')
+    file_path_form = request.form.get('filePath').strip()
+    
+    # Get full file path by combining the file path and filename
+    full_file_path = os.path.join(file_path_form, file.filename)
+    full_file_path = os.path.normpath(full_file_path)
+
+    if not os.path.exists(full_file_path):
+        error_message = "Error. The file path: " + full_file_path + " does not exist."
+        return jsonify({'error': error_message}), 404
 
     if file:
         # Create directory path
@@ -69,7 +78,7 @@ def handle_file_upload():
         # Hash the file content
         file_hash = hashing.generate_hash(file_data)
         # Store file name and hash in database
-        database.update_file_db(user_id, file.filename, file_hash, file.content_type, size, last_modified_date)
+        database.update_file_db(user_id, file.filename, file_hash, file.content_type, size, last_modified_date, file_path_form)
 
         message = "The file: " + file.filename + " was uploaded successfully."
         return jsonify({'message': message, 'file': file.filename}), 200
@@ -85,6 +94,7 @@ def handle_file_check():
     user_id = request.form.get('user_id')
     size = request.form.get('size')
     last_modified_date = request.form.get('lastModifiedDate')
+    file_path_form = request.form.get('filePath')
 
     if file.filename == '':
         return jsonify({'error': 'The filename cannot be empty.'}), 404
@@ -97,10 +107,11 @@ def handle_file_check():
         new_file_hash = hashing.generate_hash(file_data)
         
         filename = file.filename
-        filename_result = database.find_recent_file_by_name(filename, user_id)
+        filename_result = database.find_recent_file_by_name(filename, file_path_form, user_id)
         new_file_result = {
             "user_id": user_id,
             "filename": filename,
+            "file_path": file_path_form,
             "file_hash": new_file_hash,
             "content_type": file.content_type,
             "size": size,
@@ -108,7 +119,7 @@ def handle_file_check():
         }        
         
         if not filename_result:
-            error_message = "Error. The file: " + filename + " was not found."
+            error_message = "Error. The file: " + filename + " in the " + file_path_form + " directory was not found."
             return jsonify({'error': error_message}), 404
         
         differences_result = database.find_file_differences(filename_result, new_file_result)

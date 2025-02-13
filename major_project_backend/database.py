@@ -39,16 +39,16 @@ def find_file_by_hash(file_hash):
     return collection.find_one({"file_hash": file_hash})
 
 # Find the most recent file by filename
-def find_recent_file_by_name(filename, user_id):
+def find_recent_file_by_name(filename, file_path, user_id):
     collection = db['files']
-    filename_recent_date = collection.find_one({"filename": filename, "user_id": user_id}, sort=[('date', DESCENDING)])
+    filename_recent_date = collection.find_one({"filename": filename, "file_path": file_path, "user_id": user_id}, sort=[('date', DESCENDING)])
     
     if filename_recent_date:
         return filename_recent_date
     return None
 
 # Insert or update a file entry in the database
-def update_file_db(user_id, filename, file_hash, content_type, size, last_modified_date):
+def update_file_db(user_id, filename, file_hash, content_type, size, last_modified_date, file_path):
     collection = db['files']
 
     # Insert file data if new, otherwise update these fields
@@ -56,6 +56,7 @@ def update_file_db(user_id, filename, file_hash, content_type, size, last_modifi
     file_data = {
         "user_id": user_id,
         "filename": filename,
+        "file_path": file_path,
         "file_hash": file_hash,
         "content_type": content_type,
         "size": size,
@@ -65,7 +66,7 @@ def update_file_db(user_id, filename, file_hash, content_type, size, last_modifi
 
     # Insert or update a file entry
     update_result = collection.update_one(
-        {"filename": filename, "user_id": user_id},
+        {"filename": filename, "file_path": file_path, "user_id": user_id},
         {"$set": file_data},  # Use set operator to update the fields
         upsert=True  # Upsert creates a new document if none is found
     )

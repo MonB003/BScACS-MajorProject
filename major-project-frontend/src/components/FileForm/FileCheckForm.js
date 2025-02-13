@@ -2,18 +2,26 @@ import React, { useState } from 'react'
 
 function FileCheckForm({ userID }) {
     const [file, setFile] = useState(null);
+    const [filePath, setFilePath] = useState("");
     const MAX_FILE_SIZE = 1000000;
 
-    // Handle file change
+    // Handle file input change
     const handleFileChange = (event) => {
         // Set the selected file
         setFile(event.target.files[0]);
+    };
+    const handleFilePathChange = (event) => {
+        setFilePath(event.target.value);
     };
 
     // Handle file checking
     const handleFileCheck = async () => {
         if (!file) {
             alert("Error: Please select a file.");
+            return;
+        }
+        if (!filePath) {
+            alert("Error: Please enter a file path.");
             return;
         }
         console.log("File to send:", file);
@@ -41,9 +49,10 @@ function FileCheckForm({ userID }) {
 
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('user_id', userID);
         formData.append('size', file.size);
         formData.append('lastModifiedDate', readableDate);
+        formData.append('filePath', filePath);
+        formData.append('user_id', userID);
 
         // Send the file to the backend
         try {
@@ -62,9 +71,11 @@ function FileCheckForm({ userID }) {
             } else {
                 let alertMessage = ""
                 alertMessage += result.error + "\n"
-                alertMessage += result.log_message
+                if (result.log_message != undefined) {
+                    alertMessage += result.log_message
+                }
                 // Check if file content log was created (for supported file types)
-                if (result.log_file != "") { 
+                if (result.log_file != "" && result.log_file != undefined) { 
                     alertMessage += "\n" + result.log_file
                 }
                 alert(alertMessage);
@@ -79,6 +90,8 @@ function FileCheckForm({ userID }) {
             <div>
                 <h1>Check a File</h1>
                 <input type="file" onChange={handleFileChange} required={true} />
+                <br />
+                <input type="text" value={filePath} onChange={handleFilePathChange} required={true} placeholder='File path' />
                 <br />
                 <button onClick={handleFileCheck}>Check File</button>
                 <p id="formCheckMessage" style={{ display: "none" }}>File check in progress</p>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import "./Authentication.css"
 
 function Signup() {
   const [username, setUsername] = useState("");
@@ -49,30 +50,32 @@ function Signup() {
   return (
     <div id="page">
       <h1>Secure MoniTor Toolkit</h1>
-      <h2>Sign Up</h2>
-      <form id="signupForm" onSubmit={handleSignup}>
-        <input
-          type="text"
-          placeholder="Username"
-          required={true}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <br />
-        <input
-          type="password"
-          placeholder="Password"
-          required={true}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <br />
-        <button type="submit">Sign Up</button>
-      </form>
-      <p id="formSignupMessage" style={{ display: "none" }}></p>
+      <div id="formContainer">
+        <h2>Sign Up</h2>
+        <form id="submissionForm" onSubmit={handleSignup}>
+          <input
+            type="text"
+            placeholder="Username"
+            required={true}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <br />
+          <input
+            type="password"
+            placeholder="Password"
+            required={true}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <br />
+          <button type="submit">Sign Up</button>
+        </form>
+        <p id="formSignupMessage" style={{ display: "none" }}></p>
 
-      <br />
+        <br />
 
-      <div>
-        <button onClick={() => navigate("/")}>Back to Login</button>
+        <div id="redirectDiv">
+          <button onClick={() => navigate("/")}>Back to Login</button>
+        </div>
       </div>
     </div>
   );

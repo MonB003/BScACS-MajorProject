@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import FileCheckForm from '../FileForm/FileCheckForm'
 import LogGenerator from '../Log/LogGenerator'
 import UserFiles from './UserFiles';
+import './Dashboard.css';
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -24,17 +25,16 @@ function Dashboard() {
 
   return (
     <>
-      <h1>Hello, {username}</h1>
-      <UserFiles userID={userID} username={username} />
-      <FileCheckForm userID={userID} />
-      <LogGenerator userID={userID} username={username} />
-      <br />
       <div id="logoutDiv">
         <button onClick={() => {
           sessionStorage.clear(); // Clear data
           navigate("/")
         }}>Logout</button>
       </div>
+      <h1>Hello, {username}</h1>
+      <UserFiles userID={userID} username={username} />
+      <FileCheckForm userID={userID} />
+      <LogGenerator userID={userID} username={username} />
     </>
   )
 }

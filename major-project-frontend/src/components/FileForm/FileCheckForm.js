@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import "./FileForm.css"
 
 function FileCheckForm({ userID }) {
     const [file, setFile] = useState(null);
@@ -75,7 +76,7 @@ function FileCheckForm({ userID }) {
                     alertMessage += result.log_message
                 }
                 // Check if file content log was created (for supported file types)
-                if (result.log_file != "" && result.log_file != undefined) { 
+                if (result.log_file != "" && result.log_file != undefined) {
                     alertMessage += "\n" + result.log_file
                 }
                 alert(alertMessage);
@@ -86,17 +87,15 @@ function FileCheckForm({ userID }) {
     };
 
     return (
-        <>
-            <div>
-                <h1>Check a File</h1>
-                <input type="file" onChange={handleFileChange} required={true} />
-                <br />
-                <input type="text" value={filePath} onChange={handleFilePathChange} required={true} placeholder='File path' />
-                <br />
-                <button onClick={handleFileCheck}>Check File</button>
-                <p id="formCheckMessage" style={{ display: "none" }}>File check in progress</p>
-            </div>
-        </>
+        <div id='fileForm'>
+            <h1>Check a File</h1>
+            <input type="file" onChange={handleFileChange} required={true} />
+            <br />
+            <input type="text" value={filePath} onChange={handleFilePathChange} required={true} placeholder='File path' />
+            <br />
+            <button onClick={handleFileCheck}>Check File</button>
+            <p id="formCheckMessage" style={{ display: "none" }}>File check in progress</p>
+        </div>
     );
 }
 

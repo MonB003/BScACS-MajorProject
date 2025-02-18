@@ -1,4 +1,5 @@
 import React from 'react'
+import "./LogGenerator.css"
 
 function LogGenerator({ userID, username }) {
     // Handle log file generation
@@ -39,7 +40,7 @@ function LogGenerator({ userID, username }) {
 
     return (
         <>
-            <div>
+            <div id='logContainer'>
                 <h1>Logs</h1>
                 <button onClick={handleLogGeneration}>Get Log File</button>
             </div>

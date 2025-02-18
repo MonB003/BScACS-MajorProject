@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import "./Authentication.css"
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -49,30 +50,32 @@ function Login() {
   return (
     <div id="page">
       <h1>Secure MoniTor Toolkit</h1>
-      <h2>Login</h2>
-      <form id="loginForm" onSubmit={handleLogin}>
-        <input
-          type="text"
-          placeholder="Username"
-          required={true}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <br />
-        <input
-          type="password"
-          placeholder="Password"
-          required={true}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <br />
-        <button type="submit">Login</button>
-      </form>
-      <p id="formLoginMessage" style={{ display: "none" }}></p>
+      <div id="formContainer">
+        <h2>Login</h2>
+        <form id="submissionForm" onSubmit={handleLogin}>
+          <input
+            type="text"
+            placeholder="Username"
+            required={true}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <br />
+          <input
+            type="password"
+            placeholder="Password"
+            required={true}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <br />
+          <button type="submit">Login</button>
+        </form>
+        <p id="formLoginMessage" style={{ display: "none" }}></p>
 
-      <br />
+        <br />
 
-      <div id="signupDiv">
-        <button onClick={() => navigate("/signup")}>Signup</button>
+        <div id="redirectDiv">
+          <button onClick={() => navigate("/signup")}>Signup</button>
+        </div>
       </div>
     </div>
   );

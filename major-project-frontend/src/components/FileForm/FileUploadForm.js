@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import "./FileForm.css"
 
 function FileUploadForm({ userID, onUploadSuccess }) {
     const [file, setFile] = useState(null);
@@ -44,7 +45,7 @@ function FileUploadForm({ userID, onUploadSuccess }) {
             second: 'numeric',
             hour12: false // Ensures 24-hour format
         }).format(lastModified);
-    
+
         console.log("File to send:", file);
         console.log("File path:", filePath);
         console.log("Type:", file.type);
@@ -90,17 +91,15 @@ function FileUploadForm({ userID, onUploadSuccess }) {
     };
 
     return (
-        <>
-            <div>
-                <h1>File Upload</h1>
-                <input data-testid="fileInput" type="file" onChange={handleFileChange} required={true} />
-                <br />
-                <input type="text" value={filePath} onChange={handleFilePathChange} required={true} placeholder='File path' />
-                <br />
-                <button onClick={handleFileUpload}>Upload File</button>
-                <p id="formMessage" style={{ display: "none" }}>File upload in progress</p>
-            </div>
-        </>
+        <div id='fileForm'>
+            <h1>File Upload</h1>
+            <input data-testid="fileInput" type="file" onChange={handleFileChange} required={true} />
+            <br />
+            <input type="text" value={filePath} onChange={handleFilePathChange} required={true} placeholder='File path' />
+            <br />
+            <button onClick={handleFileUpload}>Upload File</button>
+            <p id="formMessage" style={{ display: "none" }}>File upload in progress</p>
+        </div>
     );
 }
 

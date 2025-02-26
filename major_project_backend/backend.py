@@ -56,10 +56,21 @@ def handle_file_upload():
         # Create file path to save the file to
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
 
-        # Check if file exists
-        if os.path.exists(file_path):
-            # Temporarily change permissions to writable
-            os.chmod(file_path, stat.S_IWRITE)
+        # Temporarily change permissions to writable
+        security.make_file_writable(file_path)
+
+        # # Check if file exists
+        # if os.path.exists(file_path):
+        #     print("CHANGE TO WRITE FOR: ", os.name)
+        #     # Temporarily change permissions to writable
+        #     # os.chmod(file_path, stat.S_IWRITE)
+
+        #     if os.name != "nt":  # If not Windows
+        #         print("NOT WINDOWS")
+        #         os.chmod(file_path, stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH)
+        #     else:  # Windows
+        #         print("WINDOWS")
+        #         os.chmod(file_path, stat.S_IWRITE)
 
         # Save the new file (overwrites if exists)
         file.save(file_path)
@@ -68,7 +79,10 @@ def handle_file_upload():
         security.encrypt_file(file_path, app.config['UPLOAD_FOLDER'], user_id)
 
         # Make file read-only again
-        os.chmod(file_path, stat.S_IREAD)
+        security.make_file_readable(file_path)
+        # os.chmod(file_path, stat.S_IREAD)
+        # os.chmod(file_path, stat.S_IRUSR | stat.S_IWUSR)  # Owner can read and write
+
         
         # Reset the file pointer after saving it
         file.seek(0)

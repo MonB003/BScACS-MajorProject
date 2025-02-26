@@ -18,15 +18,11 @@ collection = db["initial_files"]
 def make_file_writable(file_path):
     # Check if file exists
     if os.path.exists(file_path):
-        print("CHANGE TO WRITE FOR: ", os.name)
-
         # Change a file's permissions to writable
         if os.name == "nt":  # Windows
-            print("WINDOWS")
             os.chmod(file_path, stat.S_IWRITE)
 
         else:  # Not Windows (Linux or Mac)
-            print("NOT WINDOWS")
             # Make the file readable and writable by owner, and readable by others
             os.chmod(file_path, stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH)
 
@@ -53,11 +49,6 @@ def encrypt_file(filename, file_dir, user_id):
     if not os.path.exists(file_dir):
         os.makedirs(file_dir)
     
-    # Check if file exists
-    # if os.path.exists(encrypted_filename):
-    #     # Temporarily change permissions to writable
-    #     os.chmod(encrypted_filename, stat.S_IWRITE)
-
     # Temporarily change permissions to writable   
     make_file_writable(encrypted_filename)
 
@@ -67,9 +58,6 @@ def encrypt_file(filename, file_dir, user_id):
     # Make file read-only again
     make_file_readable(encrypted_filename)
 
-    # os.chmod(encrypted_filename, stat.S_IREAD) # Make file read only
-    # os.chmod(encrypted_filename, stat.S_IRUSR | stat.S_IWUSR)  # Owner can read and write
-    
     # Store metadata in MongoDB
     file_metadata = {
         "filename": os.path.basename(filename),
@@ -112,11 +100,6 @@ def decrypt_file(filename, file_dir, user_id):
         decrypted_data = cipher.decrypt_and_verify(ciphertext, tag)
         original_filename = os.path.join(file_dir, f"decrypt-{name}")
         
-        # # Check if file exists
-        # if os.path.exists(original_filename):
-        #     # Temporarily change permissions to writable
-        #     os.chmod(original_filename, stat.S_IWRITE)
-
         # Temporarily change permissions to writable   
         make_file_writable(original_filename)
     
@@ -125,9 +108,7 @@ def decrypt_file(filename, file_dir, user_id):
             
         # Make file read-only again
         make_file_readable(original_filename)
-        # os.chmod(original_filename, stat.S_IREAD) # Make file read only
-        # os.chmod(encrypted_filename, stat.S_IRUSR | stat.S_IWUSR)  # Owner can read and write
-
+        
         print(f"File decrypted and saved as {original_filename}")
     except ValueError:
         print("Decryption failed! Data may have been tampered with.")

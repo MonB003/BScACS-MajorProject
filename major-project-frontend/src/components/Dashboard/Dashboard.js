@@ -32,9 +32,11 @@ function Dashboard() {
         }}>Logout</button>
       </div>
       <h1>Hello, {username}</h1>
-      <UserFiles userID={userID} username={username} />
-      <FileCheckForm userID={userID} />
-      <LogGenerator userID={userID} username={username} />
+      <div id="dashboardContainer">
+        <UserFiles userID={userID} username={username} />
+        <FileCheckForm userID={userID} />
+        <LogGenerator userID={userID} username={username} />
+      </div>
     </>
   )
 }

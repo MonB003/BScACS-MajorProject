@@ -45,27 +45,28 @@ function UserFiles({ userID, username }) {
     return (
         <>
             <FileUploadForm userID={userID} onUploadSuccess={refreshFiles} />
-
-            <h1>{username}'s Files</h1>
-            <div id="fileList">
-                {
-                    // Loop through files state object and display each file's info
-                    files ? (
-                        files.map((file, index) => (
-                            <div key={index} className='fileItem'>
-                                <h3>File: {file.filename}</h3>
-                                <ul>
-                                    <li>File Path: {file.file_path}</li>
-                                    <li>File Type: {file.content_type}</li>
-                                    <li>Size: {file.size}</li>
-                                    <li>Last Modified: {file.last_modified_date}</li>
-                                    <li>Date Uploaded: {file.date}</li>
-                                </ul>
-                            </div>
-                        ))
-                    ) : (
-                        <p>There are no files.</p>
-                    )}
+            <div id='userFilesContainer' className='dashboardDiv'>
+                <h1>{username}'s Files</h1>
+                <div id="fileList">
+                    {
+                        // Loop through files state object and display each file's info
+                        files ? (
+                            files.map((file, index) => (
+                                <div key={index} className='fileItem'>
+                                    <h3>File: {file.filename}</h3>
+                                    <ul>
+                                        <li>File Path: {file.file_path}</li>
+                                        <li>File Type: {file.content_type}</li>
+                                        <li>Size: {file.size}</li>
+                                        <li>Last Modified: {file.last_modified_date}</li>
+                                        <li>Date Uploaded: {file.date}</li>
+                                    </ul>
+                                </div>
+                            ))
+                        ) : (
+                            <p>There are no files.</p>
+                        )}
+                </div>
             </div>
         </>
     );

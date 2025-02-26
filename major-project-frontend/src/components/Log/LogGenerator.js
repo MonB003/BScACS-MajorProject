@@ -40,7 +40,7 @@ function LogGenerator({ userID, username }) {
 
     return (
         <>
-            <div id='logContainer'>
+            <div id='logContainer' className='dashboardDiv'>
                 <h1>Logs</h1>
                 <button onClick={handleLogGeneration}>Get Log File</button>
             </div>

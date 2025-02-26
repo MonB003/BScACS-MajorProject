@@ -1,4 +1,4 @@
-#fileForm {
+.fileForm {
     display: flex;
     flex-direction: column;
     justify-content: center;

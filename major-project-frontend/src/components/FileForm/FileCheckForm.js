@@ -87,7 +87,7 @@ function FileCheckForm({ userID }) {
     };
 
     return (
-        <div id='fileForm'>
+        <div class='fileForm dashboardDiv'>
             <h1>Check a File</h1>
             <input type="file" onChange={handleFileChange} required={true} />
             <br />

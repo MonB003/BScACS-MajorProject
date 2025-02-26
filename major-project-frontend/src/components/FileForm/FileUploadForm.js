@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import "./FileForm.css"
+// import "../Dashboard/UserFiles.css"
 
 function FileUploadForm({ userID, onUploadSuccess }) {
     const [file, setFile] = useState(null);
@@ -91,7 +92,7 @@ function FileUploadForm({ userID, onUploadSuccess }) {
     };
 
     return (
-        <div id='fileForm'>
+        <div class='fileForm dashboardDiv'>
             <h1>File Upload</h1>
             <input data-testid="fileInput" type="file" onChange={handleFileChange} required={true} />
             <br />

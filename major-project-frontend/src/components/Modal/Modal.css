@@ -29,5 +29,6 @@
 }
 
 .modalText {
+    /* Make '\n' text into a newline */
     white-space: pre-line;
 }

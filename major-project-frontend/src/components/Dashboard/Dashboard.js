@@ -16,9 +16,6 @@ function Dashboard() {
   const [modalTitle, setModalTitle] = useState("");
   const [modalText, setModalText] = useState("");
 
-
-  // console.log("TOKEN: ", accessToken)
-
   // Redirect to login if no token is present
   useEffect(() => {
     if (!accessToken || !userID) {
@@ -37,7 +34,6 @@ function Dashboard() {
     setOpenModal(true);
   };
 
-
   return (
     <>
       <div id="logoutDiv">
@@ -49,15 +45,10 @@ function Dashboard() {
       <h1>Hello, {username}</h1>
       <div id="dashboardContainer">
         <UserFiles userID={userID} username={username} showModal={showModal} />
-        {/* <FileCheckForm userID={userID} /> */}
         <FileCheckForm userID={userID} showModal={showModal} />
-
         <LogGenerator userID={userID} username={username} />
       </div>
 
-      <button className="openModalBtn" onClick={() => {
-        setOpenModal(true)
-      }}>Open Modal</button>
       {openModal && <Modal closeModal={setOpenModal} titleText={modalTitle} bodyText={modalText} />}
     </>
   )

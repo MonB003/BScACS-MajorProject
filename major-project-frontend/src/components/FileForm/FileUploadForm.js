@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import "./FileForm.css"
-// import "../Dashboard/UserFiles.css"
 
 function FileUploadForm({ userID, onUploadSuccess, showModal }) {
     const [file, setFile] = useState(null);
@@ -19,12 +18,10 @@ function FileUploadForm({ userID, onUploadSuccess, showModal }) {
     // Handle file upload
     const handleFileUpload = async () => {
         if (!file) {
-            // alert("Error: Please select a file.");
             showModal("Error", "Error: Please select a file.");
             return;
         }
         if (!filePath) {
-            // alert("Error: Please enter a file path.");
             showModal("Error", "Error: Please enter a file path.");
             return;
         }
@@ -57,7 +54,6 @@ function FileUploadForm({ userID, onUploadSuccess, showModal }) {
 
         if (file.size > MAX_FILE_SIZE) {
             let errorMessage = "Error: File size is too large. Max file size to upload: " + MAX_FILE_SIZE;
-            // alert(errorMessage);
             showModal("Error", errorMessage);
             return;
         }
@@ -82,13 +78,11 @@ function FileUploadForm({ userID, onUploadSuccess, showModal }) {
 
             console.log("Response", result)
             if (response.ok) {
-                // alert(result.message);
                 showModal("Success", result.message);
                 if (onUploadSuccess) {
                     onUploadSuccess(); // Callback to refresh files displayed in UserFiles component
                 }
             } else {
-                // alert(result.error);
                 showModal("Error", result.error);
             }
         } catch (error) {

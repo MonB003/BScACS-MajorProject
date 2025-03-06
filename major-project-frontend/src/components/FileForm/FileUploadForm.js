@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import "./FileForm.css"
 // import "../Dashboard/UserFiles.css"
 
-function FileUploadForm({ userID, onUploadSuccess }) {
+function FileUploadForm({ userID, onUploadSuccess, showModal }) {
     const [file, setFile] = useState(null);
     const [filePath, setFilePath] = useState("");
     const MAX_FILE_SIZE = 1000000;
@@ -19,11 +19,13 @@ function FileUploadForm({ userID, onUploadSuccess }) {
     // Handle file upload
     const handleFileUpload = async () => {
         if (!file) {
-            alert("Error: Please select a file.");
+            // alert("Error: Please select a file.");
+            showModal("Error", "Error: Please select a file.");
             return;
         }
         if (!filePath) {
-            alert("Error: Please enter a file path.");
+            // alert("Error: Please enter a file path.");
+            showModal("Error", "Error: Please enter a file path.");
             return;
         }
         if (filePath.startsWith("/")) {
@@ -55,7 +57,8 @@ function FileUploadForm({ userID, onUploadSuccess }) {
 
         if (file.size > MAX_FILE_SIZE) {
             let errorMessage = "Error: File size is too large. Max file size to upload: " + MAX_FILE_SIZE;
-            alert(errorMessage);
+            // alert(errorMessage);
+            showModal("Error", errorMessage);
             return;
         }
 
@@ -79,12 +82,14 @@ function FileUploadForm({ userID, onUploadSuccess }) {
 
             console.log("Response", result)
             if (response.ok) {
-                alert(result.message);
+                // alert(result.message);
+                showModal("Success", result.message);
                 if (onUploadSuccess) {
                     onUploadSuccess(); // Callback to refresh files displayed in UserFiles component
                 }
             } else {
-                alert(result.error);
+                // alert(result.error);
+                showModal("Error", result.error);
             }
         } catch (error) {
             console.error('Error uploading file:', error);

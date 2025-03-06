@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import "./FileForm.css"
 
-function FileCheckForm({ userID }) {
+function FileCheckForm({ userID, showModal }) {
     const [file, setFile] = useState(null);
     const [filePath, setFilePath] = useState("");
     const MAX_FILE_SIZE = 1000000;
@@ -18,11 +18,13 @@ function FileCheckForm({ userID }) {
     // Handle file checking
     const handleFileCheck = async () => {
         if (!file) {
-            alert("Error: Please select a file.");
+            // alert("Error: Please select a file.");
+            showModal("Error", "Error: Please select a file.");
             return;
         }
         if (!filePath) {
-            alert("Error: Please enter a file path.");
+            // alert("Error: Please enter a file path.");
+            showModal("Error", "Error: Please enter a file path.");
             return;
         }
         console.log("File to send:", file);
@@ -44,7 +46,8 @@ function FileCheckForm({ userID }) {
 
         if (file.size > MAX_FILE_SIZE) {
             let errorMessage = "Error: File size is too large. Max file size to upload: " + MAX_FILE_SIZE;
-            alert(errorMessage);
+            // alert(errorMessage);
+            showModal("Error", errorMessage);
             return;
         }
 
@@ -68,7 +71,8 @@ function FileCheckForm({ userID }) {
 
             console.log("Response", result)
             if (response.ok) {
-                alert(result.message);
+                showModal("Success", result.message);
+                // alert(result.message);
             } else {
                 let alertMessage = ""
                 alertMessage += result.error + "\n"
@@ -79,7 +83,8 @@ function FileCheckForm({ userID }) {
                 if (result.log_file != "" && result.log_file != undefined) {
                     alertMessage += "\n" + result.log_file
                 }
-                alert(alertMessage);
+                // alert(alertMessage);
+                showModal("Error", alertMessage);
             }
         } catch (error) {
             console.error('Error checking file:', error);

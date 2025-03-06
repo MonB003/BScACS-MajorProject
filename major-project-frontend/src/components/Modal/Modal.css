@@ -1,0 +1,33 @@
+/* Modal background */
+.modalDiv {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Z index so it's above the other components */
+    z-index: 1000;
+    /* Can't click elements behind the div */
+    pointer-events: auto;
+}
+
+/* Modal */
+.modalContainer {
+    background: white;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    min-width: 300px;
+    /* Z index so it's above the other components and modal background */
+    z-index: 1001;
+    /* Allow interactions inside the modal */
+    pointer-events: auto;
+}
+
+.modalText {
+    white-space: pre-line;
+}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import FileUploadForm from '../FileForm/FileUploadForm';
 import './UserFiles.css'
 
-function UserFiles({ userID, username }) {
+function UserFiles({ userID, username, showModal }) {
     // Store user's files
     const [files, setFiles] = useState(null);
 
@@ -44,7 +44,7 @@ function UserFiles({ userID, username }) {
 
     return (
         <>
-            <FileUploadForm userID={userID} onUploadSuccess={refreshFiles} />
+            <FileUploadForm userID={userID} onUploadSuccess={refreshFiles} showModal={showModal} />
             <div id='userFilesContainer' className='dashboardDiv'>
                 <h1>{username}'s Files</h1>
                 <div id="fileList">

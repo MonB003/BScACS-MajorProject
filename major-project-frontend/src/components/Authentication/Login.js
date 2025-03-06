@@ -69,7 +69,7 @@ function Login() {
           <br />
           <button type="submit">Login</button>
         </form>
-        <p id="formLoginMessage" style={{ display: "none" }}></p>
+        <p id="formLoginMessage" className="message" style={{ display: "none" }}></p>
 
         <br />
 

@@ -11,7 +11,7 @@
 * Frontend: React, JavaScript
 * Backend: Python, Flask
 * Database: [MongoDB](https://www.mongodb.com/)
-* Hosting: [Netlify.com (frontend)](https://www.netlify.com/), [Render.com (backend)](https://render.com/)
+* Hosting for initial prototype: [Netlify.com (frontend)](https://www.netlify.com/), [Render.com (backend)](https://render.com/)
 
 ## <a id="operating-systems">Operating Systems</a>
 
@@ -19,6 +19,8 @@ This project has been tested on:
 * Windows 11
 * macOS Sonoma 14.4.1
 * Fedora 40
+* Ubuntu 2024.04 LTS
+* Manjaro
 
 ## <a id="how-to-run-project">How to run the project</a>
 ### Prerequisites:
@@ -47,11 +49,11 @@ npm install
 #### Python Backend (major_project_backend folder):
 The backend requires a virtual environment to be setup. 
 
-**Windows and Linux:**
+**Windows and Linux (Fedora, Manjaro):**
 ```
 python -m venv venv
 ```
-**Mac:**
+**Mac and Linux (Ubuntu):**
 ```
 python3 -m venv venv
 ```
@@ -69,12 +71,12 @@ source venv/bin/activate
 
 The packages below need to be installed.
 
-**Windows and Linux:**
+**Windows and Linux (Fedora, Manjaro):**
 ```
 pip install flask flask-cors pymongo python-dotenv reportlab pycryptodome python-docx PyPDF2 PyJWT
 
 ```
-**Mac:**
+**Mac and Linux (Ubuntu):**
 ```
 pip3 install flask flask-cors pymongo python-dotenv reportlab pycryptodome python-docx PyPDF2 PyJWT
 ```
@@ -91,12 +93,12 @@ pip3 install flask flask-cors pymongo python-dotenv reportlab pycryptodome pytho
 .\venv\Scripts\activate
 python backend.py
 ```
-**Mac:**
+**Mac and Linux (Ubuntu):**
 ```
 source venv/bin/activate
 python3 backend.py
 ```
-**Linux:**
+**Linux (Fedora, Manjaro):**
 ```
 source venv/bin/activate
 python backend.py

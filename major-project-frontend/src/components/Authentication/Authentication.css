@@ -19,6 +19,7 @@ h1, h2 {
     align-self: center;
     background-color: rgb(186, 208, 225);
     padding: 30px 0px;
+    row-gap: 5px;
 }
 
 #submissionForm, #redirectDiv {
@@ -27,4 +28,9 @@ h1, h2 {
     flex-direction: column;
     justify-content: center;
     align-self: center;
+    row-gap: 5px;
+}
+
+.message {
+    text-align: center;
 }

@@ -69,7 +69,7 @@ function Signup() {
           <br />
           <button type="submit">Sign Up</button>
         </form>
-        <p id="formSignupMessage" style={{ display: "none" }}></p>
+        <p id="formSignupMessage" className="message" style={{ display: "none" }}></p>
 
         <br />
 

@@ -11,7 +11,7 @@ function LogGenerator({ userID, username }) {
         // Send the request to the backend
         try {
             const URL = process.env.REACT_APP_BACKEND_LOCAL_URL;
-            const response = await fetch(`${URL}/generate-log-file`,{
+            const response = await fetch(`${URL}/generate-log-file`, {
                 method: 'POST',
                 body: formData,
             });
@@ -32,7 +32,7 @@ function LogGenerator({ userID, username }) {
             document.body.appendChild(a);
             a.click();
             a.remove();
-            
+
         } catch (error) {
             console.error('Error generating the log file:', error);
         }

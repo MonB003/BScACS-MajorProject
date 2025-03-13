@@ -136,7 +136,6 @@ def generate_log_file(user_id, username):
     y_position -= 20
     canvasObj.drawString(50, y_position, f"Created on: {get_date_time()}")
     y_position -= 40
-    # y_position = 700  # Start position to write logs
 
     # Function to add a page break if y_position is too low
     def add_page_break():

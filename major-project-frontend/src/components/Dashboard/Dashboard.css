@@ -8,12 +8,23 @@
     display: grid;
     /* 2 columns */
     grid-template-columns: 1fr 1fr; 
-    grid-template-rows: auto auto;
+    grid-auto-rows: 1fr; 
     gap: 10px;
+    /* align-items: stretch; */
 }
 
 .dashboardDiv {
-    padding: 20px;
+    padding: 10px;
+    row-gap: 5px;
+    border-radius: 5px;
+    align-self: stretch;
+    background-color: rgb(186, 208, 225);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease-in-out;
+}
+
+.dashboardDiv:hover {
+    transform: translateY(-5px);
 }
 
 /* Small screens */

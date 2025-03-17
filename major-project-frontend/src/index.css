@@ -2,6 +2,7 @@
 
 body {
     font-family: "PT Sans", serif;
+    background-color: rgb(241, 233, 233);
 }
 
 button {
@@ -14,12 +15,15 @@ button {
     border-radius: 10px;
     background-color: #8e52e0;
     background-image: radial-gradient(93% 87% at 87% 89%, rgba(0, 0, 0, 0.23) 0%, transparent 86.18%), radial-gradient(66% 87% at 26% 20%, rgba(255, 255, 255, 0.41) 0%, rgba(255, 255, 255, 0) 69.79%, rgba(255, 255, 255, 0) 100%);
+    box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.2);
     min-width: 75px;
+    transition: all 0.2s ease-in-out;
 }
 
 button:hover {
     background-color: #7a36da;
     background-image: none;
+    transform: scale(1.05);
 }
 
 input[type=text],
@@ -27,7 +31,7 @@ input[type=password] {
     font-family: "PT Sans", serif;
     font-size: medium;
     padding: 10px 10px;
-    border-radius: 3px;
+    border-radius: 10px;
     border: 1px solid rgb(173, 171, 171);
     min-width: 75px;
 }
@@ -43,4 +47,12 @@ input::file-selector-button {
     border: thin solid grey;
     border-radius: 3px;
     cursor: pointer;
+}
+
+input[type=text]:focus,
+input[type=password]:focus,
+input[type=file]:focus {
+    border-color: #7a36da;
+    box-shadow: 0px 0px 6px rgba(127, 89, 203, 0.5);
+    outline: none;
 }

@@ -35,14 +35,14 @@ function Dashboard() {
   };
 
   return (
-    <>
+    <div id="toolkitPage">
       <div id="logoutDiv">
         <button onClick={() => {
           sessionStorage.clear(); // Clear data
           navigate("/")
         }}>Logout</button>
       </div>
-      <h1>Hello, {username}</h1>
+      <h1 id="helloName">Dashboard for {username}</h1>
       <div id="dashboardContainer">
         <UserFiles userID={userID} username={username} showModal={showModal} />
         <FileCheckForm userID={userID} showModal={showModal} />
@@ -50,7 +50,7 @@ function Dashboard() {
       </div>
 
       {openModal && <Modal closeModal={setOpenModal} titleText={modalTitle} bodyText={modalText} />}
-    </>
+    </div>
   )
 }
 

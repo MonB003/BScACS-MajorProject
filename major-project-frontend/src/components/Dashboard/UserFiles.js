@@ -53,7 +53,7 @@ function UserFiles({ userID, username, showModal }) {
                         files ? (
                             files.map((file, index) => (
                                 <div key={index} className='fileItem'>
-                                    <h3>File: {file.filename}</h3>
+                                    <h3 className='userFilename'>{file.filename}</h3>
                                     <ul>
                                         <li>File Path: {file.file_path}</li>
                                         <li>File Type: {file.content_type}</li>

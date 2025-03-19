@@ -225,8 +225,8 @@ def handle_user_login():
 def create_access_token(user_id):
     payload = {
         "user_id": user_id,
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1),  # Token expires in 1 hour
-        "iat": datetime.datetime.utcnow(),  # Issued at
+        "exp": datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1),  # Token expires in 1 hour
+        "iat": datetime.datetime.now(datetime.timezone.utc),  # Issued at
     }
     token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
     return token

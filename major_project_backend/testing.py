@@ -7,10 +7,6 @@ TIME_PRECISION = 4
 TEST_FILE = f"testing_times_{os.name}.txt"
 
 def record_test_time(method, start_time):
-    # print("RECORD TEST METHOD")
-    # print(f"TEST_MODE: {TEST_MODE}")
-    # print(os.getcwd())
-    
     if TEST_MODE is False:
         return
     

@@ -1,0 +1,23 @@
+Method: handle_user_login (user: test). Time: 0.2317 seconds
+Method: get_user_files. Time: 0.0255 seconds
+Method: get_user_files. Time: 0.184 seconds
+Method: handle_file_upload (file: test-linux.txt). Time: 0.0651 seconds
+Method: get_user_files. Time: 0.0257 seconds
+Method: handle_file_upload (file: test-csv.csv). Time: 0.5216 seconds
+Method: get_user_files. Time: 0.0234 seconds
+Method: handle_file_upload (file: test-word.docx). Time: 0.0649 seconds
+Method: get_user_files. Time: 0.0254 seconds
+Method: handle_file_upload (file: test-pdf.pdf). Time: 0.0631 seconds
+Method: get_user_files. Time: 0.0269 seconds
+Method: handle_file_check (file not changed: test-linux.txt). Time: 0.0331 seconds
+Method: handle_file_check (file not changed: test-csv.csv). Time: 0.0281 seconds
+Method: handle_file_check (file not changed: test-word.docx). Time: 0.0301 seconds
+Method: handle_file_check (file not changed: test-pdf.pdf). Time: 0.0295 seconds
+Method: handle_file_check (file changed: test-linux.txt). Time: 0.119 seconds
+Method: handle_file_check (file changed: test-csv.csv). Time: 0.0815 seconds
+Method: handle_file_check (file changed: test-word.docx). Time: 0.3095 seconds
+Method: handle_file_check (file changed: test-pdf.pdf). Time: 0.1616 seconds
+Method: download_log_file. Time: 0.0613 seconds
+Method: handle_user_signup (user: test4). Time: 0.0518 seconds
+Method: get_user_files. Time: 0.0251 seconds
+Method: get_user_files. Time: 0.0268 seconds

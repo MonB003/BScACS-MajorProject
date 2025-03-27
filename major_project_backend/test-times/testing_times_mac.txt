@@ -18,3 +18,6 @@ Method: handle_file_check (file changed: test-csv.csv). Time: 0.1054 seconds
 Method: handle_file_check (file changed: test-word.docx). Time: 0.1102 seconds
 Method: handle_file_check (file changed: test-pdf.pdf). Time: 0.1581 seconds
 Method: download_log_file. Time: 0.0436 seconds
+Method: handle_user_signup (user: test3). Time: 0.2933 seconds
+Method: get_user_files. Time: 0.0288 seconds
+Method: get_user_files. Time: 0.2196 seconds

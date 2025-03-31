@@ -1,5 +1,4 @@
 import docx
-# import PyPDF2
 from pypdf import PdfReader
 import os, stat
 from datetime import datetime
@@ -7,9 +6,8 @@ from io import BytesIO
 import difflib
 
 def fix_newlines(lines):
-    # Crate consistent "\n" newline characters
-        return [line.replace("\r\n", "\n").replace("\r", "\n").strip() + "\n" for line in lines]
-    # return [line.replace("\r\n", "\n").replace("\\n", "\n").strip() for line in lines]
+    # Create consistent "\n" newline characters
+    return [line.replace("\r\n", "\n").replace("\r", "\n").strip() + "\n" for line in lines]
 
 def compare_file_content(local_file_path, uploaded_file_data, file_type):
     # Read uploaded file data from memory if it's a text file
@@ -24,8 +22,6 @@ def compare_file_content(local_file_path, uploaded_file_data, file_type):
         with open(local_file_path, "rb") as local_file:
             local_lines = get_pdf_text(local_file)
         uploaded_lines = get_pdf_text(BytesIO(uploaded_file_data))
-        print("LOCAL LINES:", [repr(line) for line in local_lines])
-        print("UPLOADED LINES:", [repr(line) for line in uploaded_lines])
 
     elif file_type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
         # Extract text from both DOCX files
@@ -36,14 +32,11 @@ def compare_file_content(local_file_path, uploaded_file_data, file_type):
         print("Unsupported file type for text comparison.")
         return None
     
+    # Fix any inconsistent newlines
     local_lines = fix_newlines(local_lines)
     uploaded_lines = fix_newlines(uploaded_lines)
-    print("NORMALIZED LOCAL LINES:", [repr(line) for line in local_lines])
-    print("NORMALIZED UPLOADED LINES:", [repr(line) for line in uploaded_lines])
-
+    
     # Use difflib to compare lines
-    # diff = difflib.ndiff(local_lines, uploaded_lines)
-
     diff = difflib.unified_diff(local_lines, uploaded_lines, 
                                 fromfile='initial_file', 
                                 tofile='uploaded_file', 
@@ -51,27 +44,14 @@ def compare_file_content(local_file_path, uploaded_file_data, file_type):
     return diff
 
 # Get text content from a PDF
-# def get_pdf_text(pdf_file):
-#     reader = PyPDF2.PdfReader(pdf_file)
-#     text_lines = []
-#     for page in reader.pages:
-#         text = page.extract_text()
-#         if text:
-#             text_lines.extend(text.splitlines(keepends=True)) # Split text into lines, keep the line break characters
-#     return text_lines
-
 def get_pdf_text(pdf_file):
-    reader = PdfReader(pdf_file)  # Use PdfReader from pypdf
+    reader = PdfReader(pdf_file)
     text_lines = []
     for page in reader.pages:
-        # text = page.extract_text()
         text = page.extract_text(layout=True)
-        print("TEXT", text)
         if text:
-            # print("TEXT TRUE")
-            # text = text.replace("\\n", "\n")  
-            text_lines.extend(text.splitlines(keepends=True))  # Keep line breaks
-    print("TEXT LINES", text_lines)
+            # Split text into lines, keep the line break characters
+            text_lines.extend(text.splitlines(keepends=True))
     return text_lines
 
 # Get text content from a Word docx

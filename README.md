@@ -73,12 +73,12 @@ The packages below need to be installed.
 
 **Windows and Linux (Fedora, Manjaro):**
 ```
-pip install flask flask-cors pymongo python-dotenv reportlab pycryptodome python-docx PyPDF2 PyJWT
+pip install flask flask-cors pymongo python-dotenv reportlab pycryptodome python-docx pypdf PyJWT
 
 ```
 **Mac and Linux (Ubuntu):**
 ```
-pip3 install flask flask-cors pymongo python-dotenv reportlab pycryptodome python-docx PyPDF2 PyJWT
+pip3 install flask flask-cors pymongo python-dotenv reportlab pycryptodome python-docx pypdf PyJWT
 ```
 
 ### Running the project locally:

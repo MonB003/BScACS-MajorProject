@@ -33,3 +33,67 @@ Method: handle_user_login (user: mon). Time: 0.2058 seconds
 Method: get_user_files. Time: 0.0277 seconds
 Method: get_user_files. Time: 0.0219 seconds
 Method: handle_file_check (file changed: test-add.txt). Time: 1.252 seconds
+Method: handle_user_login (user: mon). Time: 0.2591 seconds
+Method: get_user_files. Time: 0.022 seconds
+Method: get_user_files. Time: 0.0223 seconds
+Method: handle_file_upload (file: test-pdf.pdf). Time: 0.3165 seconds
+Method: get_user_files. Time: 0.0242 seconds
+Method: handle_file_check (file changed: test-pdf.pdf). Time: 0.1875 seconds
+Method: handle_user_login (user: mon). Time: 0.2114 seconds
+Method: get_user_files. Time: 0.0282 seconds
+Method: get_user_files. Time: 0.0233 seconds
+Method: handle_file_check (file changed: test-pdf.pdf). Time: 0.3434 seconds
+Method: handle_file_upload (file: test-pdf.pdf). Time: 0.0794 seconds
+Method: get_user_files. Time: 0.0219 seconds
+Method: handle_file_check (file changed: test-pdf.pdf). Time: 0.1393 seconds
+Method: handle_file_check (file changed: test-pdf.pdf). Time: 0.4842 seconds
+Method: handle_file_check (file changed: test-pdf.pdf). Time: 0.5934 seconds
+Method: handle_file_upload (file: test_pdf.pdf). Time: 0.0679 seconds
+Method: get_user_files. Time: 0.0259 seconds
+Method: handle_file_check (file changed: test_pdf.pdf). Time: 0.0918 seconds
+Method: get_user_files. Time: 0.2197 seconds
+Method: get_user_files. Time: 0.2361 seconds
+Method: handle_file_upload (file: test-pdf.pdf). Time: 0.2528 seconds
+Method: get_user_files. Time: 0.0228 seconds
+Method: handle_file_check (file changed: test-pdf.pdf). Time: 0.1201 seconds
+Method: handle_file_check (file changed: test-pdf.pdf). Time: 10.0089 seconds
+Method: handle_file_check (file changed: test-pdf.pdf). Time: 0.7348 seconds
+Method: handle_user_login (user: mon). Time: 0.264 seconds
+Method: get_user_files. Time: 0.0252 seconds
+Method: get_user_files. Time: 0.0267 seconds
+Method: handle_file_upload (file: test-pdf.pdf). Time: 0.3206 seconds
+Method: get_user_files. Time: 0.0239 seconds
+Method: handle_file_check (file changed: test-pdf.pdf). Time: 0.1271 seconds
+Method: handle_file_upload (file: test-pdf.pdf). Time: 0.6775 seconds
+Method: get_user_files. Time: 0.0232 seconds
+Method: handle_file_check (file changed: test-pdf.pdf). Time: 0.1186 seconds
+Method: handle_user_login (user: mon). Time: 0.2536 seconds
+Method: get_user_files. Time: 0.0408 seconds
+Method: get_user_files. Time: 0.0257 seconds
+Method: handle_file_upload (file: test-pdf.pdf). Time: 0.3024 seconds
+Method: get_user_files. Time: 0.0223 seconds
+Method: handle_file_check (file changed: test-pdf.pdf). Time: 0.1311 seconds
+Method: handle_user_login (user: mon). Time: 0.2267 seconds
+Method: get_user_files. Time: 0.0248 seconds
+Method: get_user_files. Time: 0.0224 seconds
+Method: handle_file_upload (file: test-pdf.pdf). Time: 0.3178 seconds
+Method: get_user_files. Time: 0.023 seconds
+Method: handle_file_check (file changed: test-pdf.pdf). Time: 0.1279 seconds
+Method: handle_file_check (file changed: test-pdf.pdf). Time: 0.9454 seconds
+Method: handle_file_check (file changed: test-pdf.pdf). Time: 0.4834 seconds
+Method: handle_user_login (user: mon). Time: 0.2148 seconds
+Method: get_user_files. Time: 0.0335 seconds
+Method: get_user_files. Time: 0.0257 seconds
+Method: handle_file_upload (file: test-small.pdf). Time: 0.2754 seconds
+Method: get_user_files. Time: 0.0252 seconds
+Method: handle_file_check (file changed: test-small.pdf). Time: 0.1194 seconds
+Method: handle_file_check (file changed: test_pdf.pdf). Time: 0.0986 seconds
+Method: handle_file_upload (file: test-small.pdf). Time: 0.4578 seconds
+Method: get_user_files. Time: 0.0212 seconds
+Method: handle_file_check (file changed: test-small.pdf). Time: 0.1287 seconds
+Method: handle_user_login (user: mon). Time: 0.3353 seconds
+Method: get_user_files. Time: 0.0321 seconds
+Method: get_user_files. Time: 0.0277 seconds
+Method: handle_file_upload (file: test-big.pdf). Time: 0.2788 seconds
+Method: get_user_files. Time: 0.0323 seconds
+Method: handle_file_check (file changed: test-big.pdf). Time: 0.1286 seconds

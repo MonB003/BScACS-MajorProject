@@ -5,6 +5,16 @@ from datetime import datetime
 from io import BytesIO
 import difflib
 
+def format_diff_result(diff):
+    """Remove metadata lines ('?') from the diff output."""
+    cleaned_diff = []  # Create an empty list to store valid lines
+
+    for line in diff:  # Loop through each line in the diff result
+        if not line.startswith("?"):  # Check if the line does NOT start with '?'
+            cleaned_diff.append(line)  # Add it to the cleaned list
+
+    return cleaned_diff  # Return the filtered list
+
 def compare_file_content(local_file_path, uploaded_file_data, file_type):
     # Read uploaded file data from memory if it's a text file
     if file_type.startswith("text/"):
@@ -30,10 +40,18 @@ def compare_file_content(local_file_path, uploaded_file_data, file_type):
     
     # Use difflib to compare lines
     diff = difflib.unified_diff(local_lines, uploaded_lines, 
-                                fromfile='local_file', 
+                                fromfile='initial_file', 
                                 tofile='uploaded_file', 
                                 lineterm='')
+                   
+    # diff = difflib.context_diff(local_lines, uploaded_lines, 
+    #                             fromfile='local_file', 
+    #                             tofile='uploaded_file', 
+    #                             lineterm='')
+    
+    # diff = difflib.ndiff(local_lines, uploaded_lines)                  
     return diff
+    # return format_diff_result(diff)
 
 # Get text content from a PDF
 def get_pdf_text(pdf_file):

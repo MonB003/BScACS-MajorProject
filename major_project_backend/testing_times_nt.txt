@@ -1,0 +1,31 @@
+Method: handle_user_login (user: mon). Time: 0.3407 seconds
+Method: get_user_files. Time: 0.0987 seconds
+Method: get_user_files. Time: 0.0283 seconds
+Method: handle_file_check (error). Time: 0.028 seconds
+Method: handle_file_upload (file: test-windows.txt). Time: 0.3227 seconds
+Method: get_user_files. Time: 0.0238 seconds
+Method: handle_file_check (file changed: test-windows.txt). Time: 0.0948 seconds
+Method: handle_file_upload (file: test-add.txt). Time: 0.0633 seconds
+Method: get_user_files. Time: 0.0238 seconds
+Method: handle_file_check (file changed: test-add.txt). Time: 0.092 seconds
+Method: handle_file_check (file changed: test-add.txt). Time: 0.4957 seconds
+Method: handle_file_check (file changed: test-windows.txt). Time: 0.4625 seconds
+Method: handle_file_check (file changed: test-add.txt). Time: 0.4221 seconds
+Method: handle_file_check (file changed: test-add.txt). Time: 0.516 seconds
+Method: handle_file_upload (file: test-remove.txt). Time: 0.45 seconds
+Method: get_user_files. Time: 0.0219 seconds
+Method: handle_file_check (file changed: test-remove.txt). Time: 0.0933 seconds
+Method: handle_file_check (file changed: test-remove.txt). Time: 0.4599 seconds
+Method: handle_file_upload (file: test-add-middle.txt). Time: 0.0679 seconds
+Method: get_user_files. Time: 0.0249 seconds
+Method: handle_file_upload (file: test-remove-middle.txt). Time: 0.0664 seconds
+Method: get_user_files. Time: 0.0243 seconds
+Method: handle_file_check (file changed: test-add-middle.txt). Time: 0.095 seconds
+Method: handle_file_check (file changed: test-remove-middle.txt). Time: 0.0984 seconds
+Method: handle_file_check (file changed: test-remove-middle.txt). Time: 0.6826 seconds
+Method: handle_file_check (file changed: test-add-middle.txt). Time: 0.1085 seconds
+Method: handle_file_upload (file: test-add-middle-long.txt). Time: 0.0819 seconds
+Method: get_user_files. Time: 0.0219 seconds
+Method: handle_file_check (file changed: test-add-middle-long.txt). Time: 0.0932 seconds
+Method: handle_file_check (file changed: test-add-middle-long.txt). Time: 0.4837 seconds
+Method: handle_file_check (file changed: test-add-middle-long.txt). Time: 0.6856 seconds

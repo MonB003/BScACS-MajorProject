@@ -29,3 +29,7 @@ Method: get_user_files. Time: 0.0219 seconds
 Method: handle_file_check (file changed: test-add-middle-long.txt). Time: 0.0932 seconds
 Method: handle_file_check (file changed: test-add-middle-long.txt). Time: 0.4837 seconds
 Method: handle_file_check (file changed: test-add-middle-long.txt). Time: 0.6856 seconds
+Method: handle_user_login (user: mon). Time: 0.2058 seconds
+Method: get_user_files. Time: 0.0277 seconds
+Method: get_user_files. Time: 0.0219 seconds
+Method: handle_file_check (file changed: test-add.txt). Time: 1.252 seconds

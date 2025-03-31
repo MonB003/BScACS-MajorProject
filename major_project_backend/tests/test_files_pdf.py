@@ -1,7 +1,7 @@
-import os
-import pytest
+# Tests for the files.py methods related to PDF files
+import os, pytest
 from reportlab.pdfgen import canvas
-from major_project_backend.files import compare_file_content
+from major_project_backend.files import compare_file_content, get_pdf_text
 
 TEST_DIR = "testing_files"
 
@@ -97,7 +97,7 @@ def test_compare_pdf_line_remove(test_pdf_file, test_pdf_file_remove):
         "@@ -1,2 +1 @@"
     ]
     
-    # Expected header size plus 2 lines: 2 lines for original, 1 line removed
+    # Expected header size plus 2 lines: 1 same line from original, 1 line removed
     file_sizes = 2
     expected_size = len(expected_header) + file_sizes
     # Check size of diff result
@@ -113,3 +113,18 @@ def test_compare_pdf_same(test_pdf_file):
     diff_result = list(compare_file_content(test_pdf_file, uploaded_data, "application/pdf"))
     # Check for no differences
     assert len(diff_result) == 0
+
+def test_get_pdf_text(test_pdf_file):
+    text_result = get_pdf_text(test_pdf_file)
+    # Check the file has 2 lines
+    assert len(text_result) == 2
+
+def test_get_pdf_text_add(test_pdf_file_add):
+    text_result = get_pdf_text(test_pdf_file_add)
+    # Check the file has 3 lines
+    assert len(text_result) == 3
+
+def test_get_pdf_text_remove(test_pdf_file_remove):
+    text_result = get_pdf_text(test_pdf_file_remove)
+    # Check the file has 1 line
+    assert len(text_result) == 1

@@ -1,5 +1,7 @@
+# Tests for the files.py methods related to text files and datetime
 import os, pytest
-from major_project_backend.files import compare_file_content
+from datetime import datetime
+from major_project_backend.files import compare_file_content, get_date_time_string
 
 TEST_DIR = "testing_files"
 
@@ -103,3 +105,15 @@ def test_compare_text_file_same(test_text_file):
 
     # Check size of diff result
     assert len(diff_result_list) == 0
+
+def test_get_date_time_string():
+    date_result = get_date_time_string()
+    
+    # Check the result is a string
+    assert isinstance(date_result, str)
+    
+    # Check string matches the format: YYYY-MM-DD-HH-MM-SS
+    try:
+        datetime.strptime(date_result, "%Y-%m-%d-%H-%M-%S")
+    except ValueError:
+        pytest.fail(f"Datetime format isn't valid: '{date_result}'")

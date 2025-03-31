@@ -18,3 +18,17 @@ def test_compare_file_hashes_different():
     new_file_hash = "hash2"
     comparison_result = compare_file_hashes(current_file_hash, new_file_hash)
     assert comparison_result is False
+
+def test_generate_hash_empty():
+    password = ""
+    encoded_password = password.encode('utf-8')
+    hash_password = generate_hash(encoded_password)
+    # Should still generate a hash
+    assert hash_password is not None
+
+def test_generate_hash_characters():
+    password = "Abc123!@#"
+    encoded_password = password.encode('utf-8')
+    hash_password = generate_hash(encoded_password)
+    # Should still generate a hash
+    assert hash_password is not None

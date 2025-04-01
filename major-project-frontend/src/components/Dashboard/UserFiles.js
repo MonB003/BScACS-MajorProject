@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import FileUploadForm from '../FileForm/FileUploadForm';
 import './UserFiles.css'
 import FileForm from '../FileForm/FileForm';
 
@@ -38,14 +37,13 @@ function UserFiles({ userID, username, showModal }) {
         handleUserFiles();
     }, []);
 
-    // Function to pass to FileUploadForm, which updates files displayed after each upload
+    // Function to pass to FileForm, which updates files displayed after each upload
     const refreshFiles = () => {
         handleUserFiles();
     };
 
     return (
         <>
-            {/* <FileUploadForm userID={userID} onUploadSuccess={refreshFiles} showModal={showModal} /> */}
             <FileForm userID={userID} onUploadSuccess={refreshFiles} showModal={showModal} backendPath={"upload-file"} />
 
             <div id='userFilesContainer' className='dashboardDiv'>

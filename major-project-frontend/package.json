@@ -25,7 +25,10 @@
     "eject": "react-scripts eject"
   },
   "jest": {
-    "testEnvironment": "jsdom"
+    "testEnvironment": "jsdom",
+    "moduleNameMapper": {
+      "\\.(css|less|sass|scss)$": "identity-obj-proxy"
+    }
   },
   "eslintConfig": {
     "extends": [
@@ -48,6 +51,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.25.9",
-    "@testing-library/jest-dom": "^6.6.3"
+    "@testing-library/jest-dom": "^6.6.3",
+    "identity-obj-proxy": "^3.0.0"
   }
 }

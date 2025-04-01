@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import FileCheckForm from '../FileForm/FileCheckForm'
 import LogGenerator from '../Log/LogGenerator'
 import UserFiles from './UserFiles';
 import './Dashboard.css';
@@ -46,9 +45,7 @@ function Dashboard() {
       <h1 id="helloName">Dashboard for {username}</h1>
       <div id="dashboardContainer">
         <UserFiles userID={userID} username={username} showModal={showModal} />
-        {/* <FileCheckForm userID={userID} showModal={showModal} /> */}
         <FileForm userID={userID} showModal={showModal} backendPath={"check-file"} />
-
         <LogGenerator userID={userID} username={username} />
       </div>
 

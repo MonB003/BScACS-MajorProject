@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import "./FileForm.css";
+import recordTestTime from "../Utilities/TestTime";
 
 function FileForm({ userID, onUploadSuccess = null, showModal, backendPath }) {
+    const TEST_MODE = process.env.REACT_APP_TEST_MODE === "true";
     const [file, setFile] = useState(null);
     const [filePath, setFilePath] = useState("");
     const MAX_FILE_SIZE = 1000000;
@@ -24,6 +26,11 @@ function FileForm({ userID, onUploadSuccess = null, showModal, backendPath }) {
         if (!filePath) {
             showModal("Error", "Error: Please enter a file path.");
             return;
+        }
+
+        let startTime = null, endTime = null;
+        if (TEST_MODE) {
+            startTime = performance.now();
         }
 
         const formMessage = document.getElementById('formMessage');
@@ -72,6 +79,13 @@ function FileForm({ userID, onUploadSuccess = null, showModal, backendPath }) {
             formMessage.style.display = "none";
 
             console.log("Response", result)
+            if (TEST_MODE) {
+                // Send time to the backend to record 
+                endTime = performance.now();
+                let totalTime = endTime - startTime;
+                let methodName = backendPath === 'upload-file' ? 'handleFileUpload' : 'handleFileCheck';
+                await recordTestTime(methodName, totalTime);
+            }
             if (response.ok) {
                 showModal("Success", result.message);
                 if (onUploadSuccess) {

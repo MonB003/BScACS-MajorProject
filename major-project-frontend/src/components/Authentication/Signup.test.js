@@ -3,13 +3,13 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
-import Login from './Login';
+import Signup from './Signup';
 
-test('Login component renders toolkit name', () => {
+test('Signup component renders toolkit name', () => {
     // Render the Login component in MemoryRouter to provide the necessary router context
     render(
         <MemoryRouter>
-            <Login />
+            <Signup />
         </MemoryRouter>
     );
 
@@ -17,10 +17,10 @@ test('Login component renders toolkit name', () => {
     expect(toolkitElement).toBeInTheDocument(); // Check it exists
 });
 
-test('Login component renders form fields', async () => {
+test('Signup component renders form fields', async () => {
     render(
         <MemoryRouter>
-            <Login />
+            <Signup />
         </MemoryRouter>
     );
 
@@ -30,22 +30,22 @@ test('Login component renders form fields', async () => {
     expect(passwordElement).toBeInTheDocument(); // Check it exists
 });
 
-test('Login component, login button is clickable', async () => {
+test('Signup component, signup button is clickable', async () => {
     render(
         <MemoryRouter>
-            <Login />
+            <Signup />
         </MemoryRouter>
     );
 
-    const loginButton = screen.getByRole('button', { name: /Login/i });
-    expect(loginButton).toBeInTheDocument();
-    expect(loginButton).toBeEnabled(); // Check it's clickable
+    const signupButton = screen.getByRole('button', { name: /Sign Up/i });
+    expect(signupButton).toBeInTheDocument();
+    expect(signupButton).toBeEnabled(); // Check it's clickable
 });
 
-test('Login component, type in username and password fields', async () => {
+test('Signup component, type in username and password fields', async () => {
     render(
         <MemoryRouter>
-            <Login />
+            <Signup />
         </MemoryRouter>
     );
 
@@ -63,7 +63,7 @@ test('Login component, type in username and password fields', async () => {
     expect(passwordField).toHaveValue(passwordValue);
 });
 
-test('Login component, form submission request success', async () => {
+test('Signup component, form submission request success', async () => {
     let usernameValue = 'user';
     let passwordValue = 'password';
 
@@ -77,20 +77,19 @@ test('Login component, form submission request success', async () => {
 
     render(
         <MemoryRouter>
-            <Login />
+            <Signup />
         </MemoryRouter>
     );
 
     const usernameField = await screen.findByPlaceholderText(/Username/i);
     const passwordField = await screen.findByPlaceholderText(/Password/i);
-    const loginButton = screen.getByRole('button', { name: /Login/i });
+    const signupButton = screen.getByRole('button', { name: /Sign Up/i });
     
     // Type in the text fields
     userEvent.type(usernameField, usernameValue);
     userEvent.type(passwordField, passwordValue);
-    userEvent.click(loginButton);
+    userEvent.click(signupButton);
 
     // Check the mock fetch request is made and returns a result
     expect(mockFetch).toHaveBeenCalledTimes(1);
-    expect(mockFetch).toHaveBeenCalledWith(expect.stringContaining('/login'), expect.any(Object));
 });

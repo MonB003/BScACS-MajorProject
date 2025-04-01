@@ -1,2 +1,0 @@
-New test line 1.
-New test line 2.

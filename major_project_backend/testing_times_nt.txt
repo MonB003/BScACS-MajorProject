@@ -32,3 +32,13 @@ Backend Method: get_user_files. Time: 0.0236 seconds
 Backend Method: get_user_files. Time: 0.0785 seconds
 Backend Method: download_log_file. Time: 0.0905 seconds
 Frontend Method: handleLogGeneration. Time: 0.4942 seconds
+Backend Method: handle_user_login (user: mon). Time: 0.2525 seconds
+Frontend Method: handleLogin. Time: 0.5612 seconds
+Backend Method: get_user_files. Time: 0.025 seconds
+Backend Method: get_user_files. Time: 0.032 seconds
+Backend Method: get_user_files. Time: 0.0298 seconds
+Backend Method: handle_file_upload (error). Time: 0.0012 seconds
+Backend Method: handle_file_upload (file: test-add.txt). Time: 0.4325 seconds
+Backend Method: get_user_files. Time: 0.0234 seconds
+Backend Method: handle_file_check (file not changed: test-add.txt). Time: 0.0239 seconds
+Backend Method: handle_file_check (file changed: test-add.txt). Time: 0.0944 seconds

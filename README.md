@@ -115,7 +115,7 @@ python backend.py
 6. This will direct you to the main page
 
 ## <a id="how-to-run-tests">How to run the automated tests</a>
-### Backend (Python)
+### Python Backend (major_project_backend folder)
 The backend uses pytest automated tests. They are located in the `tests` folder (`cd tests`).
 
 #### Setup backend tests
@@ -144,7 +144,7 @@ Run all the tests using the command:
 pytest
 ```
 
-### Frontend (React)
+### React Frontend (major-project-frontend folder)
 The frontend uses jest automated tests. They can be run from the root folder of the frontend project (`cd major-project-frontend`).
 
 #### Setup frontend tests

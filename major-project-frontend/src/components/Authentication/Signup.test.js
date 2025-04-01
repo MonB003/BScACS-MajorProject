@@ -84,7 +84,7 @@ test('Signup component, form submission request success', async () => {
     const usernameField = await screen.findByPlaceholderText(/Username/i);
     const passwordField = await screen.findByPlaceholderText(/Password/i);
     const signupButton = screen.getByRole('button', { name: /Sign Up/i });
-    
+
     // Type in the text fields
     userEvent.type(usernameField, usernameValue);
     userEvent.type(passwordField, passwordValue);

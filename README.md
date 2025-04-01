@@ -5,6 +5,7 @@
 - [Technologies](#technologies)
 - [Operating Systems](#operating-systems)
 - [How to run the project](#how-to-run-project)
+- [How to run the automated tests](#how-to-run-tests)
 - [Features](#features)
 
 ## Technologies
@@ -42,11 +43,11 @@ Cloning the repository:
 **Note:** There is a `.env` file that is needed in order for the database and security functionality to work.
 
 In the respective folders, you will need to install these packages:
-#### React Frontend (major-project-frontend folder):
+#### <a id="react-frontend">React Frontend (major-project-frontend folder):</a>
 ```
 npm install
 ```
-#### Python Backend (major_project_backend folder):
+#### <a id="python-backend">Python Backend (major_project_backend folder):</a>
 The backend requires a virtual environment to be setup. 
 
 **Windows and Linux (Fedora, Manjaro):**
@@ -117,3 +118,49 @@ python backend.py
 - File metadata extraction
 - Secure logging
 - Real-time alert system
+
+## <a id="how-to-run-tests">How to run the automated tests</a>
+### Backend (Python)
+The backend uses pytest automated tests. They are located in the `tests` folder (`cd tests`).
+
+#### Setup backend tests
+You will need to install these packages:
+
+**Windows:**
+
+Note that for Windows, the pytest tests do not need to be run in a virtual environment. All pytest commands can be run directly in the `tests` folder.
+
+Install these packages, which are used in the test files:
+```
+pip install pytest pycryptodome python-docx PyPDF2
+```
+**Mac:**
+
+To run pytest tests in Mac, a virtual environment needs to be setup. Follow the steps in the <a href="#python-backend">Python Backend (major_project_backend folder)</a> section and use the Mac commands to setup the virtual environment, activate the environment, and install packages. 
+
+In addition to the packages previously installed, `pytest` also needs to be installed inside the virtual environment.
+```
+pip3 install pytest
+```
+
+#### Run backend tests
+Run all the tests using the command:
+```
+pytest
+```
+
+### Frontend (React)
+The frontend uses jest automated tests. They can be run from the root folder of the frontend project (`cd major-project-frontend`).
+
+#### Setup frontend tests
+You will need to install these packages:
+```
+npm install --save-dev @babel/preset-env @babel/preset-react
+npm install @testing-library/jest-dom --save-dev
+npm install --save-dev identity-obj-proxy
+```
+#### Run frontend tests
+Run all the tests using the command:
+```
+npm test
+```

@@ -126,13 +126,13 @@ The backend uses pytest automated tests. They are located in the `tests` folder 
 #### Setup backend tests
 You will need to install these packages:
 
-**Windows:**
+**Windows and Linux (Fedora):**
 
 Note that for Windows, the pytest tests do not need to be run in a virtual environment. All pytest commands can be run directly in the `tests` folder.
 
 Install these packages, which are used in the test files:
 ```
-pip install pytest pycryptodome python-docx PyPDF2
+pip install pytest pycryptodome python-docx pypdf
 ```
 **Mac:**
 

@@ -1,0 +1,34 @@
+Backend Method: handle_user_login (user: test). Time: 0.4183 seconds
+Frontend Method: handleLogin. Time: 0.729 seconds
+Backend Method: get_user_files. Time: 0.0273 seconds
+Backend Method: get_user_files. Time: 0.0254 seconds
+Backend Method: handle_file_upload (file: test-text.txt). Time: 0.2596 seconds
+Frontend Method: handleFileUpload. Time: 0.2823 seconds
+Backend Method: get_user_files. Time: 0.0331 seconds
+Backend Method: handle_file_upload (file: test-csv.csv). Time: 0.0562 seconds
+Frontend Method: handleFileUpload. Time: 0.3691 seconds
+Backend Method: get_user_files. Time: 0.028 seconds
+Backend Method: handle_file_upload (file: test-word.docx). Time: 0.0864 seconds
+Frontend Method: handleFileUpload. Time: 0.1046 seconds
+Backend Method: get_user_files. Time: 0.0285 seconds
+Backend Method: handle_file_upload (file: test-pdf.pdf). Time: 0.0735 seconds
+Frontend Method: handleFileUpload. Time: 0.0812 seconds
+Backend Method: get_user_files. Time: 0.0233 seconds
+Backend Method: handle_file_check (file not changed: test-text.txt). Time: 0.0255 seconds
+Frontend Method: handleFileCheck. Time: 0.0331 seconds
+Backend Method: handle_file_check (file not changed: test-csv.csv). Time: 0.0253 seconds
+Frontend Method: handleFileCheck. Time: 0.0333 seconds
+Backend Method: handle_file_check (file not changed: test-word.docx). Time: 0.0281 seconds
+Frontend Method: handleFileCheck. Time: 0.0431 seconds
+Backend Method: handle_file_check (file not changed: test-pdf.pdf). Time: 0.0317 seconds
+Frontend Method: handleFileCheck. Time: 0.042 seconds
+Backend Method: handle_file_check (file changed: test-text.txt). Time: 0.0959 seconds
+Frontend Method: handleFileCheck. Time: 0.1034 seconds
+Backend Method: handle_file_check (file changed: test-csv.csv). Time: 0.0847 seconds
+Frontend Method: handleFileCheck. Time: 0.413 seconds
+Backend Method: handle_file_check (file changed: test-word.docx). Time: 0.1427 seconds
+Frontend Method: handleFileCheck. Time: 0.1491 seconds
+Backend Method: handle_file_check (file changed: test-pdf.pdf). Time: 0.151 seconds
+Frontend Method: handleFileCheck. Time: 0.1587 seconds
+Backend Method: download_log_file. Time: 0.0341 seconds
+Frontend Method: handleLogGeneration. Time: 0.4288 seconds

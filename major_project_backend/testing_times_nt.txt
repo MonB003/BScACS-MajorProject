@@ -1,0 +1,26 @@
+Method: handle_user_login (user: mon). Time: 0.2285 seconds
+Method: get_user_files. Time: 0.0245 seconds
+Method: get_user_files. Time: 0.0231 seconds
+Method: handle_user_login (user: mon). Time: 0.2393 seconds
+Method: get_user_files. Time: 0.0287 seconds
+Method: get_user_files. Time: 0.0228 seconds
+Method: handle_user_login (user: mon). Time: 0.2823 seconds
+Method: handleLogin. Time: None seconds
+Method: get_user_files. Time: 0.0243 seconds
+Method: get_user_files. Time: 0.0233 seconds
+Method: handle_user_login (user: mon). Time: 0.3786 seconds
+Method: handleLogin. Time: None seconds
+Method: handle_user_login (user: mon). Time: 0.0285 seconds
+Method: handleLogin. Time: 0.3531 seconds
+Method: handle_user_login (user: mon). Time: 0.0255 seconds
+Method: handleLogin. Time: 0.3332 seconds
+Method: get_user_files. Time: 0.0226 seconds
+Method: get_user_files. Time: 0.0204 seconds
+Backend Method: handle_user_login (user: mon). Time: 0.202 seconds
+Frontend Method: handleLogin. Time: 0.5215 seconds
+Backend Method: get_user_files. Time: 0.0237 seconds
+Backend Method: get_user_files. Time: 0.0562 seconds
+Backend Method: handle_user_login (user: mon). Time: 0.2329 seconds
+Frontend Method: handleLogin. Time: 0.5533 seconds
+Backend Method: get_user_files. Time: 0.0257 seconds
+Backend Method: get_user_files. Time: 0.0239 seconds

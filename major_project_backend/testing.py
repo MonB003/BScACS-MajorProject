@@ -17,5 +17,10 @@ def record_test_time(method, start_time):
     print(f"Writing to {TEST_FILE}: {method} took {total_time} seconds")
 
     # Log time to a file
+    write_test_time(method, total_time)
+    # with open(TEST_FILE, "a") as file:
+    #     file.write(f"Method: {method}. Time: {total_time} seconds\n")
+        
+def write_test_time(method, total_time, program="Backend"):
     with open(TEST_FILE, "a") as file:
-        file.write(f"Method: {method}. Time: {total_time} seconds\n")
+        file.write(f"{program} Method: {method}. Time: {total_time} seconds\n")

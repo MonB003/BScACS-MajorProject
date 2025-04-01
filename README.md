@@ -114,11 +114,6 @@ python backend.py
 5. Go to http://localhost:3000 on any browser
 6. This will direct you to the main page
 
-## <a id="features">Features</a>
-- File metadata extraction
-- Secure logging
-- Real-time alert system
-
 ## <a id="how-to-run-tests">How to run the automated tests</a>
 ### Backend (Python)
 The backend uses pytest automated tests. They are located in the `tests` folder (`cd tests`).
@@ -164,3 +159,8 @@ Run all the tests using the command:
 ```
 npm test
 ```
+
+## <a id="features">Features</a>
+- File metadata extraction
+- Secure logging
+- Real-time alert system

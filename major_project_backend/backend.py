@@ -300,20 +300,10 @@ def verify_access_token(token):
     
 @app.route('/record-time', methods=['POST'])
 def record_time():
-    # testing_file = f"testing_times_{os.name}.txt"
     data = request.json
     method = data.get("methodName")
     total_time = data.get("totalTime")
-    
-    # print("TIME", total_time)
-    # print(f"RECORD TIME: Received time for {method}: {total_time} ms")  # Debugging line
-
     testing.write_test_time(method, total_time, "Frontend")
-
-    # with open(testing_file, "a") as file:
-    #     file.write(f"{feature}: {total_time} ms\n")
-
-    # return {"message": "Method time recorded"}, 200
     return jsonify({'message': 'Method time recorded'}), 200
 
 # To run the app

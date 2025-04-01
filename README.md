@@ -123,7 +123,7 @@ You will need to install these packages:
 
 **Windows and Linux (Fedora):**
 
-Note that for Windows, the pytest tests do not need to be run in a virtual environment. All pytest commands can be run directly in the `tests` folder.
+Note that for these operating systems, the pytest tests do not need to be run in a virtual environment. All pytest commands can be run directly in the `tests` folder.
 
 Install these packages, which are used in the test files:
 ```

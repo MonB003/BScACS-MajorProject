@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Authentication.css"
+import "./Authentication.css";
 import recordTestTime from "../Utilities/TestTime";
 
 function Login() {
   const TEST_MODE = process.env.REACT_APP_TEST_MODE === "true";
-  console.log("TEST MODE", TEST_MODE)
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const URL = process.env.REACT_APP_BACKEND_LOCAL_URL;
 
   // Redirect to dashboard if already logged in
   useEffect(() => {
@@ -18,29 +16,6 @@ function Login() {
       navigate("/toolkit");
     }
   }, [navigate]);
-
-  // const recordTestTime = async (methodName, timeTaken) => {
-  //   try {
-  //     const timePrecision = 4;
-  //     const timeSeconds = (timeTaken / 1000).toFixed(timePrecision);
-
-  //     const response = await fetch(`${URL}/record-time`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ methodName, totalTime: parseFloat(timeSeconds) }),
-  //     });
-  //     console.log("Response status:", response.status);  // Debugging line
-  //     if (response.ok) {
-  //       console.log("Successfully logged time!");
-  //     } else {
-  //       console.error("Failed to log time:", await response.json());
-  //     }
-  //   } catch (error) {
-  //     console.error("Error logging method execution time:", error);
-  //   }
-  // };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -53,7 +28,7 @@ function Login() {
       formData.append('username', username);
       formData.append('password', password);
 
-      // const URL = process.env.REACT_APP_BACKEND_LOCAL_URL;
+      const URL = process.env.REACT_APP_BACKEND_LOCAL_URL;
       const response = await fetch(`${URL}/login`, {
         method: 'POST',
         body: formData,
@@ -62,14 +37,10 @@ function Login() {
       const result = await response.json();
       console.log("RESULT", result)
       if (TEST_MODE) {
+        // Send time to the backend to record 
         endTime = performance.now();
         let totalTime = endTime - startTime;
-        // console.log("TIME", totalTime)
-
         await recordTestTime("handleLogin", totalTime);
-
-        // const timeResult = await recordTestTime("handleLogin", totalTime);
-        // console.log("TIME RESULT", timeResult)
       }
       if (response.ok) {
         // Store token in memory (or use a secure cookie)

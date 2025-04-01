@@ -1,9 +1,16 @@
 import React from 'react'
 import "./LogGenerator.css"
+import recordTestTime from "../Utilities/TestTime";
 
 function LogGenerator({ userID, username }) {
+    const TEST_MODE = process.env.REACT_APP_TEST_MODE === "true";
+
     // Handle log file generation
     const handleLogGeneration = async () => {
+        let startTime = null, endTime = null;
+        if (TEST_MODE) {
+            startTime = performance.now();
+        }
         const formData = new FormData();
         formData.append('user_id', userID);
         formData.append('username', username);
@@ -32,6 +39,13 @@ function LogGenerator({ userID, username }) {
             document.body.appendChild(a);
             a.click();
             a.remove();
+
+            if (TEST_MODE) {
+                // Send time to the backend to record 
+                endTime = performance.now();
+                let totalTime = endTime - startTime;
+                await recordTestTime("handleLogGeneration", totalTime);
+            }
 
         } catch (error) {
             console.error('Error generating the log file:', error);

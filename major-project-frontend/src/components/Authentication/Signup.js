@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Authentication.css"
+import "./Authentication.css";
+import recordTestTime from "../Utilities/TestTime";
 
 function Signup() {
+  const TEST_MODE = process.env.REACT_APP_TEST_MODE === "true";
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -18,6 +20,10 @@ function Signup() {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
+      let startTime = null, endTime = null;
+      if (TEST_MODE) {
+        startTime = performance.now();
+      }
       const formData = new FormData();
       formData.append('username', username);
       formData.append('password', password);
@@ -30,6 +36,12 @@ function Signup() {
 
       const result = await response.json();
       console.log("RESULT", result)
+      if (TEST_MODE) {
+        // Send time to the backend to record 
+        endTime = performance.now();
+        let totalTime = endTime - startTime;
+        await recordTestTime("handleSignup", totalTime);
+      }
       if (response.ok) {
         // Store token in memory (or use a secure cookie)
         sessionStorage.setItem('userID', result.user_id);

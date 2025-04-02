@@ -12,6 +12,7 @@
 * Frontend: React, JavaScript
 * Backend: Python, Flask
 * Database: [MongoDB](https://www.mongodb.com/)
+* Testing: Pytest (backend), Jest (frontend)
 * Hosting for initial prototype: [Netlify.com (frontend)](https://www.netlify.com/), [Render.com (backend)](https://render.com/)
 
 ## <a id="operating-systems">Operating Systems</a>

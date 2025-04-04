@@ -11,10 +11,8 @@ const recordTestTime = async (methodName, timeTaken) => {
             body: JSON.stringify({ methodName, totalTime: parseFloat(timeSeconds) }),
         });
 
-        console.log("Response status:", response.status); // Debugging line
-
         if (response.ok) {
-            console.log("Successfully logged time!");
+            console.log("Successfully logged time");
         } else {
             console.error("Failed to log time:", await response.json());
         }

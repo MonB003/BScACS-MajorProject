@@ -48,12 +48,6 @@ function FileForm({ userID, onUploadSuccess = null, showModal, backendPath }) {
             hour12: false // Ensures 24-hour format
         }).format(lastModified);
 
-        console.log("File to send:", file);
-        console.log("File path:", filePath);
-        console.log("Type:", file.type);
-        console.log("Size:", file.size);
-        console.log("Last modified date:", readableDate);
-
         if (file.size > MAX_FILE_SIZE) {
             let errorMessage = "Error: File size is too large. Max file size to upload: " + MAX_FILE_SIZE;
             showModal("Error", errorMessage);
@@ -78,7 +72,6 @@ function FileForm({ userID, onUploadSuccess = null, showModal, backendPath }) {
             const result = await response.json();
             formMessage.style.display = "none";
 
-            console.log("Response", result)
             if (TEST_MODE) {
                 // Send time to the backend to record 
                 endTime = performance.now();

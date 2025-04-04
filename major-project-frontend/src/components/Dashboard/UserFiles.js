@@ -20,7 +20,6 @@ function UserFiles({ userID, username, showModal }) {
             });
 
             const result = await response.json();
-            console.log("Response", result)
             if (response.ok) {
                 setFiles(result.files);
             } else {

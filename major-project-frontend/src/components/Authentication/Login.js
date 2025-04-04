@@ -35,7 +35,6 @@ function Login() {
       });
 
       const result = await response.json();
-      console.log("RESULT", result)
       if (TEST_MODE) {
         // Send time to the backend to record 
         endTime = performance.now();

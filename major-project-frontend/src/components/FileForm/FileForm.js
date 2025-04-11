@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import "./FileForm.css";
 import recordTestTime from "../Utilities/TestTime";
 
@@ -7,6 +7,7 @@ function FileForm({ userID, onUploadSuccess = null, showModal, backendPath }) {
     const [file, setFile] = useState(null);
     const [filePath, setFilePath] = useState("");
     const MAX_FILE_SIZE = 1000000;
+    const formMessageRef = useRef(null);
 
     // Handle file input change
     const handleFileChange = (event) => {
@@ -33,8 +34,9 @@ function FileForm({ userID, onUploadSuccess = null, showModal, backendPath }) {
             startTime = performance.now();
         }
 
-        const formMessage = document.getElementById('formMessage');
-        formMessage.style.display = "block";
+        if (formMessageRef.current) {
+            formMessageRef.current.style.display = "block";
+        }
 
         // Convert local date and time into readable format
         const lastModified = new Date(file.lastModified);
@@ -70,7 +72,9 @@ function FileForm({ userID, onUploadSuccess = null, showModal, backendPath }) {
             });
 
             const result = await response.json();
-            formMessage.style.display = "none";
+            if (formMessageRef.current) {
+                formMessageRef.current.style.display = "none";
+            }
 
             if (TEST_MODE) {
                 // Send time to the backend to record 
@@ -109,7 +113,9 @@ function FileForm({ userID, onUploadSuccess = null, showModal, backendPath }) {
             <input type="text" value={filePath} onChange={handleFilePathChange} required={true} placeholder='File path' />
             <br />
             <button onClick={handleFileUpload}>{backendPath === 'upload-file' ? 'Upload File' : 'Check File'}</button>
-            <p id="formMessage" style={{ display: "none" }}>{backendPath === 'upload-file' ? 'File upload in progress' : 'File check in progress'}</p>
+            <p ref={formMessageRef} style={{ display: "none" }}>
+                {backendPath === 'upload-file' ? 'File upload in progress' : 'File check in progress'}
+            </p>
         </div>
     );
 }

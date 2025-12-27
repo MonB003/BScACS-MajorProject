@@ -3,7 +3,7 @@ import "./FileForm.css";
 import recordTestTime from "../Utilities/TestTime.js";
 
 function FileForm({ userID, onUploadSuccess = null, showModal, backendPath }) {
-    const TEST_MODE = import.meta.env.REACT_APP_TEST_MODE === "true";
+    const TEST_MODE = import.meta.env.VITE_TEST_MODE === "true";
     const [file, setFile] = useState(null);
     const [filePath, setFilePath] = useState("");
     const MAX_FILE_SIZE = 1000000;
@@ -65,7 +65,7 @@ function FileForm({ userID, onUploadSuccess = null, showModal, backendPath }) {
 
         // Send the file to the backend
         try {
-            const URL = import.meta.env.REACT_APP_BACKEND_LOCAL_URL;
+            const URL = import.meta.env.VITE_BACKEND_LOCAL_URL;
             const response = await fetch(`${URL}/${backendPath}`, {
                 method: 'POST',
                 body: formData,
@@ -106,7 +106,7 @@ function FileForm({ userID, onUploadSuccess = null, showModal, backendPath }) {
     };
 
     return (
-        <div class='fileForm dashboardDiv'>
+        <div className='fileForm dashboardDiv'>
             <h1>{backendPath === 'upload-file' ? 'File Upload' : 'Check a File'}</h1>
             <input data-testid="fileInput" type="file" onChange={handleFileChange} required={true} />
             <br />

@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "./Authentication.css";
 import recordTestTime from "../Utilities/TestTime.js";
 
-function Signup() {
-  const TEST_MODE = import.meta.env.REACT_APP_TEST_MODE === "true";
+function Login() {
+  const TEST_MODE = import.meta.env.VITE_TEST_MODE === "true";
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ function Signup() {
     }
   }, [navigate]);
 
-  const handleSignup = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
       let startTime = null, endTime = null;
@@ -28,8 +28,8 @@ function Signup() {
       formData.append('username', username);
       formData.append('password', password);
 
-      const URL = import.meta.env.REACT_APP_BACKEND_LOCAL_URL;
-      const response = await fetch(`${URL}/signup`, {
+      const URL = import.meta.env.VITE_BACKEND_LOCAL_URL;
+      const response = await fetch(`${URL}/login`, {
         method: 'POST',
         body: formData,
       });
@@ -39,7 +39,7 @@ function Signup() {
         // Send time to the backend to record 
         endTime = performance.now();
         let totalTime = endTime - startTime;
-        await recordTestTime("handleSignup", totalTime);
+        await recordTestTime("handleLogin", totalTime);
       }
       if (response.ok) {
         // Store token in memory (or use a secure cookie)
@@ -48,10 +48,10 @@ function Signup() {
         sessionStorage.setItem('accessToken', result.access_token);
         navigate("/toolkit");  // Redirect to dashboard
       } else {
-        console.error("Error with signup:", result.error);
-        const formSignupMessage = document.getElementById('formSignupMessage');
-        formSignupMessage.innerHTML = result.error;
-        formSignupMessage.style.display = "block";
+        console.error("Error with login:", result.error);
+        const formLoginMessage = document.getElementById('formLoginMessage');
+        formLoginMessage.innerHTML = result.error;
+        formLoginMessage.style.display = "block";
       }
     } catch (err) {
       console.log(err);
@@ -62,8 +62,8 @@ function Signup() {
     <div id="page">
       <h1>Secure MoniTor Toolkit</h1>
       <div id="formContainer">
-        <h2>Sign Up</h2>
-        <form id="submissionForm" onSubmit={handleSignup}>
+        <h2>Login</h2>
+        <form id="submissionForm" onSubmit={handleLogin}>
           <input
             type="text"
             placeholder="Username"
@@ -78,18 +78,18 @@ function Signup() {
             onChange={(e) => setPassword(e.target.value)}
           />
           <br />
-          <button type="submit">Sign Up</button>
+          <button type="submit">Login</button>
         </form>
-        <p id="formSignupMessage" className="message" style={{ display: "none" }}></p>
+        <p id="formLoginMessage" className="message" style={{ display: "none" }}></p>
 
         <br />
 
         <div id="redirectDiv">
-          <button onClick={() => navigate("/")}>Back to Login</button>
+          <button onClick={() => navigate("/signup")}>Signup</button>
         </div>
       </div>
     </div>
   );
 }
 
-export default Signup;
+export default Login;

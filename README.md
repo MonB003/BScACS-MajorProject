@@ -112,7 +112,7 @@ python backend.py
 2. `cd` into your project folder (for example: `cd BScACS-MajorProject`)
 3. Type `cd major-project-frontend`
 4. Type `npm start`
-5. Go to http://localhost:3000 on any browser
+5. Go to http://localhost:5173 on any browser
 6. This will direct you to the main page
 
 ## <a id="how-to-run-tests">How to run the automated tests</a>

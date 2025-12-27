@@ -13,7 +13,7 @@ function UserFiles({ userID, username, showModal }) {
 
         // Send user ID to the backend to get the user's files
         try {
-            const URL = import.meta.env.REACT_APP_BACKEND_LOCAL_URL;
+            const URL = import.meta.env.VITE_BACKEND_LOCAL_URL;
             const response = await fetch(`${URL}/get-user-files`, {
                 method: 'POST',
                 body: formData,

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import LogGenerator from '../Log/LogGenerator'
-import UserFiles from './UserFiles';
+import LogGenerator from '../Log/LogGenerator.jsx'
+import UserFiles from './UserFiles.jsx';
 import './Dashboard.css';
-import Modal from "../Modal/Modal"
-import FileForm from '../FileForm/FileForm';
+import Modal from "../Modal/Modal.jsx"
+import FileForm from '../FileForm/FileForm.jsx';
 
 function Dashboard() {
   const navigate = useNavigate();

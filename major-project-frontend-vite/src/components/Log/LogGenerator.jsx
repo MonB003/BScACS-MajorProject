@@ -1,9 +1,9 @@
 import React from 'react'
 import "./LogGenerator.css"
-import recordTestTime from "../Utilities/TestTime";
+import recordTestTime from "../Utilities/TestTime.js";
 
 function LogGenerator({ userID, username }) {
-    const TEST_MODE = process.env.REACT_APP_TEST_MODE === "true";
+    const TEST_MODE = import.meta.env.REACT_APP_TEST_MODE === "true";
 
     // Handle log file generation
     const handleLogGeneration = async () => {
@@ -17,7 +17,7 @@ function LogGenerator({ userID, username }) {
 
         // Send the request to the backend
         try {
-            const URL = process.env.REACT_APP_BACKEND_LOCAL_URL;
+            const URL = import.meta.env.REACT_APP_BACKEND_LOCAL_URL;
             const response = await fetch(`${URL}/generate-log-file`, {
                 method: 'POST',
                 body: formData,

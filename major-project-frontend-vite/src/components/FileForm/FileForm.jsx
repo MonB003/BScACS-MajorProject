@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 import "./FileForm.css";
-import recordTestTime from "../Utilities/TestTime";
+import recordTestTime from "../Utilities/TestTime.js";
 
 function FileForm({ userID, onUploadSuccess = null, showModal, backendPath }) {
-    const TEST_MODE = process.env.REACT_APP_TEST_MODE === "true";
+    const TEST_MODE = import.meta.env.REACT_APP_TEST_MODE === "true";
     const [file, setFile] = useState(null);
     const [filePath, setFilePath] = useState("");
     const MAX_FILE_SIZE = 1000000;
@@ -65,7 +65,7 @@ function FileForm({ userID, onUploadSuccess = null, showModal, backendPath }) {
 
         // Send the file to the backend
         try {
-            const URL = process.env.REACT_APP_BACKEND_LOCAL_URL;
+            const URL = import.meta.env.REACT_APP_BACKEND_LOCAL_URL;
             const response = await fetch(`${URL}/${backendPath}`, {
                 method: 'POST',
                 body: formData,

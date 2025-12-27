@@ -3,7 +3,7 @@ const recordTestTime = async (methodName, timeTaken) => {
         const timePrecision = 4;
         const timeSeconds = (timeTaken / 1000).toFixed(timePrecision);
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_LOCAL_URL}/record-time`, {
+        const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_LOCAL_URL}/record-time`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

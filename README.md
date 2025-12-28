@@ -75,12 +75,12 @@ The packages below need to be installed.
 
 **Windows and Linux (Fedora, Manjaro):**
 ```
-pip install flask flask-cors pymongo python-dotenv reportlab pycryptodome python-docx pypdf PyJWT
+pip install flask flask-cors pymongo python-dotenv reportlab pycryptodome python-docx pypdf PyJWT pytest
 
 ```
 **Mac and Linux (Ubuntu):**
 ```
-pip3 install flask flask-cors pymongo python-dotenv reportlab pycryptodome python-docx pypdf PyJWT
+pip3 install flask flask-cors pymongo python-dotenv reportlab pycryptodome python-docx pypdf PyJWT pytest
 ```
 
 ### Running the project locally:
@@ -111,7 +111,7 @@ python backend.py
 1. Open Command Prompt (Windows) or Terminal (Mac and Linux)
 2. `cd` into your project folder (for example: `cd BScACS-MajorProject`)
 3. Type `cd major-project-frontend`
-4. Type `npm start`
+4. Type `npm run dev`
 5. Go to http://localhost:5173 on any browser
 6. This will direct you to the main page
 
@@ -151,9 +151,8 @@ The frontend uses jest automated tests. They can be run from the root folder of 
 #### Setup frontend tests
 You will need to install these packages:
 ```
-npm install --save-dev @babel/preset-env @babel/preset-react
-npm install @testing-library/jest-dom --save-dev
-npm install --save-dev identity-obj-proxy
+npm install --save-dev vitest @testing-library/react @testing-library/jest-dom jsdom
+npm install --save-dev @testing-library/user-event
 ```
 #### Run frontend tests
 Run all the tests using the command:

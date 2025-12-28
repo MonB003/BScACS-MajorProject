@@ -1,4 +1,3 @@
-import React from 'react'
 import "./LogGenerator.css"
 import recordTestTime from "../Utilities/TestTime.js";
 

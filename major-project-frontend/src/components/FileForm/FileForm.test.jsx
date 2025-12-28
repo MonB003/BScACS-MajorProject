@@ -1,9 +1,7 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
-import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from "react-router-dom";
-import FileForm from "./FileForm";
+import FileForm from "./FileForm.jsx";
 
 test('FileForm component renders upload title', () => {
     // Render the FileForm component in MemoryRouter to provide the necessary router context
@@ -65,7 +63,8 @@ test('FileForm component, type in file path field', async () => {
     let filePathValue = 'data';
 
     // Type in the text fields
-    userEvent.type(filePathField, filePathValue);
+    const user = userEvent.setup();
+    await user.type(filePathField, filePathValue);
     // Check the typed values are in the text fields
     expect(filePathField).toHaveValue(filePathValue);
 });

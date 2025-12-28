@@ -1,9 +1,7 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
-import Login from './Login';
+import Login from './Login.jsx';
 
 test('Login component renders toolkit name', () => {
     // Render the Login component in MemoryRouter to provide the necessary router context
@@ -56,8 +54,9 @@ test('Login component, type in username and password fields', async () => {
     let passwordValue = 'password';
 
     // Type in the text fields
-    userEvent.type(usernameField, usernameValue);
-    userEvent.type(passwordField, passwordValue);
+    const user = userEvent.setup();
+    await user.type(usernameField, usernameValue);
+    await user.type(passwordField, passwordValue);
     // Check the typed values are in the text fields
     expect(usernameField).toHaveValue(usernameValue);
     expect(passwordField).toHaveValue(passwordValue);
@@ -67,7 +66,7 @@ test('Login component, form submission request success', async () => {
     let usernameValue = 'user';
     let passwordValue = 'password';
 
-    const mockFetch = jest.fn(() =>
+    const mockFetch = vi.fn(() =>
         Promise.resolve({
             ok: true,
             json: () => Promise.resolve({ user_id: 1, username: usernameValue }),
@@ -86,9 +85,10 @@ test('Login component, form submission request success', async () => {
     const loginButton = screen.getByRole('button', { name: /Login/i });
 
     // Type in the text fields
-    userEvent.type(usernameField, usernameValue);
-    userEvent.type(passwordField, passwordValue);
-    userEvent.click(loginButton);
+    const user = userEvent.setup();
+    await user.type(usernameField, usernameValue);
+    await user.type(passwordField, passwordValue);
+    await user.click(loginButton);
 
     // Check the mock fetch request is made and returns a result
     expect(mockFetch).toHaveBeenCalledTimes(1);

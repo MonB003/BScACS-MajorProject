@@ -1,4 +1,3 @@
-import React from 'react'
 import "./Modal.css"
 
 function Modal({ closeModal, titleText, bodyText }) {

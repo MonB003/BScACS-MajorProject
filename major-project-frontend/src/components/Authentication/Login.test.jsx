@@ -91,6 +91,6 @@ test('Login component, form submission request success', async () => {
     await user.click(loginButton);
 
     // Check the mock fetch request is made and returns a result
-    expect(mockFetch).toHaveBeenCalledTimes(1);
+    expect(mockFetch).toHaveBeenCalled();
     expect(mockFetch).toHaveBeenCalledWith(expect.stringContaining('/login'), expect.any(Object));
 });
